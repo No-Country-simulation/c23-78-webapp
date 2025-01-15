@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class NotFoundController {
 
-    private final String status = HttpStatus.BAD_REQUEST.name();
-    private final Integer statusCode = HttpStatus.BAD_REQUEST.value();
-
-    @ExceptionHandler(UserNotFoundException.class)
-    public BaseErrorResponse handleExpenseException(UserNotFoundException exception){
-        return ErrorResponse.builder()
-                .message(exception.getMessage())
-                .status(status)
-                .statusCode(statusCode)
-                .build();
-    }
+//    private final String status = HttpStatus.BAD_REQUEST.name();
+//    private final Integer statusCode = HttpStatus.BAD_REQUEST.value();
+//
+//    @ExceptionHandler(UserNotFoundException.class)
+//    public BaseErrorResponse handleExpenseException(UserNotFoundException exception){
+//        return ErrorResponse.builder()
+//                .message(exception.getMessage())
+//                .status(status)
+//                .statusCode(statusCode)
+//                .build();
+//    }
 }
