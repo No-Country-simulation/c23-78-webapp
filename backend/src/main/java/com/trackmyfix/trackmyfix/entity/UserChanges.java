@@ -20,8 +20,8 @@ public class UserChanges implements Serializable {
     private ActionUser actionUser;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User user;
+    @JoinColumn(name = "id_technician")
+    private Technician technician;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)

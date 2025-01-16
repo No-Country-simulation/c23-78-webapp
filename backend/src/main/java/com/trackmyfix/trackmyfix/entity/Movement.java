@@ -16,8 +16,9 @@ public class Movement implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMovement;
 
+
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_technician", referencedColumnName = "id_user")
     private Technician technician;
 
     @OneToOne

@@ -1,6 +1,5 @@
 package com.trackmyfix.trackmyfix.Dto.Request;
 
-import com.trackmyfix.trackmyfix.entity.UserRole;
 import lombok.*;
 
 @Getter

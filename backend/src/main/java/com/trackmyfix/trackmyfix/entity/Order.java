@@ -1,8 +1,10 @@
 package com.trackmyfix.trackmyfix.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -12,6 +14,8 @@ import java.util.Date;
 @Table(name = "`order`")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class Order implements Serializable {
 
     @Id
@@ -31,7 +35,7 @@ public class Order implements Serializable {
     private BigDecimal finalPrice;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "id_client", referencedColumnName = "id_user")
     private Client client;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -52,5 +56,4 @@ public class Order implements Serializable {
     protected void onUpdate() {
         updatedAt = new Date();
     }
-
 }
