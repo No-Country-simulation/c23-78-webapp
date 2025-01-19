@@ -10,5 +10,4 @@ import lombok.*;
 @Data
 public class UserRequestDTO {
     private Long id;
-    private UserRole userRole;
 }

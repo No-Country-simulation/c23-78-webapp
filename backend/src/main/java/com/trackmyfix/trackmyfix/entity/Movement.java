@@ -25,6 +25,10 @@ public class Movement implements Serializable {
     @JoinColumn(name = "id_order")
     private Order order;
 
+    @OneToOne
+    @JoinColumn(name = "id_device")
+    private Device device;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date movementDate;

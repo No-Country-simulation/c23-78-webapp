@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
-public class UserChanges implements Serializable {
+public class UserChange implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

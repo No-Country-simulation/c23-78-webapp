@@ -15,7 +15,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
+
+
 public class Order implements Serializable {
 
     @Id
