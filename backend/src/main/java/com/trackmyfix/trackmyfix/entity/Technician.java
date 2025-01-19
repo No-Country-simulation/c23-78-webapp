@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import lombok.Setter;
 @DiscriminatorValue("Technician")
 @SuperBuilder
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class Technician extends User {

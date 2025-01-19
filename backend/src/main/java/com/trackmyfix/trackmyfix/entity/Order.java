@@ -1,10 +1,7 @@
 package com.trackmyfix.trackmyfix.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,9 +10,9 @@ import java.util.Date;
 @Entity
 @Table(name = "`order`")
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
-
-
+@Builder
 public class Order implements Serializable {
 
     @Id
