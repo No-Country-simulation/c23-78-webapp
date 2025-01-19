@@ -13,7 +13,6 @@ import java.util.Date;
 @Entity
 @Table(name = "`order`")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 
 

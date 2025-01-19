@@ -1,5 +1,6 @@
 package com.trackmyfix.trackmyfix.entity;
 
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
@@ -10,7 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.Getter;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.persistence.*;
+import lombok.*;
+
 
 @Entity
 @DiscriminatorValue("Admin")
