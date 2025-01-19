@@ -1,7 +1,7 @@
 package com.trackmyfix.trackmyfix.configs;
 
 import com.trackmyfix.trackmyfix.entity.*;
-import com.trackmyfix.trackmyfix.repository.AdminRepository;
+import com.trackmyfix.trackmyfix.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,38 +13,32 @@ import java.util.Date;
 public class DataLoader {
 
     @Bean
-    public CommandLineRunner loadData(AdminRepository adminRepository) {
+    public CommandLineRunner loadData(UserRepository<Admin> adminRepository) {
         return args -> {
             // Crear usuarios tipo Admin
-            Admin admin1 = new Admin(
-                    null,
-                    Role.ADMIN,
-                    "NombreAdmin1",
-                    "ApellidoAdmin1",
-                    "123456789",
-                    "Calle Falsa 123",
-                    "1234567890",
-                    "admin1@example.com",
-                    "password1",
-                    true,
-                    new Date(),
-                    new Date()
-            );
+            Admin admin1 = Admin.builder()
+                    .role(Role.ADMIN)
+                    .name("NombreAdmin1")
+                    .lastName("ApellidoAdmin1")
+                    .dni("987654323")
+                    .address("Calle Falsa 322")
+                    .phone("0987654322")
+                    .email("admin1@example.com")
+                    .password("password1")
+                    .active(true)
+                    .build();
 
-            Admin admin2 = new Admin(
-                    null,
-                    Role.ADMIN,
-                    "NombreAdmin2",
-                    "ApellidoAdmin2",
-                    "987654321",
-                    "Avenida Siempre Viva 456",
-                    "0987654321",
-                    "admin2@example.com",
-                    "password2",
-                    true,
-                    new Date(),
-                    new Date()
-            );
+            Admin admin2 = Admin.builder()
+                    .role(Role.ADMIN)
+                    .name("NombreAdmin2")
+                    .lastName("ApellidoAdmin2")
+                    .dni("987654321")
+                    .address("Calle Falsa 321")
+                    .phone("0987654321")
+                    .email("admin2@example.com")
+                    .password("password2")
+                    .active(true)
+                    .build();
 
             adminRepository.saveAll(Arrays.asList(admin1, admin2));
 

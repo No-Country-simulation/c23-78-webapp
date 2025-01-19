@@ -1,5 +1,6 @@
 package com.trackmyfix.trackmyfix.Dto.Response;
 
+import com.trackmyfix.trackmyfix.entity.Role;
 import lombok.*;
 
 @Getter
@@ -10,5 +11,12 @@ import lombok.*;
 @Data
 public class UserResponseDTO {
     private Long id;
-    private UserRole userRole;
+    private String name;
+    private String lastName;
+    private String dni;
+    private String address;
+    private String phone;
+    private String email;
+    private Boolean active = true;
+    private Role role;
 }
