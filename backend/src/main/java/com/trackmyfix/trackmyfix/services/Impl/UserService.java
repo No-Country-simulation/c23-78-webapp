@@ -11,6 +11,9 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -18,36 +21,47 @@ import java.util.Set;
 @Transactional
 public class UserService implements IUserService<UserResponseDTO> {
 
-    private final UserRepository<User> userRepository;
-    private final UserRepository<Admin> adminRepository;
-    private final UserRepository<Client> clientRepository;
-    private final UserRepository<Technician> technicianRepository;
+    private UserRepository<User> userRepository;
+    private UserRepository<Admin> adminRepository;
+    private UserRepository<Client> clientRepository;
+    private UserRepository<Technician> technicianRepository;
 
 
     @SneakyThrows
     public UserResponseDTO findById(Long id) {
-        var user = this.userRepository.findByPk(id)
-                .orElseThrow(()-> new UserNotFoundException("User_collection"));
-        return mapToDTO(user);
+        UserResponseDTO user = null;
+        var client = clientRepository.findById(id);
+        System.out.println(client.get().toString());
+        if (client.isPresent()) {
+            System.out.println(client.get().toString());
+            user = mapToDTO(client.get());
+        }
+        var technician = technicianRepository.findById(id);
+        if(technician.isPresent()) {
+            user = mapToDTO(technician.get());
+        }
+        var admin = adminRepository.findById(id);
+        if(admin.isPresent()) {
+            user = mapToDTO(admin.get());
+        }
+        return user;
     }
 
     @SneakyThrows
     @Transactional
     public UserResponseDTO save(UserRequestDTO user) {
-        User savedUser = null;
         switch(user.getRole()) {
             case ADMIN -> {
-                savedUser = this.adminRepository.save((Admin) mapToEntity(user));
+                return mapToDTO(adminRepository.save((Admin) mapToEntity(user)));
             }
             case CLIENT -> {
-                savedUser = this.clientRepository.save((Client) mapToEntity(user));
+                return mapToDTO(clientRepository.save((Client) mapToEntity(user)));
             }
             case TECHNICIAN -> {
-                savedUser = this.technicianRepository.save((Technician) mapToEntity(user));
+                return mapToDTO(technicianRepository.save((Technician) mapToEntity(user)));
             }
             default -> throw new IllegalStateException("Unexpected value: " + user.getRole());
         }
-        return mapToDTO(savedUser);
     }
 
     @Override

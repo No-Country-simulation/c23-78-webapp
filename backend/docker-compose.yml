@@ -1,6 +1,6 @@
 services:
   db-trackmyfix:
-    image: mysql
+    image: mysql:8.0
     container_name: db-trackmyfix
     restart: always
     environment:
@@ -40,4 +40,4 @@ networks:
       driver: default
       config:
         -
-          subnet: 192.168.2.0/24
+          subnet: 192.168.3.0/24
