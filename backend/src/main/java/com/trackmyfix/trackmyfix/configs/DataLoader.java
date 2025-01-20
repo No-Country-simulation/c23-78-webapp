@@ -21,7 +21,9 @@ public class DataLoader {
             StateDataLoader stateDataLoader,
             ActionDataLoader actionDataLoader,
             DeviceDataLoader deviceDataLoader,
-            MovementDataLoader movementDataLoader) {
+            MovementDataLoader movementDataLoader,
+            ActionUserDataLoader actionUserDataLoader,
+            UserChangeDataLoader userChangeDataLoader) {
         return args -> {
             userDataLoader.load();
             orderDataLoader.load();
@@ -30,6 +32,8 @@ public class DataLoader {
             actionDataLoader.load();
             deviceDataLoader.load();
             movementDataLoader.load();
+            actionUserDataLoader.load();
+            userChangeDataLoader.load();
 
         };
     }
