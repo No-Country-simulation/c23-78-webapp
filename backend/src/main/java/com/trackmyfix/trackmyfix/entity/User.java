@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 import java.io.Serializable;
 import java.util.Date;
 
+@EqualsAndHashCode
 @Entity
 @Data
 @NoArgsConstructor

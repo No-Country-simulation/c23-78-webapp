@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Builder
@@ -40,9 +42,9 @@ public class UserRequestDTO {
     @Size(min = 6, max = 50, message = "Password must be between 6 and 50 characters")
     private String password;
 
-    private Boolean active = true;
+    private Boolean active;
 
     @NotNull(message = "Role is required")
-    private Role role = Role.CLIENT;
+    private Role role;
 
 }

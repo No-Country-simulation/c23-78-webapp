@@ -19,6 +19,7 @@ import lombok.*;
 @DiscriminatorValue("Admin")
 @SuperBuilder
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class Admin extends User {

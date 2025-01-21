@@ -2,163 +2,52 @@ package com.trackmyfix.trackmyfix.services.Impl;
 
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
-import com.trackmyfix.trackmyfix.entity.*;
+import com.trackmyfix.trackmyfix.entity.User;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
-import com.trackmyfix.trackmyfix.services.IUserService;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-@Transactional
-public class UserService implements IUserService<UserResponseDTO> {
+public class UserService {
 
     private final UserRepository<User> userRepository;
-    private final UserRepository<Admin> adminRepository;
-    private final UserRepository<Client> clientRepository;
-    private final UserRepository<Technician> technicianRepository;
+    private final AdminService adminService;
+    private final TechnicianService technicianService;
+    private final ClientService clientService;
 
-
-    @SneakyThrows
     public UserResponseDTO findById(Long id) {
-        var user = this.userRepository.findByPk(id)
-                .orElseThrow(()-> new UserNotFoundException("User_collection"));
-        return mapToDTO(user);
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
+        return switch (user.getRole()) {
+            case ADMIN -> adminService.findById(id);
+            case TECHNICIAN -> technicianService.findById(id);
+            case CLIENT -> clientService.findById(id);
+        };
     }
 
-    @SneakyThrows
-    @Transactional
     public UserResponseDTO save(UserRequestDTO user) {
-        User savedUser = null;
-        switch(user.getRole()) {
-            case ADMIN -> {
-                savedUser = this.adminRepository.save((Admin) mapToEntity(user));
-            }
-            case CLIENT -> {
-                savedUser = this.clientRepository.save((Client) mapToEntity(user));
-            }
-            case TECHNICIAN -> {
-                savedUser = this.technicianRepository.save((Technician) mapToEntity(user));
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + user.getRole());
-        }
-        return mapToDTO(savedUser);
+        return switch (user.getRole()) {
+            case ADMIN -> adminService.save(user);
+            case TECHNICIAN -> technicianService.save(user);
+            case CLIENT -> clientService.save(user);
+        };
     }
-
-    @Override
     public UserResponseDTO update(UserRequestDTO user) {
-        this.findById(user.getId());
-        return this.save(user);
+        return switch (user.getRole()) {
+            case ADMIN -> adminService.update(user);
+            case TECHNICIAN -> technicianService.update(user);
+            case CLIENT -> clientService.update(user);
+        };
     }
-
-    @Override
     public void delete(Long id) {
-        this.findById(id);
-        this.userRepository.deleteById(id);
-    }
-
-    private <T extends User> Object mapToEntity(UserRequestDTO user) {
-        Object userEntity = null;
-        switch(user.getRole()) {
-            case ADMIN -> {
-                userEntity = Admin.builder()
-                        .id(user.getId())
-                        .name(user.getName())
-                        .lastName(user.getLastName())
-                        .email(user.getEmail())
-                        .phone(user.getPhone())
-                        .address(user.getAddress())
-                        .role(user.getRole())
-                        .active(user.getActive())
-                        .dni(user.getDni())
-                        .build();
-            }
-            case CLIENT -> {
-                userEntity = Client.builder()
-                        .id(user.getId())
-                        .name(user.getName())
-                        .lastName(user.getLastName())
-                        .email(user.getEmail())
-                        .phone(user.getPhone())
-                        .address(user.getAddress())
-                        .role(user.getRole())
-                        .active(user.getActive())
-                        .dni(user.getDni())
-                        .build();
-            }
-            case TECHNICIAN -> {
-                userEntity = Technician.builder()
-                        .id(user.getId())
-                        .name(user.getName())
-                        .lastName(user.getLastName())
-                        .email(user.getEmail())
-                        .phone(user.getPhone())
-                        .address(user.getAddress())
-                        .role(user.getRole())
-                        .active(user.getActive())
-                        .dni(user.getDni())
-                        .build();
-            }
+        UserResponseDTO user = this.findById(id);
+        switch (user.getRole()) {
+            case ADMIN -> adminService.delete(id);
+            case TECHNICIAN -> technicianService.delete(id);
+            case CLIENT -> clientService.delete(id);
         }
-        return userEntity;
     }
-
-    private UserResponseDTO mapToDTO(User user) {
-        return UserResponseDTO.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .address(user.getAddress())
-                .role(user.getRole())
-                .dni(user.getDni())
-                .active(user.getActive())
-                .build();
-    }
-    private UserResponseDTO mapToDTO(Admin user) {
-        return UserResponseDTO.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .address(user.getAddress())
-                .role(user.getRole())
-                .dni(user.getDni())
-                .active(user.getActive())
-                .build();
-    }
-    private UserResponseDTO mapToDTO(Client user) {
-        return UserResponseDTO.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .address(user.getAddress())
-                .role(user.getRole())
-                .dni(user.getDni())
-                .active(user.getActive())
-                .build();
-    }
-    private UserResponseDTO mapToDTO(Technician user) {
-        return UserResponseDTO.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .address(user.getAddress())
-                .role(user.getRole())
-                .dni(user.getDni())
-                .active(user.getActive())
-                .build();
-    }
-
 }
