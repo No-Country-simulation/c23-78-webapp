@@ -22,6 +22,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 public class UserRepositoryTest {
+
     @Autowired
     private UserRepository<Admin> adminRepository;
     @Autowired

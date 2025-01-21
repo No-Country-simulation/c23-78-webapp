@@ -89,7 +89,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <environmentVariables>
-                        <DB_HOST>jdbc:mysql://localhost:3306/track_my_fix_db</DB_HOST>
+                        <DB_HOST>jdbc:mysql://localhost:3306/track_my_fix_db?createDatabaseIfNotExist=true&amp;serverTimezone=UTC</DB_HOST>
                         <DB_USER>root</DB_USER>
                         <DB_PASSWORD>admin</DB_PASSWORD>
                     </environmentVariables>
