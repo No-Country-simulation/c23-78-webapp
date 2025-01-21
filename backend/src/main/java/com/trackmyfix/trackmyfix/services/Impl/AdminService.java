@@ -34,7 +34,7 @@ public class AdminService implements IUserService<UserResponseDTO> {
     @Override
     public void delete(Long id) {
         this.findById(id);
-        this.adminRepository.deleteById(id);
+        adminRepository.deleteById(id);
     }
 
     private Admin mapToEntity(UserRequestDTO user) {
@@ -48,6 +48,7 @@ public class AdminService implements IUserService<UserResponseDTO> {
                 .role(user.getRole())
                 .active(user.getActive())
                 .dni(user.getDni())
+                .password(user.getPassword())
                 .build();
     }
     private UserResponseDTO mapToDTO(Admin user) {

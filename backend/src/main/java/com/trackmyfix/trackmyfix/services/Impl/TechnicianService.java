@@ -35,7 +35,7 @@ public class TechnicianService implements IUserService<UserResponseDTO> {
     @Override
     public void delete(Long id) {
         this.findById(id);
-        this.technicianRepository.deleteById(id);
+        technicianRepository.deleteById(id);
     }
 
     private UserResponseDTO mapToDTO(Technician user) {

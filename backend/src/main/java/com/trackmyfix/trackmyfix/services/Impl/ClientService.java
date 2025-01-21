@@ -37,7 +37,7 @@ public class ClientService implements IUserService<UserResponseDTO> {
     @Override
     public void delete(Long id) {
         this.findById(id);
-        this.clientRepository.deleteById(id);
+        clientRepository.deleteById(id);
     }
 
     private UserResponseDTO mapToDTO(Client user) {
