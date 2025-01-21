@@ -23,7 +23,7 @@ public class Order implements Serializable {
     private String number;
 
     @Column(columnDefinition = "TEXT")
-    private String Observations;
+    private String observations;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal initialPrice;
