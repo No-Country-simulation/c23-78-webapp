@@ -1,7 +1,10 @@
 package com.trackmyfix.trackmyfix.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -12,7 +15,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class Order implements Serializable {
 
     @Id
@@ -23,7 +26,7 @@ public class Order implements Serializable {
     private String number;
 
     @Column(columnDefinition = "TEXT")
-    private String observations;
+    private String Observations;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal initialPrice;

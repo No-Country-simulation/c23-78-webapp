@@ -2,19 +2,16 @@ package com.trackmyfix.trackmyfix.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@EqualsAndHashCode
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "discriminator", discriminatorType = DiscriminatorType.STRING)
-@SuperBuilder
 public abstract class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +40,9 @@ public abstract class User implements Serializable {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    @Column(length = 100)
+    private String password;
+
     @Column(nullable = false)
     private Boolean active;
 
@@ -58,11 +58,27 @@ public abstract class User implements Serializable {
     protected void onCreate() {
         createdAt = new Date();
         updatedAt = new Date();
-        active = true;
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = new Date();
+    }
+
+    // Constructor personalizado
+    public User(Long id, Role role, String name, String lastName, String dni, String address, String phone,
+                String email, String password, Boolean active, Date createdAt, Date updatedAt) {
+        this.id = id;
+        this.role = role;
+        this.name = name;
+        this.lastName = lastName;
+        this.dni = dni;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.active = active;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }
