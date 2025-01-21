@@ -1,6 +1,7 @@
 package com.trackmyfix.trackmyfix.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
@@ -9,7 +10,8 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
-public class UserChanges implements Serializable {
+@AllArgsConstructor
+public class UserChange implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package com.trackmyfix.trackmyfix.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Movement implements Serializable {
 
     @Id
@@ -24,6 +26,10 @@ public class Movement implements Serializable {
     @OneToOne
     @JoinColumn(name = "id_order")
     private Order order;
+
+    @OneToOne
+    @JoinColumn(name = "id_device")
+    private Device device;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
