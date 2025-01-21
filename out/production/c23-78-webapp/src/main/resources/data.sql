@@ -1,5 +1,6 @@
 
 insert into `action`(action_name) values
+<<<<<<< HEAD
 ("LOGIN"),("LOGOUT"),("CREATE_ORDER"),("UPDATE_ORDER"),("DELETE_ORDER");
 
 insert into user(discriminator, name, last_name, phone, dni, email, address, password, active, role) values
@@ -58,7 +59,7 @@ insert into device(model, serial_number, accessories, description, id_order, id_
 ("Model H", "SN99000", "Adapter", "Refurbished device",8,3,3 ),
 ("Model I", "SN11334", "Battery", "Old device",9,4,4 ),
 ("Model J", "SN55667", "Screen Protector", "Damaged device",10,5,5 );
-
+=======
 ("CREATE"),("DELETE"),("EXPORT"),("READ"),("UPDATE");
 
 insert into user(discriminator, name, last_name, phone, dni, email, address, password, active, role) values
@@ -125,6 +126,7 @@ INSERT INTO `device` (id_order,id_state,id_type,model,serial_number,accessories,
 	 (5,2,2,'Model15','SN-00015','Accessories15','Description15');
 
 
+>>>>>>> ad9ec89d1c18019ec25af1a6af898e822befb3c3
 
 insert into action_user(name) values
 ("CREATE"),
