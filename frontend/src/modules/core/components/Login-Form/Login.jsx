@@ -6,8 +6,7 @@ const Login = () => {
           <h2 className="mb-1 text-3xl ">Iniciar Sesión</h2>
           <p>Ingrese sus datos para acceder a la cuenta</p>
         </div>
-
-
+        {/* estoy probando algo */}
         <div className="flex flex-col mb-6">
           <label htmlFor="telefono" className="text-sm font-bold text-gray-700">Correo electrónico</label>
           <input
