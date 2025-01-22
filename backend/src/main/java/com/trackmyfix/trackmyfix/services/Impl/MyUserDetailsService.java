@@ -34,15 +34,6 @@ public class MyUserDetailsService implements UserDetailsService {
         }
         Set<GrantedAuthority> authority = Set.of(new SimpleGrantedAuthority(user.getRole().toString()));
         assert userPass != null;
-//        return new org.springframework.security.core.userdetails.User(
-//                user.getEmail(),
-//                userPass,
-//                true,
-//                true,
-//                true,
-//                true,
-//                authority
-//        );
         return new UserJwtData(
                 user.getId(),
                 user.getEmail(),

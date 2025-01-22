@@ -32,8 +32,6 @@ public class OrderService implements IOrderService {
     public ResponseEntity<Map<String, Object>> findAll() {
         Map<String, Object> response = new HashMap<>();
         List<Order> orders = (List<Order>) this.orderRepository.findAll();
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getPrincipal());
         response.put("orders", orders);
         response.put("orderSize", orders.size());
         return ResponseEntity.ok(response);
