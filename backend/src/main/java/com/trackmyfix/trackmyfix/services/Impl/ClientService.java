@@ -8,13 +8,16 @@ import com.trackmyfix.trackmyfix.repository.UserRepository;
 import com.trackmyfix.trackmyfix.services.IUserService;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class ClientService implements IUserService<UserResponseDTO> {
 
-    private final UserRepository<Client> clientRepository;
+    private UserRepository<Client> clientRepository;
+    private BCryptPasswordEncoder encoder;
+
 
     @SneakyThrows
     @Override
@@ -25,6 +28,7 @@ public class ClientService implements IUserService<UserResponseDTO> {
 
     @Override
     public UserResponseDTO save(UserRequestDTO user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         return mapToDTO(clientRepository.save(mapToEntity(user)));
     }
 

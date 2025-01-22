@@ -7,6 +7,7 @@ import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
 import com.trackmyfix.trackmyfix.services.IUserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class TechnicianService implements IUserService<UserResponseDTO> {
 
     private final UserRepository<Technician> technicianRepository;
+    private BCryptPasswordEncoder encoder;
+
 
     @Override
     public UserResponseDTO findById(Long id) {
@@ -23,6 +26,7 @@ public class TechnicianService implements IUserService<UserResponseDTO> {
 
     @Override
     public UserResponseDTO save(UserRequestDTO user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         return mapToDTO(technicianRepository.save(mapToEntity(user)));
     }
 

@@ -1,15 +1,24 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
+import com.trackmyfix.trackmyfix.Dto.Request.LoginRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
+import com.trackmyfix.trackmyfix.entity.Admin;
 import com.trackmyfix.trackmyfix.entity.User;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -18,6 +27,9 @@ public class UserService {
     private final AdminService adminService;
     private final TechnicianService technicianService;
     private final ClientService clientService;
+
+    private JWTService jwtService;
+    AuthenticationManager authManager;
 
     public UserResponseDTO findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
@@ -48,6 +60,15 @@ public class UserService {
             case ADMIN -> adminService.delete(id);
             case TECHNICIAN -> technicianService.delete(id);
             case CLIENT -> clientService.delete(id);
+        }
+    }
+    @SneakyThrows
+    public Map<String, String> verify(LoginRequestDTO user) {
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(user.getUsername());
+        } else {
+            throw new Exception("Login failed");
         }
     }
 }

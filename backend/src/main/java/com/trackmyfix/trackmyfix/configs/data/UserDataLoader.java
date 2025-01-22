@@ -8,6 +8,7 @@ import com.trackmyfix.trackmyfix.repository.AdminRepository;
 import com.trackmyfix.trackmyfix.repository.ClientRepository;
 import com.trackmyfix.trackmyfix.repository.TechnicianRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class UserDataLoader {
     private final AdminRepository adminRepository;
     private final TechnicianRepository technicianRepository;
     private final ClientRepository clientRepository;
+    private final BCryptPasswordEncoder encoder;
 
     public void load() {
         Admin admin1 = Admin.builder()
@@ -28,7 +30,7 @@ public class UserDataLoader {
                 .address("blanco 5126")
                 .phone("1122540454")
                 .email("jindrg@gmail.com")
-                .password("12345678Nmmm")
+                .password(encoder.encode("adminpassword1"))
                 .active(true)
                 .build();
         adminRepository.save(admin1);
@@ -41,7 +43,7 @@ public class UserDataLoader {
                 .address("calle 123")
                 .phone("1122540455")
                 .email("tech1@example.com")
-                .password("techpassword1")
+                .password(encoder.encode("techpassword1"))
                 .active(true)
                 .build();
         Technician technician2 = Technician.builder()
@@ -52,7 +54,7 @@ public class UserDataLoader {
                 .address("calle 124")
                 .phone("1122540456")
                 .email("tech2@example.com")
-                .password("techpassword2")
+                .password(encoder.encode("techpassword2"))
                 .active(true)
                 .build();
         Technician technician3 = Technician.builder()
@@ -63,7 +65,7 @@ public class UserDataLoader {
                 .address("calle 125")
                 .phone("1122540457")
                 .email("tech3@example.com")
-                .password("techpassword3")
+                .password(encoder.encode("techpassword3"))
                 .active(true)
                 .build();
         technicianRepository.saveAll(List.of(technician1, technician2, technician3));

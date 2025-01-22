@@ -7,13 +7,18 @@ import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
 import com.trackmyfix.trackmyfix.services.IUserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
 public class AdminService implements IUserService<UserResponseDTO> {
 
-    private final UserRepository<Admin> adminRepository;
+    private UserRepository<Admin> adminRepository;
+    private BCryptPasswordEncoder encoder;
+
 
     @Override
     public UserResponseDTO findById(Long id) {
@@ -22,6 +27,7 @@ public class AdminService implements IUserService<UserResponseDTO> {
 
     @Override
     public UserResponseDTO save(UserRequestDTO user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         return mapToDTO(adminRepository.save(mapToEntity(user)));
     }
 
