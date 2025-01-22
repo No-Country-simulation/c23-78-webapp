@@ -11,7 +11,6 @@ function App() {
   return (
     <>
       <section className='max-w-[1200px] m-auto'>
-        <Login />
         <OurServices />
         <AboutUs />
         <ContactForm />

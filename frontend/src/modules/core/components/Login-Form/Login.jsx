@@ -1,9 +1,9 @@
 const Login = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
-      <form className="bg-white p-10 rounded-lg shadow-md w-full max-w-2xl border border-black ">
-        <div>
-          <h2 className="text-3xl">Iniciar Sesión</h2>
+      <form className="bg-white p-10 rounded-lg shadow-md w-[580px] h-[425px] border border-black">
+      <div className="mb-3">
+          <h2 className="mb-1 text-3xl ">Iniciar Sesión</h2>
           <p>Ingrese sus datos para acceder a la cuenta</p>
         </div>
 
