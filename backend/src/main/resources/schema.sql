@@ -1,6 +1,5 @@
 --DROP DATABASE IF EXISTS `track_my_fix_db`;
 --
---CREATE DATABASE if not exists `track_my_fix_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 --
 --CREATE DATABASE if not exists `track_my_fix_db`; -- /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 --

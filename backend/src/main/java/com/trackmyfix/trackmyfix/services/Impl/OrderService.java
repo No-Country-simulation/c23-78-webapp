@@ -59,8 +59,6 @@ public class OrderService implements IOrderService {
                 .initialPrice(orderRequest.getInitialPrice())
                 .finalPrice(BigDecimal.ZERO) // Precio final por defecto .client(client)
                 .client(client)
-                .createdAt(new Date())
-                .updatedAt(new Date())
                 .build();
 
         Order savedOrder = orderRepository.save(newOrder);
@@ -80,10 +78,13 @@ public class OrderService implements IOrderService {
     @Override
     public ResponseEntity<Order> updateOrder(Long id, OrderUpdateRequest orderUpdateRequest) {
         Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Orden no encontrada"));
-
         existingOrder.setObservations(orderUpdateRequest.getObservations());
         existingOrder.setInitialPrice(orderUpdateRequest.getInitialPrice());
-        existingOrder.setUpdatedAt(new Date());
+        existingOrder.setFinalPrice(orderUpdateRequest.getFinalPrice());
+
+        System.out.println("Updating Order with ID: " + id); System.out.println("Observations: " + orderUpdateRequest.getObservations());
+        System.out.println("Initial Price: " + orderUpdateRequest.getInitialPrice());
+        System.out.println("Final Price: " + orderUpdateRequest.getFinalPrice());
 
         Order updatedOrder = orderRepository.save(existingOrder);
         return new ResponseEntity<>(updatedOrder,HttpStatus.OK);
