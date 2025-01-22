@@ -10,6 +10,7 @@ import com.trackmyfix.trackmyfix.services.IOrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,8 @@ public class OrderService implements IOrderService {
     public ResponseEntity<Map<String, Object>> findAll() {
         Map<String, Object> response = new HashMap<>();
         List<Order> orders = (List<Order>) this.orderRepository.findAll();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getPrincipal());
         response.put("orders", orders);
         response.put("orderSize", orders.size());
         return ResponseEntity.ok(response);

@@ -32,6 +32,7 @@ public class JWTService {
         }
     }
 
+
     public Map<String, String> generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         Map<String, String> tokenInfo = new HashMap<>();

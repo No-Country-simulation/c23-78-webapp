@@ -1,9 +1,6 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
-import com.trackmyfix.trackmyfix.entity.Admin;
-import com.trackmyfix.trackmyfix.entity.Client;
-import com.trackmyfix.trackmyfix.entity.Technician;
-import com.trackmyfix.trackmyfix.entity.User;
+import com.trackmyfix.trackmyfix.entity.*;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +26,6 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Email " + email + " not found"));
-        log.info("Line 32: User: "+user);
         String userPass = null;
         switch (user.getRole()) {
             case ADMIN -> userPass = adminRepository.findById(user.getId()).get().getPassword();
@@ -37,16 +33,20 @@ public class MyUserDetailsService implements UserDetailsService {
             case CLIENT -> userPass = clientRepository.findById(user.getId()).get().getPassword();
         }
         Set<GrantedAuthority> authority = Set.of(new SimpleGrantedAuthority(user.getRole().toString()));
-        System.out.println("Authority from Db: "+authority);
-        log.info("Line 40: User Password: "+userPass);
         assert userPass != null;
-        return new org.springframework.security.core.userdetails.User(
+//        return new org.springframework.security.core.userdetails.User(
+//                user.getEmail(),
+//                userPass,
+//                true,
+//                true,
+//                true,
+//                true,
+//                authority
+//        );
+        return new UserJwtData(
+                user.getId(),
                 user.getEmail(),
                 userPass,
-                true,
-                true,
-                true,
-                true,
                 authority
         );
     }
