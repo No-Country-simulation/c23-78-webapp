@@ -2,8 +2,12 @@ package com.trackmyfix.trackmyfix.services.Impl;
 
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
+import com.trackmyfix.trackmyfix.entity.ActionUser;
 import com.trackmyfix.trackmyfix.entity.Admin;
+import com.trackmyfix.trackmyfix.entity.Technician;
+import com.trackmyfix.trackmyfix.entity.UserChange;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
+import com.trackmyfix.trackmyfix.repository.UserChangeRepository;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
 import com.trackmyfix.trackmyfix.services.IUserService;
 import lombok.AllArgsConstructor;
@@ -18,11 +22,13 @@ public class AdminService implements IUserService<UserResponseDTO> {
 
     private UserRepository<Admin> adminRepository;
     private BCryptPasswordEncoder encoder;
-
+    private UserChangeRepository userChangeRepository;
+    private ActionUserRepository ActionUserRepository;
 
     @Override
     public UserResponseDTO findById(Long id) {
-        return mapToDTO(adminRepository.findById(id).orElseThrow(()-> new UserNotFoundException("Admin "+id+" not found")));
+        return mapToDTO(adminRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Admin " + id + " not found")));
     }
 
     @Override
@@ -43,6 +49,13 @@ public class AdminService implements IUserService<UserResponseDTO> {
         adminRepository.deleteById(id);
     }
 
+    private void createUserChange(ActionUser actionUser, Technician technician) {
+        UserChange userChange = new UserChange();
+        userChange.setActionUser(actionUser);
+        userChange.setTechnician(technician);
+        userChangeRepository.save(userChange);
+    }
+
     private Admin mapToEntity(UserRequestDTO user) {
         return Admin.builder()
                 .id(user.getId() != null ? user.getId() : null)
@@ -57,6 +70,7 @@ public class AdminService implements IUserService<UserResponseDTO> {
                 .password(user.getPassword())
                 .build();
     }
+
     private UserResponseDTO mapToDTO(Admin user) {
         return UserResponseDTO.builder()
                 .id(user.getId())
