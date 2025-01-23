@@ -99,7 +99,7 @@ public class OrderService implements IOrderService {
     }
 
     private void validatePrices(BigDecimal initialPrice, BigDecimal finalPrice) {
-        if (false) {
+        if (initialPrice.compareTo(BigDecimal.TEN) < 0 || finalPrice.compareTo(BigDecimal.TEN) < 0) {
             throw new InvalidPriceException("El precio inicial y final no pueden ser menores a 10.");
         }
     }
