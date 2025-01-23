@@ -1,19 +1,25 @@
-import Login from "../modules/core/components/Login-Form/Login"; 
 import OurServices from "../modules/core/components/OurServices/OurServices";
 import AboutUs from "../modules/core/components/About/AboutUs";
 import ContactForm from "../modules/core/components/Form/ContactForm";
-import { Link } from "react-router-dom";
+import { NavBar } from "../modules/core/components/navbar/NavBar";
+import { Footer, TestimonialCard } from "../modules/core/components";
+import Achievements from "../modules/core/components/Achievements/Achievements";
+import SearchForm from "../modules/core/components/SearchForm/SearchForm";
 
 const Principal = () => {
   return (
     <div>
-      <Link to="/auth/login">Login</Link>
-      <section className='max-w-[1200px] m-auto'>
-        <Login />
-        <OurServices />
-        <AboutUs />
-        <ContactForm />
-      </section>
+      <NavBar />
+      <SearchForm />
+      <OurServices />
+      <AboutUs />
+      <Achievements />
+      <div className="flex items-center justify-center flex-col  h-[1000px] w-full mt-10 mb-10">
+        <h2 className="text-3xl font-bold text-[#F55F1D]">TESTIMONIOS DE NUESTROS CLIENTES</h2>
+        <TestimonialCard />
+      </div>
+      <ContactForm />
+      <Footer />
     </div>
   )
 }

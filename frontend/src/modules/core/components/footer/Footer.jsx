@@ -1,5 +1,6 @@
 import React from "react";
 import { PackageSearch, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+
 export const Footer = () => {
   return (
     <footer className="text-white body-font bg-black">
@@ -72,3 +73,6 @@ export const Footer = () => {
     </footer>
   );
 };
+
+
+//export default Footer;
