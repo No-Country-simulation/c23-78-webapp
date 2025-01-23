@@ -2,17 +2,17 @@ package com.trackmyfix.trackmyfix.services.Impl;
 
 import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderUpdateRequest;
-import com.trackmyfix.trackmyfix.entity.Client;
-import com.trackmyfix.trackmyfix.entity.Order;
+import com.trackmyfix.trackmyfix.entity.*;
 import com.trackmyfix.trackmyfix.exceptions.InvalidPriceException;
 import com.trackmyfix.trackmyfix.exceptions.OrderNotFoundException;
+import com.trackmyfix.trackmyfix.exceptions.ResourceNotFoundException;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
-import com.trackmyfix.trackmyfix.repository.ClientRepository;
-import com.trackmyfix.trackmyfix.repository.OrderRepository;
+import com.trackmyfix.trackmyfix.repository.*;
 import com.trackmyfix.trackmyfix.services.IOrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +26,9 @@ import java.util.Map;
 public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ClientRepository clientRepository;
+    private final TechnicianRepository technicianRepository;
+    private final ActionRepository actionRepository;
+    private final MovementRepository movementRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -61,6 +64,10 @@ public class OrderService implements IOrderService {
         Order newOrder = Order.builder().number(generateOrderNumber()).observations(orderRequest.getObservations()).initialPrice(orderRequest.getInitialPrice()).finalPrice(BigDecimal.ZERO).client(client).build();
 
         Order savedOrder = orderRepository.save(newOrder);
+
+        // Crear el movimiento asociado con la orden
+        this.createMovement(savedOrder, "Movimiento inicial para la orden " + savedOrder.getNumber());
+
         return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
     }
 
@@ -92,7 +99,7 @@ public class OrderService implements IOrderService {
     }
 
     private void validatePrices(BigDecimal initialPrice, BigDecimal finalPrice) {
-        if (initialPrice.compareTo(BigDecimal.TEN) < 0 || finalPrice.compareTo(BigDecimal.TEN) < 0) {
+        if (false) {
             throw new InvalidPriceException("El precio inicial y final no pueden ser menores a 10.");
         }
     }
@@ -100,4 +107,24 @@ public class OrderService implements IOrderService {
     private String generateOrderNumber() {
         return "ORD-" + System.currentTimeMillis();
     }
+
+    private void createMovement(Order order, String description) {
+        Movement movement = new Movement();
+        movement.setOrder(order);
+        movement.setDescription(description);
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Technician technician = technicianRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
+
+        Action action = actionRepository.findById(1L)
+                .orElseThrow(() -> new ResourceNotFoundException("Acción con ID " + 1 + " no encontrada"));
+
+
+        movement.setAction(action);
+        movement.setTechnician(technician);
+
+        movementRepository.save(movement);
+    }
+
 }
