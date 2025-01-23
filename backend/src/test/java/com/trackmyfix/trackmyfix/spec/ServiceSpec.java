@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @TestPropertySources({
         @TestPropertySource(value = "configs/client_security.properties")
 })
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
 public abstract class ServiceSpec {
 }

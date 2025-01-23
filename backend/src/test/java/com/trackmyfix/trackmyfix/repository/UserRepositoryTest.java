@@ -26,9 +26,9 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository<Admin> adminRepository;
     @Autowired
-    private UserRepository<Technician> technicianUserRepository;
+    private UserRepository<Technician> technicianRepository;
     @Autowired
-    private UserRepository<Client> clientUserRepository;
+    private UserRepository<Client> clientRepository;
 
     private Admin admin;
     private Technician technician;
@@ -73,5 +73,19 @@ public class UserRepositoryTest {
         Admin savedAdmin = adminRepository.save(admin);
         assertThat(savedAdmin).isNotNull();
         assertThat(savedAdmin.getId()).isGreaterThan(0);
+    }
+    @DisplayName("Test Technician Repository")
+    @Test
+    void testSaveTechnician() {
+        Technician savedTechnician = technicianRepository.save(technician);
+        assertThat(savedTechnician).isNotNull();
+        assertThat(savedTechnician.getId()).isGreaterThan(0);
+    }
+    @DisplayName("Test Admin Repository")
+    @Test
+    void testSaveClient() {
+        Client savedClient = clientRepository.save(client);
+        assertThat(savedClient).isNotNull();
+        assertThat(savedClient.getId()).isGreaterThan(0);
     }
 }

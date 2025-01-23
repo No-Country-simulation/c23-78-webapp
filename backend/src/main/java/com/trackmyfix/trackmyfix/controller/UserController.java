@@ -34,12 +34,12 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> save(@Validated @RequestBody UserRequestDTO user) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.save(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
     }
 
     @PutMapping("/update")
     public ResponseEntity<UserResponseDTO> update(@Validated @RequestBody UserRequestDTO user) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.update(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.update(user));
     }
 
     @DeleteMapping("/{id}")
