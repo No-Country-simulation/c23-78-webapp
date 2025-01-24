@@ -42,9 +42,9 @@ public class OrderController {
     return this.orderService.updateOrder(id,orderUpdateRequest);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void>deleteOrder(@PathVariable Long id){
-        return orderService.deleteOrder(id);
+    @PatchMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivateOrder(@PathVariable Long id) {
+        return orderService.deactivateOrder(id);
     }
 
 }

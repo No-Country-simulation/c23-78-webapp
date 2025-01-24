@@ -31,11 +31,11 @@ public class Order implements Serializable {
 
     //tarifa de diagnóstico
     @NotNull(message = "Initial price is mandatory")
-  //  @DecimalMin(value = "0.0", inclusive = false, message = "Initial price must be greater than zero")
+    @DecimalMin(value = "10.0", inclusive = false, message = "Initial price must be greater than zero")
     @Column(precision = 10, scale = 2)
     private BigDecimal initialPrice;
 
-    //@DecimalMin(value = "0.0", inclusive = false, message = "Final price must be greater than zero")
+    //@DecimalMin(value = "0", inclusive = false, message = "Final price must be greater than zero")
     @Column(precision = 10, scale = 2)
     private BigDecimal finalPrice;
 

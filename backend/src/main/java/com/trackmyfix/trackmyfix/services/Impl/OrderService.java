@@ -3,6 +3,7 @@ package com.trackmyfix.trackmyfix.services.Impl;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderUpdateRequest;
 import com.trackmyfix.trackmyfix.entity.*;
+import com.trackmyfix.trackmyfix.event.OrderCreatedEvent;
 import com.trackmyfix.trackmyfix.exceptions.InvalidPriceException;
 import com.trackmyfix.trackmyfix.exceptions.OrderNotFoundException;
 import com.trackmyfix.trackmyfix.exceptions.ResourceNotFoundException;
@@ -10,6 +11,7 @@ import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.*;
 import com.trackmyfix.trackmyfix.services.IOrderService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,8 +28,7 @@ import java.util.Map;
 public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ClientRepository clientRepository;
-    private final TechnicianRepository technicianRepository;
-    private final MovementRepository movementRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional(readOnly = true)
@@ -60,24 +61,25 @@ public class OrderService implements IOrderService {
 
         this.validatePrices(orderRequest.getInitialPrice(), BigDecimal.ZERO);
 
-        Order newOrder = Order.builder().number(generateOrderNumber()).observations(orderRequest.getObservations()).initialPrice(orderRequest.getInitialPrice()).finalPrice(BigDecimal.ZERO).client(client).build();
+        Order newOrder = Order.builder().number(generateOrderNumber()).observations(orderRequest.getObservations()).initialPrice(orderRequest.getInitialPrice()).finalPrice(BigDecimal.ZERO).client(client).active(true).build();
 
         Order savedOrder = orderRepository.save(newOrder);
 
-        // Crear el movimiento asociado con la orden
-        this.createMovement(savedOrder, "Movimiento inicial para la orden " + savedOrder.getNumber());
+        // Emitimos un evento para que se maneje en otro servicio
+        eventPublisher.publishEvent(new OrderCreatedEvent(savedOrder));
 
         return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
     }
 
-
     @Override
     @Transactional
-    public ResponseEntity<Void> deleteOrder(Long id) {
-        if (!orderRepository.existsById(id)) {
-            throw new OrderNotFoundException("Orden con ID " + id + " no encontrada");
-        }
-        orderRepository.deleteById(id);
+    public ResponseEntity<Void> deactivateOrder(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
+
+        order.setActive(false);
+        orderRepository.save(order);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -98,30 +100,16 @@ public class OrderService implements IOrderService {
     }
 
     private void validatePrices(BigDecimal initialPrice, BigDecimal finalPrice) {
-        if (initialPrice.compareTo(BigDecimal.TEN) < 0 || finalPrice.compareTo(BigDecimal.TEN) < 0) {
-            throw new InvalidPriceException("El precio inicial y final no pueden ser menores a 10.");
+        if (initialPrice.compareTo(BigDecimal.TEN) < 0) {
+            throw new InvalidPriceException("El precio inicial no puede ser menor a 10.");
+        }
+        if (finalPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidPriceException("El precio final no puede ser negativo.");
         }
     }
 
     private String generateOrderNumber() {
         return "ORD-" + System.currentTimeMillis();
-    }
-
-    private void createMovement(Order order, String description) {
-        Movement movement = new Movement();
-        movement.setOrder(order);
-        movement.setDescription(description);
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        Technician technician = technicianRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
-
-
-
-        movement.setAction(Action.CREO_ORDEN_TRABAJO);
-        movement.setTechnician(technician);
-
-        movementRepository.save(movement);
     }
 
 }
