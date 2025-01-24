@@ -33,8 +33,8 @@ public class MovementService {
 
         Movement movement = new Movement();
         movement.setOrder(order);
-        movement.setDescription(order.getCreatedAt()+": "+order.getNumber()+"// " + order.getObservations());
-        movement.setAction(Action.CREO_ORDEN_TRABAJO);
+        movement.setDescription(order.getNumber()+"// " + order.getObservations()+"//"+event.getChanges());
+        movement.setAction(event.getAction());
         movement.setTechnician(technician);
 
         movementRepository.save(movement);

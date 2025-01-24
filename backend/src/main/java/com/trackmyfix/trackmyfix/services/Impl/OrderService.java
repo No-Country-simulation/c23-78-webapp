@@ -6,7 +6,6 @@ import com.trackmyfix.trackmyfix.entity.*;
 import com.trackmyfix.trackmyfix.event.OrderCreatedEvent;
 import com.trackmyfix.trackmyfix.exceptions.InvalidPriceException;
 import com.trackmyfix.trackmyfix.exceptions.OrderNotFoundException;
-import com.trackmyfix.trackmyfix.exceptions.ResourceNotFoundException;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.*;
 import com.trackmyfix.trackmyfix.services.IOrderService;
@@ -14,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +64,7 @@ public class OrderService implements IOrderService {
         Order savedOrder = orderRepository.save(newOrder);
 
         // Emitimos un evento para que se maneje en otro servicio
-        eventPublisher.publishEvent(new OrderCreatedEvent(savedOrder));
+        eventPublisher.publishEvent(new OrderCreatedEvent(savedOrder,Action.CREO_ORDEN_TRABAJO));
 
         return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
     }
@@ -80,6 +78,9 @@ public class OrderService implements IOrderService {
         order.setActive(false);
         orderRepository.save(order);
 
+        // Emitimos un evento para que se maneje en otro servicio
+        eventPublisher.publishEvent(new OrderCreatedEvent(order,Action.ELIMINO_ORDEN_TRABAJO));
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -87,17 +88,26 @@ public class OrderService implements IOrderService {
     @Override
     @Transactional
     public ResponseEntity<Order> updateOrder(Long id, OrderUpdateRequest orderUpdateRequest) {
+
         Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
 
         this.validatePrices(orderUpdateRequest.getInitialPrice(), orderUpdateRequest.getFinalPrice());
+
+        Map<String, Object> changes = this.detectChanges(existingOrder,orderUpdateRequest);
+
 
         existingOrder.setObservations(orderUpdateRequest.getObservations());
         existingOrder.setInitialPrice(orderUpdateRequest.getInitialPrice());
         existingOrder.setFinalPrice(orderUpdateRequest.getFinalPrice());
 
         Order updatedOrder = orderRepository.save(existingOrder);
+
+        // Emitimos un evento para que se maneje en otro servicio
+        eventPublisher.publishEvent(new OrderCreatedEvent(updatedOrder,Action.MODIFICO_ORDEN_TRABAJO,changes));
+
         return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
     }
+
 
     private void validatePrices(BigDecimal initialPrice, BigDecimal finalPrice) {
         if (initialPrice.compareTo(BigDecimal.TEN) < 0) {
@@ -108,8 +118,25 @@ public class OrderService implements IOrderService {
         }
     }
 
+
     private String generateOrderNumber() {
         return "ORD-" + System.currentTimeMillis();
     }
+
+
+    private Map<String, Object> detectChanges(Order existingOrder, OrderUpdateRequest orderUpdateRequest) {
+        Map<String, Object> changes = new HashMap<>();
+        if (!existingOrder.getObservations().equals(orderUpdateRequest.getObservations())) {
+            changes.put("observations: ", orderUpdateRequest.getObservations());
+        }
+        if (!existingOrder.getInitialPrice().equals(orderUpdateRequest.getInitialPrice())) {
+            changes.put("initialPrice: ", orderUpdateRequest.getInitialPrice());
+        }
+        if (!existingOrder.getFinalPrice().equals(orderUpdateRequest.getFinalPrice())) {
+            changes.put("finalPrice: ", orderUpdateRequest.getFinalPrice());
+        }
+        return changes;
+    }
+
 
 }
