@@ -17,22 +17,14 @@ public class DataLoader {
     public CommandLineRunner loadData(
             UserDataLoader userDataLoader,
             OrderDataLoader orderDataLoader,
-            TypeDataLoader typeDataLoader,
-            StateDataLoader stateDataLoader,
-            ActionDataLoader actionDataLoader,
             DeviceDataLoader deviceDataLoader,
             MovementDataLoader movementDataLoader,
-            ActionUserDataLoader actionUserDataLoader,
             UserChangeDataLoader userChangeDataLoader) {
         return args -> {
             userDataLoader.load();
             orderDataLoader.load();
-            typeDataLoader.load();
-            stateDataLoader.load();
-            actionDataLoader.load();
             deviceDataLoader.load();
             movementDataLoader.load();
-            actionUserDataLoader.load();
             userChangeDataLoader.load();
 
         };

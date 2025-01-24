@@ -23,11 +23,11 @@ public class Movement implements Serializable {
     @JoinColumn(name = "id_technician", referencedColumnName = "id_user")
     private Technician technician;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_order")
     private Order order;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_device")
     private Device device;
 
@@ -35,8 +35,8 @@ public class Movement implements Serializable {
     @Column(nullable = false)
     private Date movementDate;
 
-    @ManyToOne
-    @JoinColumn(name = "id_action")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Action action;
 
     @Column(columnDefinition = "TEXT")
