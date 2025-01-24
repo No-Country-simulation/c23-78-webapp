@@ -1,20 +1,13 @@
 package com.trackmyfix.trackmyfix.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
 
-import java.io.Serializable;
-
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-public class Action implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idAction;
-
-    @Column(nullable = false, unique = true, length = 50)
-    private String actionName;
+public enum Action {
+    CREO_ORDEN_TRABAJO,         // Creó una nueva orden de trabajo
+    MODIFICO_ORDEN_TRABAJO,     // Modificó una orden de trabajo existente
+    ELIMINO_ORDEN_TRABAJO,      // Eliminó una orden de trabajo
+    AGREGO_DISPOSITIVO,         // Agregó un dispositivo a la orden
+    ELIMINO_DISPOSITIVO,        // Eliminó un dispositivo de la orden
+    MODIFICO_DATOS_DISPOSITIVO, // Modificó los datos de un dispositivo en reparación
+    CAMBIO_ESTADO_DISPOSITIVO,  // Cambió el estado del dispositivo en reparación
 }
