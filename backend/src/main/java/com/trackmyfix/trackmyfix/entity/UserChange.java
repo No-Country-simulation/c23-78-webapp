@@ -17,13 +17,17 @@ public class UserChange implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUserChange;
 
-    @ManyToOne
-    @JoinColumn(name = "id_action_user")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ActionUser actionUser;
 
     @ManyToOne
     @JoinColumn(name = "id_technician")
     private Technician technician;
+
+    @ManyToOne
+    @JoinColumn(name = "id_client")
+    private Client client;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)

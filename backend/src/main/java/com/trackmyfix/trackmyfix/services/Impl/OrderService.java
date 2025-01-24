@@ -27,7 +27,6 @@ public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ClientRepository clientRepository;
     private final TechnicianRepository technicianRepository;
-    private final ActionRepository actionRepository;
     private final MovementRepository movementRepository;
 
     @Override
@@ -117,11 +116,9 @@ public class OrderService implements IOrderService {
         Technician technician = technicianRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
 
-        Action action = actionRepository.findById(1L)
-                .orElseThrow(() -> new ResourceNotFoundException("Acción con ID " + 1 + " no encontrada"));
 
 
-        movement.setAction(action);
+        movement.setAction(Action.CREO_ORDEN_TRABAJO);
         movement.setTechnician(technician);
 
         movementRepository.save(movement);

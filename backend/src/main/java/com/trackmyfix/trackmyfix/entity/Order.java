@@ -43,6 +43,9 @@ public class Order implements Serializable {
     @JoinColumn(name = "id_client", referencedColumnName = "id_user")
     private Client client;
 
+    @Column(nullable = false)
+    private Boolean active;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
