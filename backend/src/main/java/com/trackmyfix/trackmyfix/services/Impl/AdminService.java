@@ -23,7 +23,6 @@ public class AdminService implements IUserService<UserResponseDTO> {
     private UserRepository<Admin> adminRepository;
     private BCryptPasswordEncoder encoder;
     private UserChangeRepository userChangeRepository;
-    private ActionUserRepository ActionUserRepository;
 
     @Override
     public UserResponseDTO findById(Long id) {
