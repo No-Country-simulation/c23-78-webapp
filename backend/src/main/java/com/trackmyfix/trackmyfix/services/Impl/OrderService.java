@@ -3,7 +3,8 @@ package com.trackmyfix.trackmyfix.services.Impl;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderUpdateRequest;
 import com.trackmyfix.trackmyfix.entity.*;
-import com.trackmyfix.trackmyfix.event.OrderCreatedEvent;
+import com.trackmyfix.trackmyfix.event.DeviceEvent;
+import com.trackmyfix.trackmyfix.event.OrderEvent;
 import com.trackmyfix.trackmyfix.exceptions.InvalidPriceException;
 import com.trackmyfix.trackmyfix.exceptions.OrderNotFoundException;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
@@ -62,9 +63,9 @@ public class OrderService implements IOrderService {
         Order newOrder = Order.builder().number(generateOrderNumber()).observations(orderRequest.getObservations()).initialPrice(orderRequest.getInitialPrice()).finalPrice(BigDecimal.ZERO).client(client).active(true).build();
 
         Order savedOrder = orderRepository.save(newOrder);
+        eventPublisher.publishEvent(new DeviceEvent(savedOrder.getDevices()));
+        eventPublisher.publishEvent(new OrderEvent(savedOrder, Action.CREO_ORDEN_TRABAJO));
 
-        // Emitimos un evento para que se maneje en otro servicio
-        eventPublisher.publishEvent(new OrderCreatedEvent(savedOrder,Action.CREO_ORDEN_TRABAJO));
 
         return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
     }
@@ -75,11 +76,14 @@ public class OrderService implements IOrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
 
+        if (!order.getActive()) {
+            throw new IllegalStateException("La orden ya está inactiva");
+        }
+
         order.setActive(false);
         orderRepository.save(order);
 
-        // Emitimos un evento para que se maneje en otro servicio
-        eventPublisher.publishEvent(new OrderCreatedEvent(order,Action.ELIMINO_ORDEN_TRABAJO));
+        eventPublisher.publishEvent(new OrderEvent(order, Action.ELIMINO_ORDEN_TRABAJO));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -91,10 +95,13 @@ public class OrderService implements IOrderService {
 
         Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
 
+        if(!existingOrder.getActive()){
+            throw  new IllegalStateException("No se puede actualizar una orden inactiva");
+        }
+
         this.validatePrices(orderUpdateRequest.getInitialPrice(), orderUpdateRequest.getFinalPrice());
 
-        Map<String, Object> changes = this.detectChanges(existingOrder,orderUpdateRequest);
-
+        Map<String, Object> changes = this.detectChanges(existingOrder, orderUpdateRequest);
 
         existingOrder.setObservations(orderUpdateRequest.getObservations());
         existingOrder.setInitialPrice(orderUpdateRequest.getInitialPrice());
@@ -102,8 +109,7 @@ public class OrderService implements IOrderService {
 
         Order updatedOrder = orderRepository.save(existingOrder);
 
-        // Emitimos un evento para que se maneje en otro servicio
-        eventPublisher.publishEvent(new OrderCreatedEvent(updatedOrder,Action.MODIFICO_ORDEN_TRABAJO,changes));
+        eventPublisher.publishEvent(new OrderEvent(updatedOrder, Action.MODIFICO_ORDEN_TRABAJO, changes));
 
         return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
     }
@@ -120,21 +126,39 @@ public class OrderService implements IOrderService {
 
 
     private String generateOrderNumber() {
-        return "ORD-" + System.currentTimeMillis();
+        String lastOrderNumber = getLastOrderNumber();
+        int lastNumber = lastOrderNumber != null ? extractNumberFromOrder(lastOrderNumber) : 0;
+        int newOrderNumber = lastNumber + 1;
+        return formatOrderNumber(newOrderNumber);
     }
 
+    private String getLastOrderNumber() {
+        return orderRepository.findTopByOrderByIdOrderDesc()
+                .map(Order::getNumber)
+                .orElse(null);
+    }
+
+    private int extractNumberFromOrder(String orderNumber) {
+        return Integer.parseInt(orderNumber.replace("ORD-", ""));
+    }
+
+    private String formatOrderNumber(int number) {
+        return "ORD-" + String.format("%05d", number);
+    }
 
     private Map<String, Object> detectChanges(Order existingOrder, OrderUpdateRequest orderUpdateRequest) {
         Map<String, Object> changes = new HashMap<>();
+
         if (!existingOrder.getObservations().equals(orderUpdateRequest.getObservations())) {
-            changes.put("observations: ", orderUpdateRequest.getObservations());
+            changes.put("Observaciones", "De: [" + existingOrder.getObservations() + "] a: [" + orderUpdateRequest.getObservations() + "]");
         }
         if (!existingOrder.getInitialPrice().equals(orderUpdateRequest.getInitialPrice())) {
-            changes.put("initialPrice: ", orderUpdateRequest.getInitialPrice());
+            changes.put("Precio Inicial", "De: [" + existingOrder.getInitialPrice() + "] a: [" + orderUpdateRequest.getInitialPrice() + "]");
         }
         if (!existingOrder.getFinalPrice().equals(orderUpdateRequest.getFinalPrice())) {
-            changes.put("finalPrice: ", orderUpdateRequest.getFinalPrice());
+            changes.put("Precio Final", "De: [" + existingOrder.getFinalPrice() + "] a: [" + orderUpdateRequest.getFinalPrice() + "]");
         }
+
         return changes;
     }
 

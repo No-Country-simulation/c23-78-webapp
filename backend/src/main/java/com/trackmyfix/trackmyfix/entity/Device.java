@@ -35,7 +35,7 @@ public class Device implements Serializable {
 //    @JoinColumn(name = "id_type")
 //    private Type type;
     @ManyToOne
-    @JoinColumn(name = "id_order")
+    @JoinColumn(name = "id_order", nullable=false)
     private Order order;
 
     @Enumerated(EnumType.STRING)

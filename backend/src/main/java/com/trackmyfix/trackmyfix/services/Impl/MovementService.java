@@ -1,10 +1,9 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
-import com.trackmyfix.trackmyfix.entity.Action;
 import com.trackmyfix.trackmyfix.entity.Movement;
 import com.trackmyfix.trackmyfix.entity.Order;
 import com.trackmyfix.trackmyfix.entity.Technician;
-import com.trackmyfix.trackmyfix.event.OrderCreatedEvent;
+import com.trackmyfix.trackmyfix.event.OrderEvent;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.MovementRepository;
 import com.trackmyfix.trackmyfix.repository.TechnicianRepository;
@@ -15,6 +14,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class MovementService {
@@ -24,19 +26,25 @@ public class MovementService {
     @Async
     @Transactional
     @EventListener
-    public void handleOrderCreatedEvent(OrderCreatedEvent event){
+    public void handleOrderCreatedEvent(OrderEvent event) {
         Order order = event.getOrder();
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        Technician technician = technicianRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
+        Technician technician = technicianRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
 
         Movement movement = new Movement();
         movement.setOrder(order);
-        movement.setDescription(order.getNumber()+"// " + order.getObservations()+"//"+event.getChanges());
+        movement.setOrder(order);
+        movement.setDescription(this.generateDescription(order, event.getChanges()));
         movement.setAction(event.getAction());
         movement.setTechnician(technician);
 
         movementRepository.save(movement);
+    }
+
+    private String generateDescription(Order order, Map<String, Object> changes) {
+        String changesDescription = changes.entrySet().stream()
+                .map(entry -> entry.getKey() + "=" + entry.getValue())
+                .collect(Collectors.joining(", "));
+        return "[" + order.getNumber() + "] =>" + " Cambios: [" + changesDescription + "]";
     }
 }

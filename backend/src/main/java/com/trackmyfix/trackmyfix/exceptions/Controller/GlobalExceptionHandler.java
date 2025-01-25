@@ -49,6 +49,12 @@ public class GlobalExceptionHandler {
         return generateErrorResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
 
+    // ⚠️ Excepción para cuando se intenta actualizar una entidad inactiva
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<String> handleIllegalStateException(IllegalStateException ex, WebRequest request) {
+        return generateErrorResponse(ex, request, HttpStatus.BAD_REQUEST);
+    }
+
     // ⚠️ Excepción genérica para recursos no encontrados
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
