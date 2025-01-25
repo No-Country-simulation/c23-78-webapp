@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-TrackmyfixApplication<trackmyfix>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.trackmyfix.trackmyfix.TrackmyfixApplication",
+      "projectName": "trackmyfix",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

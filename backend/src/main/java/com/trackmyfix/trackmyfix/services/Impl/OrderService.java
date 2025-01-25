@@ -42,25 +42,30 @@ public class OrderService implements IOrderService {
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<Order> findByNumber(String number) {
-        Order order = orderRepository.findByNumber(number).orElseThrow(() -> new OrderNotFoundException("Orden con número " + number + " no encontrada"));
+        Order order = orderRepository.findByNumber(number)
+                .orElseThrow(() -> new OrderNotFoundException("Orden con número " + number + " no encontrada"));
         return ResponseEntity.ok(order);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<Order> findById(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
         return ResponseEntity.ok(order);
     }
 
     @Override
     @Transactional
     public ResponseEntity<Order> createOrder(OrderRequest orderRequest) {
-        Client client = clientRepository.findByDni(orderRequest.getDni()).orElseThrow(() -> new UserNotFoundException("Cliente con DNI " + orderRequest.getDni() + " no encontrado"));
+        Client client = clientRepository.findByDni(orderRequest.getDni()).orElseThrow(
+                () -> new UserNotFoundException("Cliente con DNI " + orderRequest.getDni() + " no encontrado"));
 
         this.validatePrices(orderRequest.getInitialPrice(), BigDecimal.ZERO);
 
-        Order newOrder = Order.builder().number(generateOrderNumber()).observations(orderRequest.getObservations()).initialPrice(orderRequest.getInitialPrice()).finalPrice(BigDecimal.ZERO).client(client).active(true).build();
+        Order newOrder = Order.builder().number(generateOrderNumber()).observations(orderRequest.getObservations())
+                .initialPrice(orderRequest.getInitialPrice()).finalPrice(BigDecimal.ZERO).client(client).active(true)
+                .build();
 
         Order savedOrder = orderRepository.save(newOrder);
         eventPublisher.publishEvent(new DeviceEvent(savedOrder.getDevices()));
@@ -88,12 +93,16 @@ public class OrderService implements IOrderService {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
     @Override
     @Transactional
     public ResponseEntity<Order> updateOrder(Long id, OrderUpdateRequest orderUpdateRequest) {
+<<<<<<< HEAD
 
         Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
+=======
+        Order existingOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
+>>>>>>> developer-backend-esteban
 
         if(!existingOrder.getActive()){
             throw  new IllegalStateException("No se puede actualizar una orden inactiva");
