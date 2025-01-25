@@ -96,13 +96,8 @@ public class OrderService implements IOrderService {
     @Override
     @Transactional
     public ResponseEntity<Order> updateOrder(Long id, OrderUpdateRequest orderUpdateRequest) {
-<<<<<<< HEAD
-
-        Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
-=======
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
->>>>>>> developer-backend-esteban
 
         if(!existingOrder.getActive()){
             throw  new IllegalStateException("No se puede actualizar una orden inactiva");
