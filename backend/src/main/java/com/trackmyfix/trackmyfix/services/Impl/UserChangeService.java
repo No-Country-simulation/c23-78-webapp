@@ -3,7 +3,6 @@ package com.trackmyfix.trackmyfix.services.Impl;
 import com.trackmyfix.trackmyfix.Dto.Response.UserChangeResponseDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
 import com.trackmyfix.trackmyfix.entity.*;
-import com.trackmyfix.trackmyfix.repository.ActionUserRepository;
 import com.trackmyfix.trackmyfix.repository.UserChangeRepository;
 import com.trackmyfix.trackmyfix.services.IUserChangeService;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 public class UserChangeService implements IUserChangeService {
 
     private final UserChangeRepository userChangeRepository;
-    private final ActionUserRepository actionUserRepository;
 
     @Override
     public Set<UserChangeResponseDTO> findAll() {
@@ -28,10 +26,9 @@ public class UserChangeService implements IUserChangeService {
     }
 
     @Override
-    public void save(String actionName, Long technicianId, Long userId) {
-        ActionUser action = actionUserRepository.findByName(actionName);
+    public void save(ActionUser actionUser, Long technicianId, Long userId) {
         userChangeRepository.saveCustom(
-                action.getIdActionUser(),
+                actionUser.name(),
                 technicianId,
                 userId
         );
@@ -42,8 +39,8 @@ public class UserChangeService implements IUserChangeService {
         return UserChangeResponseDTO.builder()
                 .id(userChange.getIdUserChange())
                 .client(mapToDTO(userChange.getClient()))
-                .userCommited(mapToDTO(tech))
-                .actionUser(userChange.getActionUser().getName())
+                .technician(mapToDTO(tech))
+                .actionUser(userChange.getActionUser().name())
                 .created_at(userChange.getCreatedAt())
                 .build();
     }

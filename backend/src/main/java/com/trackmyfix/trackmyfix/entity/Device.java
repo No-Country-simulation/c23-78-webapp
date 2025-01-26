@@ -2,6 +2,7 @@ package com.trackmyfix.trackmyfix.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Device implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,21 +26,30 @@ public class Device implements Serializable {
     private String serialNumber;
 
     @Column(length = 250)
-    private String accessories;
+    private String accesories;
 
     @Column(columnDefinition = "TEXT")
-    private String description;
+    private String clientDescription; // Problema reportado por el cliente
 
+    @Column(columnDefinition = "TEXT")
+    private String technicalReport; // Análisis técnico y diagnóstico
+    // @ManyToOne
+    // @JoinColumn(name = "id_type")
+    // private Type type;
     @ManyToOne
-    @JoinColumn(name = "id_order")
+    @JoinColumn(name = "id_order", nullable=false)
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "id_type")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Type type;
 
-    @ManyToOne
-    @JoinColumn(name = "id_state")
+    // @ManyToOne
+    // @JoinColumn(name = "id_state")
+    // private State state;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private State state;
 
     @Column(name = "created_at", nullable = false, updatable = false)

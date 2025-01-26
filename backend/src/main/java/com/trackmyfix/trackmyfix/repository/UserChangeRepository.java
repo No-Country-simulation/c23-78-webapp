@@ -1,5 +1,6 @@
 package com.trackmyfix.trackmyfix.repository;
 
+import com.trackmyfix.trackmyfix.entity.ActionUser;
 import com.trackmyfix.trackmyfix.entity.UserChange;
 import org.hibernate.annotations.SQLInsert;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,7 +16,7 @@ public interface UserChangeRepository extends CrudRepository<UserChange,Long> {
     List<UserChange> findAll();
 
     @Modifying
-    @Query(value = "INSERT INTO user_change (id_action_user, id_technician, id_client) VALUES (:actionId, :technicianId, :clientId)", nativeQuery = true)
+    @Query(value = "INSERT INTO user_change (action_user, id_technician, id_client) VALUES (:actionUser, :technicianId, :clientId)", nativeQuery = true)
     @Transactional
-    void saveCustom(@Param("actionId") Long actionId, @Param("technicianId") Long technicianId, @Param("clientId") Long clientId);
+    void saveCustom(@Param("actionUser") String actionUser, @Param("technicianId") Long technicianId, @Param("clientId") Long clientId);
 }

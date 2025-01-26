@@ -12,6 +12,6 @@ public interface IOrderService {
     ResponseEntity<Order> findByNumber(String number);
     ResponseEntity<Order> findById(Long id);
     ResponseEntity<Order> createOrder(OrderRequest orderRequest);
-    ResponseEntity<Void>deleteOrder(Long id);
+    ResponseEntity<Void>deactivateOrder(Long id);
     ResponseEntity<Order> updateOrder(Long id,OrderUpdateRequest orderUpdateRequest);
 }

@@ -14,7 +14,7 @@ import java.util.Date;
 public class UserChangeResponseDTO {
     private Long id;
     private UserResponseDTO client;
-    private UserResponseDTO userCommited;
+    private UserResponseDTO technician;
     private String actionUser;
     private Date created_at;
 }

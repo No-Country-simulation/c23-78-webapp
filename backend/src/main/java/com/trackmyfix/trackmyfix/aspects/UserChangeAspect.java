@@ -54,27 +54,27 @@ public class UserChangeAspect {
             log.info(auth.toString());
             jwtUser = (UserJwtData) auth.getPrincipal();
             if (auth.isAuthenticated()) {
-                switch(annotation.action()){
-                    case "UPDATE" -> {
+                switch(annotation.actionUser()){
+                    case MODIFICO_DATOS_CLIENTE -> {
                         if(user.get() != null) {
-                            userChangeService.save(annotation.action(), jwtUser.getId(), user.get().getId());
+                            userChangeService.save(annotation.actionUser(), jwtUser.getId(), user.get().getId());
                         }
                     }
-                    case "DELETE", "READ" -> {
+                    case DESACTIVO_CUENTA_CLIENTE, ACTIVO_CUENTA_CLIENTE, ELIMINO_CLIENTE -> {
                         if (deletedId.get() != 0L) {
-                            userChangeService.save(annotation.action(), jwtUser.getId(), deletedId.get());
+                            userChangeService.save(annotation.actionUser(), jwtUser.getId(), deletedId.get());
                         }
                     }
-                    case "CREATE" -> {
+                    case AGREGO_CLIENTE -> {
                         User newUser = userRepository.findByEmail(user.get().getEmail()).orElseThrow(()-> new UserNotFoundException("Email not found"));
-                        userChangeService.save(annotation.action(), jwtUser.getId(), newUser.getId());
+                        userChangeService.save(annotation.actionUser(), jwtUser.getId(), newUser.getId());
                     }
-                    default -> log.error("Action UserChange "+annotation.action()+" doesn't exist");
+                    default -> log.error("Action UserChange "+annotation.actionUser()+" doesn't exist");
                 }
             }
         }
 
-        log.info("annotation params: {}", annotation.action());
+        log.info("annotation params: {}", annotation.actionUser());
 
     }
 }

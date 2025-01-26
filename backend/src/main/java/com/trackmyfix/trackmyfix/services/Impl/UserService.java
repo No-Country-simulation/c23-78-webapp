@@ -6,6 +6,8 @@ import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
 import com.trackmyfix.trackmyfix.aspects.annotations.UserChangeNotify;
 import com.trackmyfix.trackmyfix.configs.auth.JWTService;
+import com.trackmyfix.trackmyfix.entity.Action;
+import com.trackmyfix.trackmyfix.entity.ActionUser;
 import com.trackmyfix.trackmyfix.entity.User;
 import com.trackmyfix.trackmyfix.entity.UserJwtData;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
@@ -34,7 +36,6 @@ public class UserService {
     private JWTService jwtService;
     AuthenticationManager authManager;
 
-    @UserChangeNotify(action = "READ")
     public UserResponseDTO findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
         return switch (user.getRole()) {
@@ -44,7 +45,7 @@ public class UserService {
         };
     }
 
-    @UserChangeNotify(action = "CREATE")
+    @UserChangeNotify(actionUser = ActionUser.AGREGO_CLIENTE)
     public UserResponseDTO save(UserRequestDTO user) {
         return switch (user.getRole()) {
             case ADMIN -> adminService.save(user);
@@ -53,7 +54,7 @@ public class UserService {
         };
     }
 
-    @UserChangeNotify(action = "UPDATE")
+    @UserChangeNotify(actionUser = ActionUser.MODIFICO_DATOS_CLIENTE)
     public UserResponseDTO update(UserRequestDTO user) {
         return switch (user.getRole()) {
             case ADMIN -> adminService.update(user);
@@ -62,7 +63,7 @@ public class UserService {
         };
     }
 
-    @UserChangeNotify(action = "DELETE")
+    @UserChangeNotify(actionUser = ActionUser.DESACTIVO_CUENTA_CLIENTE)
     public void delete(Long id) {
         UserResponseDTO user = this.findById(id);
         switch (user.getRole()) {
