@@ -1,6 +1,8 @@
 package com.trackmyfix.trackmyfix.Dto.Response;
 
 import com.trackmyfix.trackmyfix.entity.Role;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @Getter

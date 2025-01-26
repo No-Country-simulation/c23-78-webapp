@@ -10,7 +10,7 @@ import java.util.Collection;
 public class UserJwtData implements UserDetails {
 
     @Getter
-    private final Long id;
+    private Long id;
     @Getter
     private String username;
     @Getter

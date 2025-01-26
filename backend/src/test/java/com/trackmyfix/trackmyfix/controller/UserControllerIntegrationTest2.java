@@ -4,63 +4,39 @@ import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
 import com.trackmyfix.trackmyfix.configs.auth.JwtFilter;
 import com.trackmyfix.trackmyfix.entity.Role;
-import com.trackmyfix.trackmyfix.configs.auth.JWTService;
-import com.trackmyfix.trackmyfix.configs.auth.MyUserDetailsService;
 import com.trackmyfix.trackmyfix.services.Impl.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.any;
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @WebMvcTest(controllers = UserController.class)
-public class UserControllerIntegrationTest {
+public class UserControllerIntegrationTest2 {
 
     @Autowired
     private MockMvc mockMvc;
-    @MockitoBean
-    private JwtFilter jwtFilter;
-    @MockitoBean
-    private JWTService jwtService;
-    @MockitoBean
-    private SecurityFilterChain securityFilterChain;
+
     @MockitoBean
     private UserService userServiceMock;
-    @MockitoBean
-    private UserDetailsService userDetailsService;
-    @MockitoBean
-    private AuthenticationManager authenticationManager;
-    @MockitoBean
-    private AuthenticationProvider authenticationProvider;
-    @MockitoBean
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    @MockitoBean
-    private MyUserDetailsService myUserDetailsService;
 
+    @MockitoBean
+    private JwtFilter jwtFilterMock;
 
     private UserRequestDTO sampleAdminRequest;
-    private UserRequestDTO sampleTechnicianRequest;
-    private UserRequestDTO sampleClientRequest;
 
     @BeforeEach
     void setUp() {
@@ -73,25 +49,6 @@ public class UserControllerIntegrationTest {
                 .phone("1122540454")
                 .email("asd@asd.com")
                 .password("12345678Nmmm")
-                .build();
-        sampleTechnicianRequest = UserRequestDTO.builder()
-                .role(Role.TECHNICIAN)
-                .name("NombreTecnico1")
-                .lastName("Apellido")
-                .dni("94807937")
-                .address("blanco 5127")
-                .phone("1122540454")
-                .email("asd2@asd.com")
-                .password("12345678Nmmm")
-                .build();
-        sampleClientRequest = UserRequestDTO.builder()
-                .role(Role.CLIENT)
-                .name("NombreCliente1")
-                .lastName("Apellido")
-                .dni("94807938")
-                .address("blanco 5127")
-                .phone("1122540454")
-                .email("asd3@asd.com")
                 .build();
     }
 
@@ -110,13 +67,13 @@ public class UserControllerIntegrationTest {
                 .role(Role.ADMIN)
                 .build();
 
-        given(userServiceMock.save(any(UserRequestDTO.class))).willReturn(adminResponse);
+        //given(userServiceMock.save(any(UserRequestDTO.class))).willReturn(adminResponse);
 
         mockMvc.perform(
-                    post("/user/register")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(new Jackson2ObjectMapperBuilder().build().writeValueAsString(sampleAdminRequest))
-                            )
+                        post("/user/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(new Jackson2ObjectMapperBuilder().build().writeValueAsString(sampleAdminRequest))
+                )
                 .andExpect(status().isOk());
 //                .andExpect(jsonPath("$.name").value("NombreAdmin1"))
 //                .andExpect(jsonPath("$.lastName", is("Apellido")))
@@ -125,13 +82,19 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
+    void givenRequestIsAnonymous_whenGetGreet_thenUnauthorized() throws Exception {
+        mockMvc.perform(get("/work-order").with(SecurityMockMvcRequestPostProcessors.anonymous()))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void testLogin() throws Exception {
         //GIVEN
         mockMvc
                 .perform(
                         formLogin("/user/login")
-                        .user("jindrg@gmail.com")
-                        .password("adminpassword1")
+                                .user("jindrg@gmail.com")
+                                .password("adminpassword1")
                 ).andExpect(status().isOk());
     }
 }

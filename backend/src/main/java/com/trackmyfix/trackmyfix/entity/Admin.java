@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 
 @Entity
@@ -22,6 +24,8 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE user SET active = 0 WHERE id_user=?")
+@Where(clause = "active = 1")
 public class Admin extends User {
     @Column(length = 100)
     @NotBlank(message = "Password cannot be blank")
