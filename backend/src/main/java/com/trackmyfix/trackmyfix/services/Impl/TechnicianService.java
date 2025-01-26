@@ -2,6 +2,7 @@ package com.trackmyfix.trackmyfix.services.Impl;
 
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
+import com.trackmyfix.trackmyfix.aspects.annotations.UserChangeNotify;
 import com.trackmyfix.trackmyfix.entity.Technician;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
@@ -10,6 +11,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class TechnicianService implements IUserService<UserResponseDTO> {
@@ -17,6 +20,9 @@ public class TechnicianService implements IUserService<UserResponseDTO> {
     private final UserRepository<Technician> technicianRepository;
     private BCryptPasswordEncoder encoder;
 
+    public List<UserResponseDTO> findAll() {
+        return technicianRepository.findAll().stream().map(this::mapToDTO).toList();
+    }
 
     @Override
     public UserResponseDTO findById(Long id) {

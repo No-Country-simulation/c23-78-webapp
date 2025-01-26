@@ -1,15 +1,16 @@
 package com.trackmyfix.trackmyfix.controller;
 
+import com.trackmyfix.trackmyfix.Dto.Request.GrantType;
 import com.trackmyfix.trackmyfix.Dto.Request.LoginRequestDTO;
+import com.trackmyfix.trackmyfix.Dto.Request.RefreshTokenRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
-import com.trackmyfix.trackmyfix.services.Impl.AdminService;
-import com.trackmyfix.trackmyfix.services.Impl.ClientService;
-import com.trackmyfix.trackmyfix.services.Impl.TechnicianService;
+import com.trackmyfix.trackmyfix.aspects.annotations.UserChangeNotify;
 import com.trackmyfix.trackmyfix.services.Impl.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +23,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/login")
-    public ResponseEntity<Map<String,String>> login(@RequestBody LoginRequestDTO user) {
-        return ResponseEntity.ok(userService.verify(user));
+    @PostMapping(value = "/login")
+    public ResponseEntity<Map<String,String>> login(@RequestBody LoginRequestDTO request) {
+        return ResponseEntity.ok(userService.verify(request));
+    }
+
+    @PostMapping(value = "/token")
+    public ResponseEntity<Map<String,String>> refreshToken(@RequestBody RefreshTokenRequestDTO request) {
+        return ResponseEntity.ok(userService.refreshToken());
     }
 
     @GetMapping("/{id}")
@@ -47,6 +53,5 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 
 }

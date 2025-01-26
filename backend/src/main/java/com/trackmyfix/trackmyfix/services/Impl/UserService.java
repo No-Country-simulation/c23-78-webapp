@@ -1,10 +1,13 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
 import com.trackmyfix.trackmyfix.Dto.Request.LoginRequestDTO;
+import com.trackmyfix.trackmyfix.Dto.Request.RefreshTokenRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
-import com.trackmyfix.trackmyfix.entity.Admin;
+import com.trackmyfix.trackmyfix.aspects.annotations.UserChangeNotify;
+import com.trackmyfix.trackmyfix.configs.auth.JWTService;
 import com.trackmyfix.trackmyfix.entity.User;
+import com.trackmyfix.trackmyfix.entity.UserJwtData;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -13,24 +16,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Service
 @AllArgsConstructor
 public class UserService {
 
-    private final UserRepository<User> userRepository;
-    private final AdminService adminService;
-    private final TechnicianService technicianService;
-    private final ClientService clientService;
+    private UserRepository<User> userRepository;
+    private AdminService adminService;
+    private TechnicianService technicianService;
+    private ClientService clientService;
 
     private JWTService jwtService;
     AuthenticationManager authManager;
 
+    @UserChangeNotify(action = "READ")
     public UserResponseDTO findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
         return switch (user.getRole()) {
@@ -40,6 +44,7 @@ public class UserService {
         };
     }
 
+    @UserChangeNotify(action = "CREATE")
     public UserResponseDTO save(UserRequestDTO user) {
         return switch (user.getRole()) {
             case ADMIN -> adminService.save(user);
@@ -47,6 +52,8 @@ public class UserService {
             case CLIENT -> clientService.save(user);
         };
     }
+
+    @UserChangeNotify(action = "UPDATE")
     public UserResponseDTO update(UserRequestDTO user) {
         return switch (user.getRole()) {
             case ADMIN -> adminService.update(user);
@@ -54,6 +61,8 @@ public class UserService {
             case CLIENT -> clientService.update(user);
         };
     }
+
+    @UserChangeNotify(action = "DELETE")
     public void delete(Long id) {
         UserResponseDTO user = this.findById(id);
         switch (user.getRole()) {
@@ -66,6 +75,16 @@ public class UserService {
     public Map<String, String> verify(LoginRequestDTO user) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(user.getUsername());
+        } else {
+            throw new Exception("Login failed");
+        }
+    }
+    @SneakyThrows
+    public Map<String, String> refreshToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()) {
+            UserJwtData user = (UserJwtData) authentication.getPrincipal();
             return jwtService.generateToken(user.getUsername());
         } else {
             throw new Exception("Login failed");

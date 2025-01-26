@@ -11,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 public class LoginRequestDTO {
-
     @Email(message = "Username should be valid Email")
     private String username;
 

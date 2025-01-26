@@ -1,35 +1,57 @@
 package com.trackmyfix.trackmyfix.configs;
 
+import com.trackmyfix.trackmyfix.configs.auth.JwtFilter;
+import com.trackmyfix.trackmyfix.entity.Role;
+import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
+
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
 @Slf4j
 public class SecurityConfig {
-    private JwtFilter jwtFilter;
-    private UserDetailsService userDetailsService;
+
+    private final AuthenticationProvider authenticationProvider;
+    private final JwtFilter jwtFilter;
+
+    public SecurityConfig(JwtFilter jwtFilter, AuthenticationProvider authenticationProvider) {
+        this.jwtFilter = jwtFilter;
+        this.authenticationProvider = authenticationProvider;
+    }
+
+    @Autowired
+    @Qualifier("delegatedAuthenticationEntryPoint")
+    AuthenticationEntryPoint authEntryPoint;
+
+    private static final String[] ADMIN_ROUTES = {"/**"};
+    private static final String[] TECHNICIAN_ROUTES = {"/work-order"};
+    private static final String[] CLIENT_ROUTES = {"/"};
+    private static final String[] PUBLIC_ROUTES = {"/user/login", "/user/register", "/user/logout"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
+        http.csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
                     configuration.addAllowedMethod("POST");
@@ -40,32 +62,30 @@ public class SecurityConfig {
                     configuration.addAllowedOrigin("*");
                     return configuration;
                 }))
+
                 .authorizeHttpRequests(request -> request
-                .requestMatchers("user/login", "user/register").permitAll()
-                .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .requestMatchers(PUBLIC_ROUTES).permitAll()
+                        .requestMatchers(ADMIN_ROUTES).hasAuthority(Role.ADMIN.name())
+                        .requestMatchers(TECHNICIAN_ROUTES).hasAuthority(Role.TECHNICIAN.name())
+                        .requestMatchers(POST, "/user/**").hasAnyAuthority(Role.TECHNICIAN.name())
+                        .requestMatchers(DELETE, "/user/**").hasAnyAuthority(Role.TECHNICIAN.name())
+                        .requestMatchers(PUT, "/user/**").hasAnyAuthority(Role.TECHNICIAN.name())
+                        .anyRequest()
+                        .authenticated()
+                )
+                .httpBasic()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authEntryPoint)
+                .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
-        provider.setUserDetailsService(userDetailsService);
-        log.info(provider.toString());
-
-        return provider;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-
-    }
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder(12);
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .logout(logout ->
+                        logout.logoutUrl("/user/logout")
+                            .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()
+                )
+        );
+        return http.build();
     }
 }
