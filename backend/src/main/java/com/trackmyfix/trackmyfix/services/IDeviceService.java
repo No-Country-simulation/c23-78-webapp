@@ -1,7 +1,10 @@
 package com.trackmyfix.trackmyfix.services;
 
+import java.util.List;
 import java.util.Map;
 
+import com.trackmyfix.trackmyfix.entity.Order;
+import com.trackmyfix.trackmyfix.event.DeviceEvent;
 import org.springframework.http.ResponseEntity;
 
 import com.trackmyfix.trackmyfix.Dto.Request.DeviceRequestDTO;
@@ -15,9 +18,11 @@ public interface IDeviceService {
 
     ResponseEntity<Device> findBySerialNumber(String serialNumber);
 
-    ResponseEntity<Device> createDevice(DeviceRequestDTO device);
+    void createDevice(DeviceEvent deviceEvent);
 
     ResponseEntity<Device> updateDevice(long id, DeviceRequestDTO device);
+
+
     /*
      * 
      * ResponseEntity<Device> changeStateDevice(long id, State newState);

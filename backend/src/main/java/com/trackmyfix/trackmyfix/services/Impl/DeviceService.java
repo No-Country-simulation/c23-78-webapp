@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.trackmyfix.trackmyfix.entity.Order;
+import com.trackmyfix.trackmyfix.event.DeviceEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -51,28 +54,33 @@ public class DeviceService implements IDeviceService {
     }
 
     @Override
-    public ResponseEntity<Device> createDevice(DeviceRequestDTO device) {
-        Device newDevice = Device.builder()
-                .model(device.getModel())
-                .serialNumber(device.getSerialNumber())
-                .accesories(device.getAccesories())
-                .technicalReport(device.getTechnicalReport())
-                .order(device.getOrder())
-                .type(device.getType())
-                .state(device.getState())
-                .clientDescription(device.getClientDescription())
-                .build();
-        deviceRepository.save(newDevice);
-        return new ResponseEntity<>(newDevice, HttpStatus.CREATED);
+    @EventListener
+    public void createDevice(DeviceEvent event) {
+
+        for (DeviceRequestDTO deviceRequest : event.getDevices()) {
+            Device device = new Device();
+            device.setModel(deviceRequest.getModel());
+            device.setSerialNumber(deviceRequest.getSerialNumber());
+            device.setAccessories(deviceRequest.getAccessories());
+            device.setInitialPrice(deviceRequest.getInitialPrice());
+            device.setFinalPrice(deviceRequest.getFinalPrice());
+            device.setClientDescription(deviceRequest.getClientDescription());
+            device.setTechnicalReport(deviceRequest.getTechnicalReport());
+            device.setType(deviceRequest.getType());
+            device.setState(State.RECIBIDO);
+            device.setOrder(event.getOrder());
+
+            deviceRepository.save(device); // Guardar el dispositivo en la base de datos
+        }
     }
 
     @Override
     public ResponseEntity<Device> updateDevice(long id, DeviceRequestDTO device) {
         Device updatedDevice = deviceRepository.findById(id).orElseThrow(
                 () -> new DeviceNotFoundException("El dispositivo con el numero" + id + "No fue encontrado"));
-        updatedDevice.setAccesories(device.getAccesories());
+        updatedDevice.setAccessories(device.getAccessories());
         updatedDevice.setModel(device.getModel());
-        updatedDevice.setOrder(device.getOrder());
+        //updatedDevice.setOrder(device.getOrder());
         updatedDevice.setSerialNumber(device.getSerialNumber());
         updatedDevice.setState(device.getState());
         updatedDevice.setTechnicalReport(device.getTechnicalReport());
@@ -80,6 +88,10 @@ public class DeviceService implements IDeviceService {
         deviceRepository.save(updatedDevice);
         return new ResponseEntity<>(updatedDevice, HttpStatus.OK);
     }
+
+
+
+
 
     /*
      * metodo a confirmar con front end

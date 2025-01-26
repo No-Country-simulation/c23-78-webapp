@@ -6,6 +6,7 @@ import com.trackmyfix.trackmyfix.entity.Order;
 import com.trackmyfix.trackmyfix.services.Impl.OrderService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +34,11 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order>createOrder(@RequestBody @Valid OrderRequest orderRequest){
-        return orderService.createOrder(orderRequest);
+    public ResponseEntity<Order> createOrder(@RequestBody @Valid OrderRequest orderRequest) {
+        Order order = orderService.createOrder(orderRequest); // Llama al Service, que ya no usa ResponseEntity
+        return ResponseEntity.status(HttpStatus.CREATED).body(order); // El Controller maneja la respuesta HTTP
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody @Valid OrderUpdateRequest orderUpdateRequest){

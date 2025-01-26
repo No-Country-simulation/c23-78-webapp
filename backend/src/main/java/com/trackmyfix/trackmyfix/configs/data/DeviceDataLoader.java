@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -36,22 +37,22 @@ public class DeviceDataLoader {
         Order order10 = orders.get(9);
 
         // Dispositivos para la primera orden
-        Device device1 = new Device(null, "Dell OptiPlex 3080", "SN-00001", "Teclado y Mouse", "No enciende", "Fuente dañada", order1, Type.COMPUTADORA_DE_ESCRITORIO, State.RECIBIDO, null, null);
-        Device device2 = new Device(null, "MacBook Pro 2020", "SN-00002", "Cargador original", "Pantalla con rayas", "Falla en GPU", order1, Type.NOTEBOOK, State.RECIBIDO, null, null);
+        Device device1 = new Device(null, "Dell OptiPlex 3080", "SN-00001", "Teclado y Mouse", new BigDecimal(3000), new BigDecimal(30000), "No enciende", "Fuente dañada", order1, Type.COMPUTADORA_DE_ESCRITORIO, State.RECIBIDO, null, null);
+        Device device2 = new Device(null, "MacBook Pro 2020", "SN-00002", "Cargador original", new BigDecimal(2000), new BigDecimal(20000), "Pantalla con rayas", "Falla en GPU", order1, Type.NOTEBOOK, State.RECIBIDO, null, null);
 
         // Dispositivos para la segunda orden
-        Device device3 = new Device(null, "HP Pavilion 15", "SN-00003", "Cargador genérico", "No carga", "Batería agotada", order2, Type.NOTEBOOK, State.RECIBIDO, null, null);
-        Device device4 = new Device(null, "Samsung Galaxy S21", "SN-00004", "Sin accesorios", "No enciende", "Falla en la placa", order2, Type.SMARTPHONE, State.RECIBIDO, null, null);
+        Device device3 = new Device(null, "HP Pavilion 15", "SN-00003", "Cargador genérico", new BigDecimal(8000), new BigDecimal(80000), "No carga", "Batería agotada", order2, Type.NOTEBOOK, State.RECIBIDO, null, null);
+        Device device4 = new Device(null, "Samsung Galaxy S21", "SN-00004", "Sin accesorios", new BigDecimal(9000), new BigDecimal(90000), "No enciende", "Falla en la placa", order2, Type.SMARTPHONE, State.RECIBIDO, null, null);
 
         // Dispositivos para el resto de las órdenes
-        Device device5 = new Device(null, "Dell Inspiron 5000", "SN-00005", "Teclado y Mouse", "No enciende", "Fuente dañada", orders.get(2), Type.COMPUTADORA_DE_ESCRITORIO, State.RECIBIDO, null, null);
-        Device device6 = new Device(null, "iPhone 13", "SN-00006", "Cargador", "Pantalla dañada", "Falla en la cámara", orders.get(3), Type.SMARTPHONE, State.RECIBIDO, null, null);
-        Device device7 = new Device(null, "Samsung Galaxy Tab S7", "SN-00007", "Cargador", "Pantalla rota", "Batería dañada", orders.get(4), Type.TABLET, State.RECIBIDO, null, null);
-        Device device8 = new Device(null, "Lenovo ThinkPad X1 Carbon", "SN-00008", "Mouse inalámbrico", "No carga", "Placa base dañada", orders.get(5), Type.NOTEBOOK, State.RECIBIDO, null, null);
-        Device device9 = new Device(null, "MacBook Air 2020", "SN-00009", "Cargador original", "Pantalla parpadeante", "Problema en la GPU", orders.get(6), Type.NOTEBOOK, State.RECIBIDO, null, null);
-        Device device10 = new Device(null, "Sony Xperia 5", "SN-00010", "Cargador", "No enciende", "Falla en la placa base", orders.get(7), Type.SMARTPHONE, State.RECIBIDO, null, null);
-        Device device11 = new Device(null, "HP Envy 13", "SN-00011", "Teclado Bluetooth", "No carga", "Fuente de alimentación dañada", orders.get(8), Type.NOTEBOOK, State.RECIBIDO, null, null);
-        Device device12 = new Device(null, "Google Pixel 5", "SN-00012", "Cargador original", "Pantalla rota", "Problema con el sensor", orders.get(9), Type.SMARTPHONE, State.RECIBIDO, null, null);
+        Device device5 = new Device(null, "Dell Inspiron 5000", "SN-00005", "Teclado y Mouse", new BigDecimal(10000), new BigDecimal(100000), "No enciende", "Fuente dañada", orders.get(2), Type.COMPUTADORA_DE_ESCRITORIO, State.RECIBIDO, null, null);
+        Device device6 = new Device(null, "iPhone 13", "SN-00006", "Cargador", new BigDecimal(15000), new BigDecimal(150000), "Pantalla dañada", "Falla en la cámara", orders.get(3), Type.SMARTPHONE, State.RECIBIDO, null, null);
+        Device device7 = new Device(null, "Samsung Galaxy Tab S7", "SN-00007", "Cargador", new BigDecimal(15000), new BigDecimal(150000), "Pantalla rota", "Batería dañada", orders.get(4), Type.TABLET, State.RECIBIDO, null, null);
+        Device device8 = new Device(null, "Lenovo ThinkPad X1 Carbon", "SN-00008", "Mouse inalámbrico", new BigDecimal(50000), new BigDecimal(500000), "No carga", "Placa base dañada", orders.get(5), Type.NOTEBOOK, State.RECIBIDO, null, null);
+        Device device9 = new Device(null, "MacBook Air 2020", "SN-00009", "Cargador original", new BigDecimal(100000), new BigDecimal(1000000), "Pantalla parpadeante", "Problema en la GPU", orders.get(6), Type.NOTEBOOK, State.RECIBIDO, null, null);
+        Device device10 = new Device(null, "Sony Xperia 5", "SN-00010", "Cargador", new BigDecimal(7000), new BigDecimal(70000), "No enciende", "Falla en la placa base", orders.get(7), Type.SMARTPHONE, State.RECIBIDO, null, null);
+        Device device11 = new Device(null, "HP Envy 13", "SN-00011", "Teclado Bluetooth", new BigDecimal(6000), new BigDecimal(60000), "No carga", "Fuente de alimentación dañada", orders.get(8), Type.NOTEBOOK, State.RECIBIDO, null, null);
+        Device device12 = new Device(null, "Google Pixel 5", "SN-00012", "Cargador original", new BigDecimal(20000), new BigDecimal(20000), "Pantalla rota", "Problema con el sensor", orders.get(9), Type.SMARTPHONE, State.RECIBIDO, null, null);
 
         deviceRepository.saveAll(List.of(device1, device2, device3, device4, device5, device6));
 
@@ -65,6 +66,18 @@ public class DeviceDataLoader {
         order8.getDevices().add(device9);
         order9.getDevices().add(device11);
         order10.getDevices().add(device12);
+
+        order1.updateOrderTotal();
+        order2.updateOrderTotal();
+        order3.updateOrderTotal();
+        order4.updateOrderTotal();
+        order5.updateOrderTotal();
+        order6.updateOrderTotal();
+        order7.updateOrderTotal();
+        order8.updateOrderTotal();
+        order9.updateOrderTotal();
+        order10.updateOrderTotal();
+
 
 
         orderRepository.saveAll(orders);

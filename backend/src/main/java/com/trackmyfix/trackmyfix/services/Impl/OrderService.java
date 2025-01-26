@@ -57,22 +57,21 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional
-    public ResponseEntity<Order> createOrder(OrderRequest orderRequest) {
+    public Order createOrder(OrderRequest orderRequest) {
         Client client = clientRepository.findByDni(orderRequest.getDni()).orElseThrow(
                 () -> new UserNotFoundException("Cliente con DNI " + orderRequest.getDni() + " no encontrado"));
 
-        this.validatePrices(orderRequest.getInitialPrice(), BigDecimal.ZERO);
-
-        Order newOrder = Order.builder().number(generateOrderNumber()).observations(orderRequest.getObservations())
-                .initialPrice(orderRequest.getInitialPrice()).finalPrice(BigDecimal.ZERO).client(client).active(true)
+        Order newOrder = Order.builder()
+                .number(generateOrderNumber())
+                .observations(orderRequest.getObservations())
+                .client(client)
+                .active(true)
                 .build();
 
-        Order savedOrder = orderRepository.save(newOrder);
-        eventPublisher.publishEvent(new DeviceEvent(savedOrder.getDevices()));
-        eventPublisher.publishEvent(new OrderEvent(savedOrder, Action.CREO_ORDEN_TRABAJO));
+        eventPublisher.publishEvent(new DeviceEvent(newOrder, orderRequest.getDevices()));
+        eventPublisher.publishEvent(new OrderEvent(newOrder, Action.CREO_ORDEN_TRABAJO));
 
-
-        return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
+        return orderRepository.save(newOrder);
     }
 
     @Override
@@ -99,17 +98,13 @@ public class OrderService implements IOrderService {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
 
-        if(!existingOrder.getActive()){
-            throw  new IllegalStateException("No se puede actualizar una orden inactiva");
+        if (!existingOrder.getActive()) {
+            throw new IllegalStateException("No se puede actualizar una orden inactiva");
         }
-
-        this.validatePrices(orderUpdateRequest.getInitialPrice(), orderUpdateRequest.getFinalPrice());
 
         Map<String, Object> changes = this.detectChanges(existingOrder, orderUpdateRequest);
 
         existingOrder.setObservations(orderUpdateRequest.getObservations());
-        existingOrder.setInitialPrice(orderUpdateRequest.getInitialPrice());
-        existingOrder.setFinalPrice(orderUpdateRequest.getFinalPrice());
 
         Order updatedOrder = orderRepository.save(existingOrder);
 
@@ -155,12 +150,6 @@ public class OrderService implements IOrderService {
 
         if (!existingOrder.getObservations().equals(orderUpdateRequest.getObservations())) {
             changes.put("Observaciones", "De: [" + existingOrder.getObservations() + "] a: [" + orderUpdateRequest.getObservations() + "]");
-        }
-        if (!existingOrder.getInitialPrice().equals(orderUpdateRequest.getInitialPrice())) {
-            changes.put("Precio Inicial", "De: [" + existingOrder.getInitialPrice() + "] a: [" + orderUpdateRequest.getInitialPrice() + "]");
-        }
-        if (!existingOrder.getFinalPrice().equals(orderUpdateRequest.getFinalPrice())) {
-            changes.put("Precio Final", "De: [" + existingOrder.getFinalPrice() + "] a: [" + orderUpdateRequest.getFinalPrice() + "]");
         }
 
         return changes;
