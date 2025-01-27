@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -43,9 +44,10 @@ public class TechnicianService implements IUserService<UserResponseDTO> {
     }
 
     @Override
-    public void delete(Long id) {
+    public Map<String,String> delete(Long id) {
         this.findById(id);
         technicianRepository.deleteById(id);
+        return Map.of("message","User id: "+id+" marked as inactive success");
     }
 
     private UserResponseDTO mapToDTO(Technician user) {

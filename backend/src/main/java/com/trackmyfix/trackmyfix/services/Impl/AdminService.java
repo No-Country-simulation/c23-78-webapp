@@ -11,9 +11,11 @@ import com.trackmyfix.trackmyfix.repository.UserChangeRepository;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
 import com.trackmyfix.trackmyfix.services.IUserService;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 @Service
@@ -43,9 +45,11 @@ public class AdminService implements IUserService<UserResponseDTO> {
     }
 
     @Override
-    public void delete(Long id) {
+    @SneakyThrows
+    public Map<String,String> delete(Long id) {
         this.findById(id);
         adminRepository.deleteById(id);
+        return Map.of("message","User id: "+id+" marked as inactive success");
     }
 
     private void createUserChange(ActionUser actionUser, Technician technician) {

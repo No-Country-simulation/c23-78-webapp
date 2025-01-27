@@ -1,5 +1,5 @@
 package com.trackmyfix.trackmyfix.Dto.Request;
 
-public enum GrantType {
-    PASSWORD, REFRESH
+public enum TokenType {
+    ACCESS, REFRESH
 }
