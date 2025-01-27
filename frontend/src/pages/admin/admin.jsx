@@ -1,5 +1,6 @@
 import { NavBar } from "../../modules/core/components"
 import BasicTabs from "../../modules/admin/components/AdminTab/AdminTab";
+import AdminTable from "../../modules/admin/components/AdminTable/AdminTable";
 
 var email = "roger@trackmyfix.com";
 
@@ -35,7 +36,15 @@ const admin = () => {
                     <button type="submit" className="bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto">Crear factura</button>
                 </a>
             </div>
-            <BasicTabs firts={<div>1</div>} second={<div>2</div>} third={<div>3</div>} />
+            <BasicTabs
+                firts=
+                {<>
+                    <AdminTable />
+                </>}
+                second={<>
+                    <AdminTable />
+                </>} 
+            />
         </>
     )
 }
