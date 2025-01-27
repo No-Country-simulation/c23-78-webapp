@@ -47,9 +47,15 @@ public class ClientService implements IUserService<UserResponseDTO> {
 
     @Override
     public Map<String,String> delete(Long id) {
-        this.findById(id);
-        clientRepository.deleteById(id);
-        return Map.of("message","User id: "+id+" marked as inactive success");
+        Client client = clientRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found"));
+        if (client.getActive()){
+            clientRepository.deleteById(id);
+            return Map.of("message","User id: "+id+" marked as INACTIVE success");
+        } else {
+            client.setActive(true);
+            clientRepository.save(client);
+            return Map.of("message","User id: "+id+" marked as ACTIVE success");
+        }
     }
 
     private UserResponseDTO mapToDTO(Client user) {

@@ -3,6 +3,7 @@ package com.trackmyfix.trackmyfix.services.Impl;
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
 import com.trackmyfix.trackmyfix.aspects.annotations.UserChangeNotify;
+import com.trackmyfix.trackmyfix.entity.Client;
 import com.trackmyfix.trackmyfix.entity.Technician;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
@@ -45,9 +46,15 @@ public class TechnicianService implements IUserService<UserResponseDTO> {
 
     @Override
     public Map<String,String> delete(Long id) {
-        this.findById(id);
-        technicianRepository.deleteById(id);
-        return Map.of("message","User id: "+id+" marked as inactive success");
+        Technician technician = technicianRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found"));
+        if (technician.getActive()){
+            technicianRepository.deleteById(id);
+            return Map.of("message","User id: "+id+" marked as INACTIVE success");
+        } else {
+            technician.setActive(true);
+            technicianRepository.save(technician);
+            return Map.of("message","User id: "+id+" marked as ACTIVE success");
+        }
     }
 
     private UserResponseDTO mapToDTO(Technician user) {

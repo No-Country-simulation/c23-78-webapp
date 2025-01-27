@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.AllArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 import java.util.Date;
 
@@ -21,7 +20,8 @@ import java.util.Date;
 @Getter
 @Setter
 @SQLDelete(sql = "UPDATE user SET active = 0 WHERE id_user=?")
-@Where(clause = "active = 1")
+@FilterDef(name = "activeClientFilter", parameters = @ParamDef(name="isActive", type = Boolean.class))
+@Filter(name = "activeClientFilter", condition = "active = :isActive")
 public class Client extends User {
     private String password;
 }

@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -21,14 +22,21 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<Map<String,String>> login(@RequestBody LoginRequestDTO request) {
-        return ResponseEntity.ok(userService.verify(request));
+    public ResponseEntity<Map<String,String>> login(
+                @RequestParam(name= "username") Optional<String> username,
+                @RequestParam(name= "password") Optional<String> password,
+                @RequestParam(name= "refresh_token") Optional<String> token
+            ) {
+        ResponseEntity<Map<String, String>> response = null;
+        if (username.isPresent() && password.isPresent() && token.isEmpty()) {
+            response = ResponseEntity.ok(userService.verify(username.get(), password.get()));
+        }
+        if (username.isEmpty() && password.isEmpty() && token.isPresent()) {
+            response =  ResponseEntity.ok(userService.refreshToken(token.get()));
+        }
+        return response;
     }
 
-    @PostMapping(value = "/token")
-    public ResponseEntity<Map<String,String>> refreshToken(@RequestParam(name = "refresh_token") String token) {
-        return ResponseEntity.ok(userService.refreshToken(token));
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {

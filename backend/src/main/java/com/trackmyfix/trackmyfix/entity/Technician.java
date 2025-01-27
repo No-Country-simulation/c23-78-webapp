@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 
 @Entity
@@ -22,7 +21,8 @@ import org.hibernate.annotations.Where;
 @Getter
 @Setter
 @SQLDelete(sql = "UPDATE user SET active = 0 WHERE id_user=?")
-@Where(clause = "active = 1")
+@FilterDef(name = "activeTechnicianFilter", parameters = @ParamDef(name = "isActive", type = Boolean.class))
+@Filter(name = "activeTechnicianFilter", condition = "active = :isActive")
 public class Technician extends User {
     @Column(length = 100)
     @NotBlank(message = "Password cannot be blank")

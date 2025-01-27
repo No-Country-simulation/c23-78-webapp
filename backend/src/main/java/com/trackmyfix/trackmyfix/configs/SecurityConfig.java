@@ -47,7 +47,7 @@ public class SecurityConfig {
     private static final String[] ADMIN_ROUTES = {"/**"};
     private static final String[] TECHNICIAN_ROUTES = {"/work-order"};
     private static final String[] CLIENT_ROUTES = {"/"};
-    private static final String[] PUBLIC_ROUTES = {"/user/login", "/user/register", "/user/logout", "/user/token"};
+    private static final String[] PUBLIC_ROUTES = {"/user/login", "/user/register", "/user/logout"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
