@@ -1,15 +1,17 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
+import com.trackmyfix.trackmyfix.Dto.Request.DeviceRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderUpdateRequest;
 import com.trackmyfix.trackmyfix.entity.*;
-import com.trackmyfix.trackmyfix.event.DeviceEvent;
 import com.trackmyfix.trackmyfix.event.OrderEvent;
 import com.trackmyfix.trackmyfix.exceptions.InvalidPriceException;
 import com.trackmyfix.trackmyfix.exceptions.OrderNotFoundException;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.*;
 import com.trackmyfix.trackmyfix.services.IOrderService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +31,7 @@ public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ClientRepository clientRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final DeviceService deviceService;
 
     @Override
     @Transactional(readOnly = true)
@@ -57,22 +61,26 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional
-    public ResponseEntity<Order> createOrder(OrderRequest orderRequest) {
+    public Order createOrder(OrderRequest orderRequest) {
         Client client = clientRepository.findByDni(orderRequest.getDni()).orElseThrow(
                 () -> new UserNotFoundException("Cliente con DNI " + orderRequest.getDni() + " no encontrado"));
 
-        this.validatePrices(orderRequest.getInitialPrice(), BigDecimal.ZERO);
-
-        Order newOrder = Order.builder().number(generateOrderNumber()).observations(orderRequest.getObservations())
-                .initialPrice(orderRequest.getInitialPrice()).finalPrice(BigDecimal.ZERO).client(client).active(true)
+        Order newOrder = Order.builder()
+                .number(generateOrderNumber())
+                .observations(orderRequest.getObservations())
+                .client(client)
+                .active(true)
+                .orderTotal(BigDecimal.ZERO)
+                .devices(new ArrayList<>())
                 .build();
 
+        List<Device> devices = deviceService.createDevice(orderRequest.getDevices(), newOrder);
+        newOrder.setDevices(devices);
         Order savedOrder = orderRepository.save(newOrder);
-        eventPublisher.publishEvent(new DeviceEvent(savedOrder.getDevices()));
+
         eventPublisher.publishEvent(new OrderEvent(savedOrder, Action.CREO_ORDEN_TRABAJO));
 
-
-        return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
+        return savedOrder;
     }
 
     @Override
@@ -99,17 +107,13 @@ public class OrderService implements IOrderService {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
 
-        if(!existingOrder.getActive()){
-            throw  new IllegalStateException("No se puede actualizar una orden inactiva");
+        if (!existingOrder.getActive()) {
+            throw new IllegalStateException("No se puede actualizar una orden inactiva");
         }
-
-        this.validatePrices(orderUpdateRequest.getInitialPrice(), orderUpdateRequest.getFinalPrice());
 
         Map<String, Object> changes = this.detectChanges(existingOrder, orderUpdateRequest);
 
         existingOrder.setObservations(orderUpdateRequest.getObservations());
-        existingOrder.setInitialPrice(orderUpdateRequest.getInitialPrice());
-        existingOrder.setFinalPrice(orderUpdateRequest.getFinalPrice());
 
         Order updatedOrder = orderRepository.save(existingOrder);
 
@@ -155,12 +159,6 @@ public class OrderService implements IOrderService {
 
         if (!existingOrder.getObservations().equals(orderUpdateRequest.getObservations())) {
             changes.put("Observaciones", "De: [" + existingOrder.getObservations() + "] a: [" + orderUpdateRequest.getObservations() + "]");
-        }
-        if (!existingOrder.getInitialPrice().equals(orderUpdateRequest.getInitialPrice())) {
-            changes.put("Precio Inicial", "De: [" + existingOrder.getInitialPrice() + "] a: [" + orderUpdateRequest.getInitialPrice() + "]");
-        }
-        if (!existingOrder.getFinalPrice().equals(orderUpdateRequest.getFinalPrice())) {
-            changes.put("Precio Final", "De: [" + existingOrder.getFinalPrice() + "] a: [" + orderUpdateRequest.getFinalPrice() + "]");
         }
 
         return changes;

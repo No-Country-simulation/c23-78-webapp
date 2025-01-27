@@ -1,17 +1,16 @@
 package com.trackmyfix.trackmyfix.event;
 
-import com.trackmyfix.trackmyfix.entity.Device;
+import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
+import com.trackmyfix.trackmyfix.entity.Order;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
-import java.util.List;
-
 @Getter
 public class DeviceEvent extends ApplicationEvent {
-    private final List<Device> devices;
+    private final OrderRequest order;
 
-    public DeviceEvent(List<Device> devices) {
-        super(devices);
-        this.devices = devices;
+    public DeviceEvent(OrderRequest order) {
+        super(order);
+        this.order = order;
     }
 }

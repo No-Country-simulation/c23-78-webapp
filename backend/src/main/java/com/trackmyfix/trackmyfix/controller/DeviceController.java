@@ -41,10 +41,10 @@ public class DeviceController {
         return deviceService.findBySerialNumber(serialNumber);
     }
 
-    @PostMapping
-    public ResponseEntity<Device> createDevice(@RequestBody @Valid DeviceRequestDTO device) {
-        return deviceService.createDevice(device);
-    }
+//    @PostMapping
+//    public ResponseEntity<Device> createDevice(@RequestBody @Valid DeviceRequestDTO device) {
+//        return deviceService.createDevice(device);
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Device> updateDevice(@PathVariable Long id, @RequestBody @Valid DeviceRequestDTO device) {

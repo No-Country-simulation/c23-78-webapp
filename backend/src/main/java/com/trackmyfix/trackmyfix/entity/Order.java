@@ -1,11 +1,10 @@
 package com.trackmyfix.trackmyfix.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,18 +30,14 @@ public class Order implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String observations;
 
-    //tarifa de diagnóstico
-    @NotNull(message = "Initial price is mandatory")
-    @DecimalMin(value = "10.0", inclusive = false, message = "Initial price must be greater than zero")
-    @Column(precision = 10, scale = 2)
-    private BigDecimal initialPrice;
-
     //@DecimalMin(value = "0", inclusive = false, message = "Final price must be greater than zero")
     @Column(precision = 10, scale = 2)
-    private BigDecimal finalPrice;
+    private BigDecimal orderTotal;
 
     @ManyToOne
     @JoinColumn(name = "id_client", referencedColumnName = "id_user")
+//    @JsonIgnoreProperties({ "address", "createdAt","updatedAt","role", "password"})
+    @JsonBackReference
     private Client client;
 
     @Column(nullable = false)
@@ -57,16 +52,28 @@ public class Order implements Serializable {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Device> devices;
+    @JsonManagedReference
+    private List<Device> devices = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
         updatedAt = new Date();
+        updateOrderTotal();  // Actualiza el total al crear la orden
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = new Date();
+        updateOrderTotal();  // Actualiza el total al actualizar la orden
+    }
+
+    public void updateOrderTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Device device : devices) {
+            total = total.add(device.getInitialPrice()).add(device.getFinalPrice());
+        }
+        this.orderTotal = total;
     }
 }
