@@ -65,8 +65,8 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(ADMIN_ROUTES).hasAuthority(Role.ADMIN.name())
-                        .requestMatchers(TECHNICIAN_ROUTES).hasAuthority(Role.TECHNICIAN.name())
+                        .requestMatchers(ADMIN_ROUTES).hasAnyAuthority(Role.ADMIN.name(), Role.TECHNICIAN.name())  // Ambos roles tienen acceso a ADMIN_ROUTES
+                        .requestMatchers(TECHNICIAN_ROUTES).hasAnyAuthority(Role.ADMIN.name(), Role.TECHNICIAN.name())  // Ambos roles tienen acceso a TECHNICIAN_ROUTES
                         .requestMatchers(POST, "/user/**").hasAnyAuthority(Role.TECHNICIAN.name())
                         .requestMatchers(DELETE, "/user/**").hasAnyAuthority(Role.TECHNICIAN.name())
                         .requestMatchers(PUT, "/user/**").hasAnyAuthority(Role.TECHNICIAN.name())

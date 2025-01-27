@@ -1,5 +1,6 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
+import com.trackmyfix.trackmyfix.entity.Device;
 import com.trackmyfix.trackmyfix.entity.Movement;
 import com.trackmyfix.trackmyfix.entity.Order;
 import com.trackmyfix.trackmyfix.entity.Technician;
@@ -27,18 +28,22 @@ public class MovementService {
     @Transactional
     @EventListener
     public void handleOrderCreatedEvent(OrderEvent event) {
-        Order order = event.getOrder();
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Technician technician = technicianRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
+        for (Device device : event.getOrder().getDevices()){
+            Order order = event.getOrder();
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            Technician technician = technicianRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
 
-        Movement movement = new Movement();
-        movement.setOrder(order);
-        movement.setOrder(order);
-        movement.setDescription(this.generateDescription(order, event.getChanges()));
-        movement.setAction(event.getAction());
-        movement.setTechnician(technician);
+            Movement movement = new Movement();
+            movement.setOrder(order);
+            movement.setOrder(order);
+            movement.setDescription(this.generateDescription(order, event.getChanges()));
+            movement.setAction(event.getAction());
+            movement.setTechnician(technician);
+            movement.setDevice(device);
 
-        movementRepository.save(movement);
+            movementRepository.save(movement);
+        }
+
     }
 
     private String generateDescription(Order order, Map<String, Object> changes) {

@@ -1,14 +1,16 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.entity.Order;
-import com.trackmyfix.trackmyfix.event.DeviceEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.trackmyfix.trackmyfix.Dto.Request.DeviceRequestDTO;
@@ -54,24 +56,27 @@ public class DeviceService implements IDeviceService {
     }
 
     @Override
-    @EventListener
-    public void createDevice(DeviceEvent event) {
+    @Transactional
+    public List<Device> createDevice(List<DeviceRequestDTO> devices, Order newOrder) {
 
-        for (DeviceRequestDTO deviceRequest : event.getDevices()) {
+        List<Device> devicesCreate = new ArrayList<>();
+
+        for (DeviceRequestDTO deviceAux : devices) {
             Device device = new Device();
-            device.setModel(deviceRequest.getModel());
-            device.setSerialNumber(deviceRequest.getSerialNumber());
-            device.setAccessories(deviceRequest.getAccessories());
-            device.setInitialPrice(deviceRequest.getInitialPrice());
-            device.setFinalPrice(deviceRequest.getFinalPrice());
-            device.setClientDescription(deviceRequest.getClientDescription());
-            device.setTechnicalReport(deviceRequest.getTechnicalReport());
-            device.setType(deviceRequest.getType());
+            device.setModel(deviceAux.getModel());
+            device.setSerialNumber(deviceAux.getSerialNumber());
+            device.setAccessories(deviceAux.getAccessories());
+            device.setInitialPrice(deviceAux.getInitialPrice());
+            device.setFinalPrice(deviceAux.getFinalPrice());
+            device.setClientDescription(deviceAux.getClientDescription());
+            device.setTechnicalReport(deviceAux.getTechnicalReport());
+            device.setType(deviceAux.getType());
             device.setState(State.RECIBIDO);
-            device.setOrder(event.getOrder());
+            device.setOrder(newOrder);
 
-            deviceRepository.save(device); // Guardar el dispositivo en la base de datos
+            devicesCreate.add(device);
         }
+        return devicesCreate;
     }
 
     @Override

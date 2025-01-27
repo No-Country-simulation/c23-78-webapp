@@ -1,15 +1,17 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
+import com.trackmyfix.trackmyfix.Dto.Request.DeviceRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderUpdateRequest;
 import com.trackmyfix.trackmyfix.entity.*;
-import com.trackmyfix.trackmyfix.event.DeviceEvent;
 import com.trackmyfix.trackmyfix.event.OrderEvent;
 import com.trackmyfix.trackmyfix.exceptions.InvalidPriceException;
 import com.trackmyfix.trackmyfix.exceptions.OrderNotFoundException;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.*;
 import com.trackmyfix.trackmyfix.services.IOrderService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +31,7 @@ public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ClientRepository clientRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final DeviceService deviceService;
 
     @Override
     @Transactional(readOnly = true)
@@ -66,12 +70,17 @@ public class OrderService implements IOrderService {
                 .observations(orderRequest.getObservations())
                 .client(client)
                 .active(true)
+                .orderTotal(BigDecimal.ZERO)
+                .devices(new ArrayList<>())
                 .build();
 
-        eventPublisher.publishEvent(new DeviceEvent(newOrder, orderRequest.getDevices()));
-        eventPublisher.publishEvent(new OrderEvent(newOrder, Action.CREO_ORDEN_TRABAJO));
+        List<Device> devices = deviceService.createDevice(orderRequest.getDevices(), newOrder);
+        newOrder.setDevices(devices);
+        Order savedOrder = orderRepository.save(newOrder);
 
-        return orderRepository.save(newOrder);
+        eventPublisher.publishEvent(new OrderEvent(savedOrder, Action.CREO_ORDEN_TRABAJO));
+
+        return savedOrder;
     }
 
     @Override

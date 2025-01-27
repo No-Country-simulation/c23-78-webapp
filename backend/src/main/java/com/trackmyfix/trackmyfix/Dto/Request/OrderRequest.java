@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,5 +21,6 @@ public class OrderRequest {
     @Size(min = 10, message = "Observations must have at least 10 characters")
     private String observations;
 
-    private List<DeviceRequestDTO> devices;
+    private List<DeviceRequestDTO> devices = new ArrayList<>();
+
 }
