@@ -1,16 +1,13 @@
 package com.trackmyfix.trackmyfix.controller;
 
-import com.trackmyfix.trackmyfix.Dto.Request.GrantType;
 import com.trackmyfix.trackmyfix.Dto.Request.LoginRequestDTO;
-import com.trackmyfix.trackmyfix.Dto.Request.RefreshTokenRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
-import com.trackmyfix.trackmyfix.aspects.annotations.UserChangeNotify;
 import com.trackmyfix.trackmyfix.services.Impl.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +26,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/token")
-    public ResponseEntity<Map<String,String>> refreshToken(@RequestBody RefreshTokenRequestDTO request) {
-        return ResponseEntity.ok(userService.refreshToken());
+    public ResponseEntity<Map<String,String>> refreshToken(@RequestParam(name = "refresh_token") String token) {
+        return ResponseEntity.ok(userService.refreshToken(token));
     }
 
     @GetMapping("/{id}")
@@ -49,9 +46,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        userService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.delete(id));
     }
 
 }

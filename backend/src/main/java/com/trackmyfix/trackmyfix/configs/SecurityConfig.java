@@ -47,7 +47,7 @@ public class SecurityConfig {
     private static final String[] ADMIN_ROUTES = {"/**"};
     private static final String[] TECHNICIAN_ROUTES = {"/work-order"};
     private static final String[] CLIENT_ROUTES = {"/"};
-    private static final String[] PUBLIC_ROUTES = {"/user/login", "/user/register", "/user/logout"};
+    private static final String[] PUBLIC_ROUTES = {"/user/login", "/user/register", "/user/logout", "/user/token"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -57,6 +57,7 @@ public class SecurityConfig {
                     configuration.addAllowedMethod("POST");
                     configuration.addAllowedMethod("GET");
                     configuration.addAllowedMethod("PUT");
+                    configuration.addAllowedMethod("DELETE");
                     configuration.addAllowedMethod("OPTIONS");
                     configuration.addAllowedHeader("*");
                     configuration.addAllowedOrigin("*");
