@@ -51,7 +51,6 @@ public class UserChangeAspect {
         });
         var auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
-            log.info(auth.toString());
             jwtUser = (UserJwtData) auth.getPrincipal();
             if (auth.isAuthenticated()) {
                 switch(annotation.actionUser()){
@@ -73,8 +72,5 @@ public class UserChangeAspect {
                 }
             }
         }
-
-        log.info("annotation params: {}", annotation.actionUser());
-
     }
 }

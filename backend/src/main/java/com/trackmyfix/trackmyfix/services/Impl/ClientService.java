@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -45,9 +46,10 @@ public class ClientService implements IUserService<UserResponseDTO> {
     }
 
     @Override
-    public void delete(Long id) {
+    public Map<String,String> delete(Long id) {
         this.findById(id);
         clientRepository.deleteById(id);
+        return Map.of("message","User id: "+id+" marked as inactive success");
     }
 
     private UserResponseDTO mapToDTO(Client user) {
