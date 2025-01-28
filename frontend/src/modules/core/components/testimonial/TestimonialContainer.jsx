@@ -2,7 +2,7 @@ import React from "react";
 
 import { TestimonialCard } from "./TestimonialCard";
 
-export const Testimonials = () => {
+export const TestimonialContainer = () => {
   return (
     <section className="text-gray-600 body-font">
       <div className="container px-5 py-24 mx-auto">
