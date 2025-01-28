@@ -1,4 +1,6 @@
-const clienteNumero = 123; // o cualquier lógica para obtener el número
+import { useForm } from "react-hook-form";
+
+const clienteNumero = 123; 
 
 const NewClient = () => {
     return (
