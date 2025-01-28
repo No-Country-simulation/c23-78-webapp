@@ -6,6 +6,7 @@ import RegisterPage from './pages/Auth/RegisterPage';
 import Admin from './pages/admin/admin';
 import NewWorkerPage from './pages/Admin/NewWorkerPage';
 import NewClientPage from './pages/admin/NewClientPage';
+import DeviceNotFoundPage from './pages/admin/DeviceNotFoundPage';
 
 
 
@@ -16,6 +17,8 @@ const browserRoutes = createBrowserRouter([
     { path: `/admin/*`, element: <Admin />, },
     { path: '/admin/worker', element: <NewWorkerPage />, },
     { path: '/admin/client', element: <NewClientPage />, },
+    { path: '/admin/notFound', element: <DeviceNotFoundPage />, },
+
 
 ]);
 
