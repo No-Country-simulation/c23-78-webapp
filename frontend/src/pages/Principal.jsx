@@ -19,7 +19,6 @@ const Principal = () => {
       <TestimonialContainer />
       <ContactForm />
       <Footer />
-      
     </div>
   )
 }

@@ -7,6 +7,7 @@ import Admin from './pages/admin/admin';
 import NewWorkerPage from './pages/Admin/NewWorkerPage';
 import NewClientPage from './pages/admin/NewClientPage';
 import TrackingPage from './pages/tracking/trackingPage';
+import DeviceNotFoundPage from './pages/admin/DeviceNotFoundPage';
 
 
 
@@ -18,6 +19,7 @@ const browserRoutes = createBrowserRouter([
     { path: '/admin/worker', element: <NewWorkerPage />, },
     { path: '/admin/client', element: <NewClientPage />, },
     { path: `/tracking/*`, element: <TrackingPage />, },
+    { path: '/admin/notFound', element: <DeviceNotFoundPage />, },
 ]);
 
 
