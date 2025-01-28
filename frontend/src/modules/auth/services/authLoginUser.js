@@ -14,8 +14,6 @@ export default async function authLoginUser(username, password) {
         redirect: "follow",
     };
 
-    console.log("Enviando solicitud al backend...");
-
     try {
         const response = await fetch(
             "http://trackmyfix-backend.eqgrhtbfgsa4ggdk.brazilsouth.azurecontainer.io:9091/user/login",
