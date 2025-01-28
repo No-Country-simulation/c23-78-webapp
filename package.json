@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "lucide-react": "^0.474.0",
+    "react-hook-form": "^7.54.2"
+  }
+}

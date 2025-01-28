@@ -16,9 +16,8 @@ const useGetLoginForm = (defaultValues) => {
     const onSubmit = (data) => {
         (async () => {
             try {
-                console.log("enviando, data", data);
+                console.log("enviando, data", data);    
                 const result = await authLoginUser(data.email, data.password);
-                console.log("resultados onsubmit" ,result);
             } catch (error) {
                 console.error("Login failed:", error);
             }

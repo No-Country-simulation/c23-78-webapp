@@ -26,7 +26,6 @@ export default async function authLoginUser(username, password) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        // Verifica si hay contenido en la respuesta antes de analizarla
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
             const result = await response.json();
@@ -36,7 +35,7 @@ export default async function authLoginUser(username, password) {
             console.warn("La respuesta no es JSON válida. Analizando como texto...");
             const result = await response.text();
             console.log("Respuesta exitosa (texto):", result);
-            return result; // Retorna el texto si no es JSON
+            return result; 
         }
     } catch (error) {
         console.error("Error durante el login:", error);

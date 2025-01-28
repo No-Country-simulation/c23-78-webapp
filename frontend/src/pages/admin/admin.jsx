@@ -4,7 +4,7 @@ import AdminTable from "../../modules/admin/components/AdminTable/AdminTable";
 
 var email = "roger@trackmyfix.com";
 
-const admin = () => {
+const Admin = () => {
     return (
         <>
             <NavBar />
@@ -49,4 +49,4 @@ const admin = () => {
     )
 }
 
-export default admin
+export default Admin;
