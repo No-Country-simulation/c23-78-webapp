@@ -2,7 +2,11 @@ import React from "react";
 
 import { TestimonialCard } from "./TestimonialCard";
 
+<<<<<<< HEAD
 export const TestimonialContainer = () => {
+=======
+const Testimonials = () => {
+>>>>>>> d58011ec8bd55f9b45d3738f290a1b38a881aa91
   return (
     <section className="text-gray-600 body-font">
       <div className="container px-5 py-24 mx-auto">
@@ -24,3 +28,5 @@ export const TestimonialContainer = () => {
     </section>
   );
 };
+
+export default Testimonials;

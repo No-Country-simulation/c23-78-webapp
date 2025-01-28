@@ -8,7 +8,7 @@ export const NavBar = () => {
   return (
     <header className="text-white bg-black body-font">
       <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <a className="flex title-font font-medium items-center text-white mb-4 md:mb-0">
+        <a className="flex title-font font-medium items-center text-white mb-4 md:mb-0 cursor-pointer">
           <PackageSearch />
           <span className="ml-3 text-xl">TrackMyFix</span>
         </a>
@@ -21,7 +21,7 @@ export const NavBar = () => {
               </button>
               
             {isServicesOpen && (
-              <div className="absolute left-0 mt-2 w-48 bg-white text-gray-800 shadow-lg rounded-md">
+              <div className="absolute left-0 mt-2 w-48 bg-white text-gray-800 shadow-lg rounded-md p-[5px]">
                 <a
                   href="#repair"
                   className="block px-4 py-2 hover:bg-gray-100"
@@ -64,3 +64,5 @@ export const NavBar = () => {
     </header>
   );
 };
+
+export default NavBar;
