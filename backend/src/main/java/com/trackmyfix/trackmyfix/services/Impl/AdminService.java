@@ -47,9 +47,15 @@ public class AdminService implements IUserService<UserResponseDTO> {
     @Override
     @SneakyThrows
     public Map<String,String> delete(Long id) {
-        this.findById(id);
-        adminRepository.deleteById(id);
-        return Map.of("message","User id: "+id+" marked as inactive success");
+        Admin admin = adminRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found"));
+        if (admin.getActive()){
+            adminRepository.deleteById(id);
+            return Map.of("message","User id: "+id+" marked as INACTIVE success");
+        } else {
+            admin.setActive(true);
+            adminRepository.save(admin);
+            return Map.of("message","User id: "+id+" marked as ACTIVE success");
+        }
     }
 
     private void createUserChange(ActionUser actionUser, Technician technician) {

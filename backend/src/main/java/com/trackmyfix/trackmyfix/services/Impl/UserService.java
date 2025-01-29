@@ -77,10 +77,10 @@ public class UserService {
         return resp;
     }
     @SneakyThrows
-    public Map<String, String> verify(LoginRequestDTO user) {
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+    public Map<String, String> verify(String username, String password) {
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(user.getUsername());
+            return jwtService.generateToken(username);
         } else {
             throw new Exception("Login failed");
         }

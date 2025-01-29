@@ -5,10 +5,15 @@ import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
 import com.trackmyfix.trackmyfix.entity.*;
 import com.trackmyfix.trackmyfix.repository.UserChangeRepository;
 import com.trackmyfix.trackmyfix.services.IUserChangeService;
+import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
+import org.hibernate.Filter;
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,10 +22,17 @@ import java.util.stream.Collectors;
 public class UserChangeService implements IUserChangeService {
 
     private final UserChangeRepository userChangeRepository;
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public Set<UserChangeResponseDTO> findAll() {
-        return userChangeRepository.findAll().stream().map(this::mapToDTO)
+        Session session = entityManager.unwrap(Session.class);
+        Filter filter = session.enableFilter("activeClientFilter");
+        filter.setParameter("isActive", true);
+        List<UserChange> userChanges =  userChangeRepository.findAll();
+        session.disableFilter("activeClientFilter");
+        return userChanges.stream().map(this::mapToDTO)
                 .sorted((a,b) -> Math.toIntExact(a.getId() - b.getId()))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
