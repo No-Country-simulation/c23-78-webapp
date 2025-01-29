@@ -1,21 +1,20 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trackmyfix.trackmyfix.Dto.Request.DeviceRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderUpdateRequest;
 import com.trackmyfix.trackmyfix.entity.*;
-import com.trackmyfix.trackmyfix.event.OrderEvent;
+import com.trackmyfix.trackmyfix.event.DeviceCreateEvent;
+import com.trackmyfix.trackmyfix.event.OrderCreateEvent;
+import com.trackmyfix.trackmyfix.event.OrderUpdateEvent;
 import com.trackmyfix.trackmyfix.exceptions.InvalidPriceException;
 import com.trackmyfix.trackmyfix.exceptions.OrderNotFoundException;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.*;
 import com.trackmyfix.trackmyfix.services.IOrderService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -35,28 +35,26 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Map<String, Object>> findAll() {
+    public Map<String, Object> findAll() {
         Map<String, Object> response = new HashMap<>();
         List<Order> orders = (List<Order>) orderRepository.findAll();
         response.put("orders", orders);
         response.put("orderSize", orders.size());
-        return ResponseEntity.ok(response);
+        return response;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Order> findByNumber(String number) {
-        Order order = orderRepository.findByNumber(number)
+    public Order findByNumber(String number) {
+        return orderRepository.findByNumber(number)
                 .orElseThrow(() -> new OrderNotFoundException("Orden con número " + number + " no encontrada"));
-        return ResponseEntity.ok(order);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Order> findById(Long id) {
-        Order order = orderRepository.findById(id)
+    public Order findById(Long id) {
+        return orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
-        return ResponseEntity.ok(order);
     }
 
     @Override
@@ -78,14 +76,62 @@ public class OrderService implements IOrderService {
         newOrder.setDevices(devices);
         Order savedOrder = orderRepository.save(newOrder);
 
-        eventPublisher.publishEvent(new OrderEvent(savedOrder, Action.CREO_ORDEN_TRABAJO));
+        eventPublisher.publishEvent(new OrderCreateEvent(savedOrder, Action.CREO_ORDEN_TRABAJO));
+        eventPublisher.publishEvent(new DeviceCreateEvent(savedOrder, Action.AGREGO_DISPOSITIVO));
 
         return savedOrder;
     }
 
     @Override
     @Transactional
-    public ResponseEntity<Void> deactivateOrder(Long id) {
+    public Order updateOrder(Long orderId, OrderUpdateRequest orderUpdateRequest) {
+        Order existingOrder = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + orderId + " no encontrada"));
+
+        // Guardar una copia profunda de los datos antiguos
+        Order originalOrder = Order.builder()
+                .idOrder(existingOrder.getIdOrder())
+                .observations(existingOrder.getObservations())
+                .devices(new ArrayList<>(existingOrder.getDevices().stream()
+                        .map(device -> Device.builder()
+                                .idDevice(device.getIdDevice())
+                                .model(device.getModel())
+                                .serialNumber(device.getSerialNumber())
+                                .accessories(device.getAccessories())
+                                .initialPrice(device.getInitialPrice())
+                                .finalPrice(device.getFinalPrice())
+                                .clientDescription(device.getClientDescription())
+                                .technicalReport(device.getTechnicalReport())
+                                .type(device.getType())
+                                .state(device.getState())
+                                .order(device.getOrder())
+                                .build())
+                        .collect(Collectors.toList())))
+                .build();
+
+
+        existingOrder.setObservations(orderUpdateRequest.getObservations());
+
+        List<Device> currentDevices = existingOrder.getDevices();
+        List<Device> updatedDevices = deviceService.updateDevice(orderUpdateRequest.getDevices(), currentDevices);
+        existingOrder.setDevices(updatedDevices);
+
+        Order savedOrder = orderRepository.save(existingOrder);
+
+        Map<String, Object> changes = this.detectChanges(originalOrder, orderUpdateRequest);
+
+
+
+
+
+        return savedOrder;
+    }
+
+
+
+    @Override
+    @Transactional
+    public void deactivateOrder(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
 
@@ -96,32 +142,8 @@ public class OrderService implements IOrderService {
         order.setActive(false);
         orderRepository.save(order);
 
-        eventPublisher.publishEvent(new OrderEvent(order, Action.ELIMINO_ORDEN_TRABAJO));
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        eventPublisher.publishEvent(new OrderUpdateEvent(order, Action.ELIMINO_ORDEN_TRABAJO));
     }
-
-    @Override
-    @Transactional
-    public ResponseEntity<Order> updateOrder(Long id, OrderUpdateRequest orderUpdateRequest) {
-        Order existingOrder = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
-
-        if (!existingOrder.getActive()) {
-            throw new IllegalStateException("No se puede actualizar una orden inactiva");
-        }
-
-        Map<String, Object> changes = this.detectChanges(existingOrder, orderUpdateRequest);
-
-        existingOrder.setObservations(orderUpdateRequest.getObservations());
-
-        Order updatedOrder = orderRepository.save(existingOrder);
-
-        eventPublisher.publishEvent(new OrderEvent(updatedOrder, Action.MODIFICO_ORDEN_TRABAJO, changes));
-
-        return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
-    }
-
 
     private void validatePrices(BigDecimal initialPrice, BigDecimal finalPrice) {
         if (initialPrice.compareTo(BigDecimal.TEN) < 0) {
@@ -154,11 +176,52 @@ public class OrderService implements IOrderService {
         return "ORD-" + String.format("%05d", number);
     }
 
-    private Map<String, Object> detectChanges(Order existingOrder, OrderUpdateRequest orderUpdateRequest) {
+    private Map<String, Object> detectChanges(Order originalOrder, OrderUpdateRequest orderUpdateRequest) {
         Map<String, Object> changes = new HashMap<>();
 
-        if (!existingOrder.getObservations().equals(orderUpdateRequest.getObservations())) {
-            changes.put("Observaciones", "De: [" + existingOrder.getObservations() + "] a: [" + orderUpdateRequest.getObservations() + "]");
+        // Comparar observaciones
+        if (!originalOrder.getObservations().equals(orderUpdateRequest.getObservations())) {
+            changes.put("Observaciones", "De: [" + originalOrder.getObservations() + "] a: [" + orderUpdateRequest.getObservations() + "]");
+            eventPublisher.publishEvent(new OrderUpdateEvent(Order, Action.MODIFICO_ORDEN_TRABAJO, changes));
+        }
+
+        // Comparar dispositivos
+        List<Device> originalDevices = originalOrder.getDevices();
+        List<DeviceRequestDTO> updatedDevices = orderUpdateRequest.getDevices();
+
+        for (int i = 0; i < originalDevices.size(); i++) {
+            Device originalDevice = originalDevices.get(i);
+            DeviceRequestDTO updatedDevice = updatedDevices.get(i);
+
+            if (!originalDevice.getSerialNumber().equals(updatedDevice.getSerialNumber())) {
+                changes.put("SerialNumber", "De: [" + originalDevice.getSerialNumber() + "] a: [" + updatedDevice.getSerialNumber() + "]");
+            }
+            if (!originalDevice.getModel().equals(updatedDevice.getModel())) {
+                changes.put("Model", "De: [" + originalDevice.getModel() + "] a: [" + updatedDevice.getModel() + "]");
+            }
+            if (!originalDevice.getAccessories().equals(updatedDevice.getAccessories())) {
+                changes.put("Accessories", "De: [" + originalDevice.getAccessories() + "] a: [" + updatedDevice.getAccessories() + "]");
+            }
+            if (!originalDevice.getInitialPrice().equals(updatedDevice.getInitialPrice())) {
+                changes.put("InitialPrice", "De: [" + originalDevice.getInitialPrice() + "] a: [" + updatedDevice.getInitialPrice() + "]");
+            }
+            if (originalDevice.getFinalPrice() != null && !originalDevice.getFinalPrice().equals(updatedDevice.getFinalPrice())) {
+                changes.put("FinalPrice", "De: [" + originalDevice.getFinalPrice() + "] a: [" + updatedDevice.getFinalPrice() + "]");
+            } else if (originalDevice.getFinalPrice() == null && updatedDevice.getFinalPrice() != null) {
+                changes.put("FinalPrice", "De: [null] a: [" + updatedDevice.getFinalPrice() + "]");
+            }
+            if (!originalDevice.getClientDescription().equals(updatedDevice.getClientDescription())) {
+                changes.put("ClientDescription", "De: [" + originalDevice.getClientDescription() + "] a: [" + updatedDevice.getClientDescription() + "]");
+            }
+            if (!originalDevice.getTechnicalReport().equals(updatedDevice.getTechnicalReport())) {
+                changes.put("TechnicalReport", "De: [" + originalDevice.getTechnicalReport() + "] a: [" + updatedDevice.getTechnicalReport() + "]");
+            }
+            if (!originalDevice.getType().equals(updatedDevice.getType())) {
+                changes.put("Type", "De: [" + originalDevice.getType() + "] a: [" + updatedDevice.getType() + "]");
+            }
+            if (!originalDevice.getState().equals(updatedDevice.getState())) {
+                changes.put("State", "De: [" + originalDevice.getState() + "] a: [" + updatedDevice.getState() + "]");
+            }
         }
 
         return changes;

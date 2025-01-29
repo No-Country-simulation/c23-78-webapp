@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-public class OrderEvent extends ApplicationEvent {
+public class DeviceCreateEvent extends ApplicationEvent {
 
     private final Order order;
     private final Action action;
     private  final Map<String, Object> changes;
 
     // Constructor para creación (sin cambios)
-    public OrderEvent(Order order, Action action) {
+    public DeviceCreateEvent(Order order, Action action) {
         super(order);
         this.order = order;
         this.action = action;
@@ -23,7 +23,7 @@ public class OrderEvent extends ApplicationEvent {
     }
 
     // Constructor para actualización (con cambios)
-    public OrderEvent(Order order, Action action, Map<String, Object> changes) {
+    public DeviceCreateEvent(Order order, Action action, Map<String, Object> changes) {
         super(order);
         this.order = order;
         this.action = action;
