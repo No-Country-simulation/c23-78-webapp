@@ -12,6 +12,6 @@ public interface IOrderService {
     Order findByNumber(String number);
     Order findById(Long id);
     Order createOrder(OrderRequest orderRequest);
-    void deactivateOrder(Long id);
+    void setActiveOrder(Long id,boolean active);
     Order updateOrder(Long id, OrderUpdateRequest orderUpdateRequest);
 }

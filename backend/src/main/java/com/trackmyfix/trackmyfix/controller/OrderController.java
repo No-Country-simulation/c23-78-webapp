@@ -53,10 +53,12 @@ public class OrderController {
         return ResponseEntity.ok(updatedOrder);
     }
 
-    @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivateOrder(@PathVariable Long id) {
-        orderService.deactivateOrder(id);
+    @PatchMapping("/{id}/set-active")
+    public ResponseEntity<Void> setActiveOrder(@PathVariable Long id, @RequestBody Map<String, Boolean> requestBody) {
+        boolean active = requestBody.get("active");
+        orderService.setActiveOrder(id, active);
         return ResponseEntity.noContent().build();
     }
+
 
 }
