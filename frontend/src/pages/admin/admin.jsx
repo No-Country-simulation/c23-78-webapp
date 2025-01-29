@@ -31,9 +31,9 @@ const Admin = () => {
                 />
                 <button type="submit" className="mr-4 ml-4 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto">Buscar</button>
             </form>
-            <div className="flex flex-col items-start justify-between w-full ml-20">
+            <div className="flex flex-col items-start justify-between w-full">
                 <a>
-                    <button type="submit" className="bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto">Crear factura</button>
+                    <button type="submit" className="ml-20 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto">Crear factura</button>
                 </a>
             </div>
             <BasicTabs

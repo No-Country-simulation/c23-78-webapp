@@ -1,3 +1,4 @@
+import Refresh_Token from "../../../test/refresh_token";
 import useGetLoginForm from "../../hooks/useGetLoginForm";
 
 const Login = () => {
@@ -7,7 +8,9 @@ const Login = () => {
   });
 
   return (
+
     <div className="min-h-screen flex flex-col items-center justify-center">
+      <Refresh_Token />
       <form
         className="bg-white p-10 rounded-lg shadow-md w-[580px] h-[425px] border border-black"
         onSubmit={handleSubmit(onSubmit)}
