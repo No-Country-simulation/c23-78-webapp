@@ -3,6 +3,7 @@ package com.trackmyfix.trackmyfix.controller;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderUpdateRequest;
 import com.trackmyfix.trackmyfix.entity.Order;
+import com.trackmyfix.trackmyfix.entity.State;
 import com.trackmyfix.trackmyfix.services.Impl.OrderService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/work-order")
@@ -20,17 +24,20 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> findAllOrders() {
-        return orderService.findAll();
+        Map<String, Object> response = orderService.findAll();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/number/{number}")
     public ResponseEntity<Order> findOrderByNumber(@PathVariable String number) {
-        return orderService.findByNumber(number);
+        Order order = orderService.findByNumber(number);
+        return ResponseEntity.ok(order);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Order> findById(@PathVariable Long id) {
-        return orderService.findById(id);
+        Order order = orderService.findById(id);
+        return ResponseEntity.ok(order);
     }
 
     @PostMapping
@@ -42,12 +49,14 @@ public class OrderController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody @Valid OrderUpdateRequest orderUpdateRequest){
-    return this.orderService.updateOrder(id,orderUpdateRequest);
+        Order updatedOrder = orderService.updateOrder(id, orderUpdateRequest);
+        return ResponseEntity.ok(updatedOrder);
     }
 
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivateOrder(@PathVariable Long id) {
-        return orderService.deactivateOrder(id);
+        orderService.deactivateOrder(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

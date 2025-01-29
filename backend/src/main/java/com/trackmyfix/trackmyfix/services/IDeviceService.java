@@ -3,7 +3,6 @@ package com.trackmyfix.trackmyfix.services;
 import java.util.List;
 import java.util.Map;
 
-import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.entity.Order;
 import org.springframework.http.ResponseEntity;
 
@@ -19,8 +18,10 @@ public interface IDeviceService {
 
     List<Device> createDevice(List<DeviceRequestDTO> devices, Order newOrder);
 
-    ResponseEntity<Device> updateDevice(long id, DeviceRequestDTO device);
+    List<Device> updateDevice(List<DeviceRequestDTO> devicesRequest, List<Device> currentDevices);
 
+    List<String>getAllStates();
+    List<String>getAllTypes();
 
     /*
      * 

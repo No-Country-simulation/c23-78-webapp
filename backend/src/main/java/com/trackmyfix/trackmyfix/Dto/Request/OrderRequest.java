@@ -1,5 +1,7 @@
 package com.trackmyfix.trackmyfix.Dto.Request;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +23,7 @@ public class OrderRequest {
     @Size(min = 10, message = "Observations must have at least 10 characters")
     private String observations;
 
+    @JsonManagedReference
     private List<DeviceRequestDTO> devices = new ArrayList<>();
 
 }

@@ -1,5 +1,6 @@
 package com.trackmyfix.trackmyfix.Dto.Request;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.trackmyfix.trackmyfix.entity.Order;
 import com.trackmyfix.trackmyfix.entity.State;
 import com.trackmyfix.trackmyfix.entity.Type;
@@ -18,8 +19,10 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 public class DeviceRequestDTO {
+
+    private Long idDevice;
+
     @NotBlank(message = "Debe de colocar el modelo del dispositivo")
     @NotNull
     private String model;
@@ -48,4 +51,8 @@ public class DeviceRequestDTO {
 
     @NotNull(message = "Debes de colocar un estado")
     private State state;
+
+    @JsonBackReference
+    private OrderRequest order;
+
 }

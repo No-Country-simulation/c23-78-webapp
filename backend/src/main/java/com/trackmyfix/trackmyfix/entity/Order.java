@@ -37,7 +37,7 @@ public class Order implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_client", referencedColumnName = "id_user")
 //    @JsonIgnoreProperties({ "address", "createdAt","updatedAt","role", "password"})
-    @JsonBackReference
+
     private Client client;
 
     @Column(nullable = false)
@@ -51,7 +51,7 @@ public class Order implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Device> devices = new ArrayList<>();
 

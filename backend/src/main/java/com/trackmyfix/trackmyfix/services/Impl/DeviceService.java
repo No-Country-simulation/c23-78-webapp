@@ -1,16 +1,11 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.entity.Order;
-import org.springframework.context.event.EventListener;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.trackmyfix.trackmyfix.Dto.Request.DeviceRequestDTO;
@@ -19,6 +14,7 @@ import com.trackmyfix.trackmyfix.exceptions.DeviceNotFoundException;
 import com.trackmyfix.trackmyfix.repository.DeviceRepository;
 import com.trackmyfix.trackmyfix.services.IDeviceService;
 import com.trackmyfix.trackmyfix.entity.State;
+import com.trackmyfix.trackmyfix.entity.Type;
 
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
@@ -60,7 +56,7 @@ public class DeviceService implements IDeviceService {
     public List<Device> createDevice(List<DeviceRequestDTO> devices, Order newOrder) {
 
         List<Device> devicesCreate = new ArrayList<>();
-
+        newOrder.getDevices().clear();
         for (DeviceRequestDTO deviceAux : devices) {
             Device device = new Device();
             device.setModel(deviceAux.getModel());
@@ -79,28 +75,56 @@ public class DeviceService implements IDeviceService {
         return devicesCreate;
     }
 
-    @Override
-    public ResponseEntity<Device> updateDevice(long id, DeviceRequestDTO device) {
-        Device updatedDevice = deviceRepository.findById(id).orElseThrow(
-                () -> new DeviceNotFoundException("El dispositivo con el numero" + id + "No fue encontrado"));
-        updatedDevice.setAccessories(device.getAccessories());
-        updatedDevice.setModel(device.getModel());
-        //updatedDevice.setOrder(device.getOrder());
-        updatedDevice.setSerialNumber(device.getSerialNumber());
-        updatedDevice.setState(device.getState());
-        updatedDevice.setTechnicalReport(device.getTechnicalReport());
-        updatedDevice.setType(device.getType());
-        deviceRepository.save(updatedDevice);
-        return new ResponseEntity<>(updatedDevice, HttpStatus.OK);
+    public List<Device> updateDevice(List<DeviceRequestDTO> deviceRequestDTOs, List<Device> currentDevices) {
+        List<Device> updatedDevices = new ArrayList<>();
+
+        if (deviceRequestDTOs.size() != currentDevices.size()) {
+            throw new DeviceNotFoundException("El número de dispositivos recibidos no coincide con el número de dispositivos en la orden.");
+        }
+
+        for (int i = 0; i < deviceRequestDTOs.size(); i++) {
+            Device device = getDevice(deviceRequestDTOs, currentDevices, i);
+            updatedDevices.add(device);
+        }
+        return updatedDevices;
+    }
+
+    private static Device getDevice(List<DeviceRequestDTO> deviceRequestDTOs, List<Device> currentDevices, int i) {
+        DeviceRequestDTO deviceDTO = deviceRequestDTOs.get(i);
+        Device device = currentDevices.get(i);
+
+        device.setModel(deviceDTO.getModel());
+        device.setSerialNumber(deviceDTO.getSerialNumber());
+        device.setAccessories(deviceDTO.getAccessories());
+        device.setInitialPrice(deviceDTO.getInitialPrice());
+        device.setFinalPrice(deviceDTO.getFinalPrice());
+        device.setClientDescription(deviceDTO.getClientDescription());
+        device.setTechnicalReport(deviceDTO.getTechnicalReport());
+        device.setType(deviceDTO.getType());
+        device.setState(deviceDTO.getState());
+        device.setOrder(device.getOrder());
+        return device;
     }
 
 
+    @Override
+    public List<String> getAllStates() {
+        return Arrays.stream(State.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+    }
 
+    @Override
+    public List<String> getAllTypes() {
+        return Arrays.stream(Type.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+    }
 
 
     /*
      * metodo a confirmar con front end
-     * 
+     *
      * @Override
      * public ResponseEntity<Device> changeStateDevice(long id, State newState) {
      * Device changedStateDevice = deviceRepository.findById(id).orElseThrow(
@@ -110,6 +134,6 @@ public class DeviceService implements IDeviceService {
      * deviceRepository.save(changedStateDevice);
      * return new ResponseEntity<>(changedStateDevice, HttpStatus.OK);
      * }
-     * 
+     *
      */
 }
