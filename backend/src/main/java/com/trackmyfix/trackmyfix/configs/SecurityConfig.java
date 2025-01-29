@@ -1,19 +1,12 @@
 package com.trackmyfix.trackmyfix.configs;
 
 import com.trackmyfix.trackmyfix.configs.auth.JwtFilter;
-import com.trackmyfix.trackmyfix.entity.Role;
-import io.jsonwebtoken.JwtException;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,9 +15,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 
+import static com.trackmyfix.trackmyfix.entity.Role.TECHNICIAN;
+import static com.trackmyfix.trackmyfix.entity.Role.ADMIN;
+import static com.trackmyfix.trackmyfix.entity.Role.CLIENT;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -45,9 +40,12 @@ public class SecurityConfig {
     AuthenticationEntryPoint authEntryPoint;
 
     private static final String[] ADMIN_ROUTES = {"/**"};
-    private static final String[] TECHNICIAN_ROUTES = {"/work-order"};
+    private static final String[] TECHNICIAN_ROUTES = {"/work-order/**", "/device/**"};
     private static final String[] CLIENT_ROUTES = {"/"};
-    private static final String[] PUBLIC_ROUTES = {"/user/login", "/user/register", "/user/logout"};
+    private static final String[] PUBLIC_ROUTES = {
+            "/user/login",
+            "/user/register",
+            "/user/logout"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -66,11 +64,12 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(ADMIN_ROUTES).hasAnyAuthority(Role.ADMIN.name(), Role.TECHNICIAN.name())  // Ambos roles tienen acceso a ADMIN_ROUTES
-                        .requestMatchers(TECHNICIAN_ROUTES).hasAnyAuthority(Role.ADMIN.name(), Role.TECHNICIAN.name())  // Ambos roles tienen acceso a TECHNICIAN_ROUTES
-                        .requestMatchers(POST, "/user/**").hasAnyAuthority(Role.TECHNICIAN.name())
-                        .requestMatchers(DELETE, "/user/**").hasAnyAuthority(Role.TECHNICIAN.name())
-                        .requestMatchers(PUT, "/user/**").hasAnyAuthority(Role.TECHNICIAN.name())
+                        .requestMatchers(GET, "/user/profile").authenticated()
+                        .requestMatchers(POST, "/user/**").hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())
+                        .requestMatchers(DELETE, "/user/**").hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())
+                        .requestMatchers(PUT, "/user/**").hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())
+                        .requestMatchers(TECHNICIAN_ROUTES).hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())
+                        .requestMatchers(ADMIN_ROUTES).hasAuthority(ADMIN.name())
                         .anyRequest()
                         .authenticated()
                 )
