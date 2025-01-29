@@ -182,7 +182,7 @@ public class OrderService implements IOrderService {
         // Comparar observaciones
         if (!originalOrder.getObservations().equals(orderUpdateRequest.getObservations())) {
             changes.put("Observaciones", "De: [" + originalOrder.getObservations() + "] a: [" + orderUpdateRequest.getObservations() + "]");
-            eventPublisher.publishEvent(new OrderUpdateEvent(Order, Action.MODIFICO_ORDEN_TRABAJO, changes));
+            eventPublisher.publishEvent(new OrderUpdateEvent(originalOrder, Action.MODIFICO_ORDEN_TRABAJO, changes));
         }
 
         // Comparar dispositivos
