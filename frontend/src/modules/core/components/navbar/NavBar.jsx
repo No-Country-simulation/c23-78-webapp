@@ -8,7 +8,7 @@ export const NavBar = () => {
   return (
     <header className="text-white bg-black body-font">
       <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <a className="flex title-font font-medium items-center text-white mb-4 md:mb-0 cursor-pointer">
+        <a className="flex title-font font-medium items-center text-white mb-4 md:mb-0 cursor-pointer" href="/">
           <PackageSearch />
           <span className="ml-3 text-xl">TrackMyFix</span>
         </a>
@@ -43,7 +43,7 @@ export const NavBar = () => {
             </div>
             )}
           </div>
-          <a className="mr-5 hover:text-amber-600 cursor-pointer">About us</a>
+          <a className="mr-5 hover:text-amber-600 cursor-pointer" href="#about-us">About us</a>
           <a className="mr-5 hover:text-amber-600 cursor-pointer">Contact</a>
         </nav>
         {/* <button className="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">

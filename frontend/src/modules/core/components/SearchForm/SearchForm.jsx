@@ -16,7 +16,7 @@ const SearchForm = () => {
                                     <h2 className="text-2xl md:text-3xl font-bold text-[#F55F1D] mb-6">Busca tu equipo</h2>
                                 </div>
                                 <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-2 mb-6">
-                                    <label for="tracking-number" className="text-sm font-bold text-zinc-700">Ingresa el número de seguimiento</label>
+                                    <label htmlFor="tracking-number" className="text-sm font-bold text-zinc-700">Ingresa el número de seguimiento</label>
                                     <input type="text" id="tracking-number" className="border border-black rounded-lg p-3 mt-1 w-full md:w-96" placeholder="Ingrese el numero de seguimiento" />
                                     <button type="submit" className="bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto">Buscar</button>
                                 </div>

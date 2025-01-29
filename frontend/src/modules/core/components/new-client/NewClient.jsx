@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 
-const clienteNumero = 123; 
+const clienteNumero = 123;
 
 const NewClient = () => {
     return (
@@ -9,7 +9,7 @@ const NewClient = () => {
                 <h2 className="text-2xl font-bold  mb-6">Nuevo Cliente</h2>
 
 
-                <div className="bg-gray-200 p-4 rounded-lg mb-6 w-full  "><span className="text-lg font-extralight ">Cliente #{clienteNumero}</span>
+                <div className="bg-gray-200 p-4 rounded-lg mb-6 w-full cursor-not-allowed "><span className="text-lg font-extralight ">Cliente #{clienteNumero}</span>
                 </div>
 
                 <div className="flex flex-col mb-6">
