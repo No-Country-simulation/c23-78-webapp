@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
@@ -52,6 +53,17 @@ public class DeviceController {
         return ResponseEntity.ok(types);
     }
 
+    @GetMapping("/state/{state}")
+    public ResponseEntity<List<Device>> findByState(@PathVariable State state) {
+        List<Device> devices = deviceService.findByState(state);
+        return ResponseEntity.ok(devices);
+    }
+
+    @GetMapping("/type/{type}")
+    public ResponseEntity<List<Device>> findByState(@PathVariable Type type) {
+        List<Device> devices = deviceService.findByType(type);
+        return ResponseEntity.ok(devices);
+    }
 //    @PostMapping
 //    public ResponseEntity<Device> createDevice(@RequestBody @Valid DeviceRequestDTO device) {
 //        return deviceService.createDevice(device);
@@ -62,12 +74,12 @@ public class DeviceController {
 //        return deviceService.updateDevice(id, device);
 //    }
     /*
-     * 
+     *
      * @PutMapping("/{id}/state")
      * public ResponseEntity<Device> changeStateDevice(@PathVariable Long
      * id, @RequestBody State newState) {
      * return deviceService.changeStateDevice(id, newState);
      * }
-     * 
+     *
      */
 }
