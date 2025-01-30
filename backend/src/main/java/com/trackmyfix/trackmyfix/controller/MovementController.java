@@ -36,6 +36,12 @@ public class MovementController {
     @GetMapping("/action/{action}")
     public ResponseEntity<List<Movement>> findByAction(@PathVariable Action action) {
         List<Movement> movements = movementService.findByAction(action);
-        return ResponseEntity.ok(( movements));
+        return ResponseEntity.ok(movements);
+    }
+
+    @GetMapping("/actions")
+    public ResponseEntity<List<String>> getAllActions() {
+        List<String> actions = movementService.getAllAction();
+        return ResponseEntity.ok(actions);
     }
 }

@@ -7,13 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.trackmyfix.trackmyfix.entity.Device;
 import com.trackmyfix.trackmyfix.services.Impl.DeviceService;
 import lombok.AllArgsConstructor;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,14 +34,12 @@ public class DeviceController {
         return deviceService.findBySerialNumber(serialNumber);
     }
 
-    // Llamar a los métodos del servicio para obtener las listas de estados
     @GetMapping("/states")
     public ResponseEntity<List<String>> getAllStates() {
         List<String> states = deviceService.getAllStates();
         return ResponseEntity.ok(states);
     }
 
-    // Llamar a los métodos del servicio para obtener las listas de tipos
     @GetMapping("/types")
     public ResponseEntity<List<String>> getAllTypes() {
         List<String> types = deviceService.getAllTypes();
