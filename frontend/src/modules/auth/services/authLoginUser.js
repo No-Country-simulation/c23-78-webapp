@@ -39,7 +39,6 @@ export default async function authLoginUser(username, password) {
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
             const result = await response.json();
-
             console.log("Respuesta exitosa:", result);
             return result;
         } else {
@@ -49,6 +48,7 @@ export default async function authLoginUser(username, password) {
             saveTokens(result)
             return result;
         }
+
     } catch (error) {
         console.error("Error durante el login:", error);
         throw error;

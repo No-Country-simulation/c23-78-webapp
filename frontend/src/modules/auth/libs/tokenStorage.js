@@ -3,9 +3,12 @@
  * @param {string} accessToken
  * @param {string} refreshToken
  */
+
+const TOKEN_KEY = "access_token";
+const REFRESH_TOKEN_KEY = "refresh_token";
+
 export const saveTokens = (response) => {
-    const TOKEN_KEY = "access_token";
-    const REFRESH_TOKEN_KEY = "refresh_token";
+
 
     localStorage.setItem(TOKEN_KEY, response.access_token);
     localStorage.setItem(REFRESH_TOKEN_KEY, response.refresh_token);
@@ -16,7 +19,12 @@ export const saveTokens = (response) => {
  * @returns {string | null}
  */
 export const getAccessToken = () => {
-    return localStorage.getItem(TOKEN_KEY);
+    try {
+        return localStorage.getItem(TOKEN_KEY);
+    } catch (error) {
+        console.error("Usuario no logeado:", error);
+        return null;
+    }
 };
 export const getRefreshToken = () => {
     return localStorage.getItem(REFRESH_TOKEN_KEY);

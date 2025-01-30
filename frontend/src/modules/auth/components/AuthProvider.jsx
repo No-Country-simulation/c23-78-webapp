@@ -5,15 +5,15 @@ const accessToken = getAccessToken();
 const itsLogged = accessToken ? true : false;
 
 const AuthContext = createContext({
-    isAuthenticated: itsLogged,
+  isAuthenticated: itsLogged,
 })
 
-export function AuthProvider({children}) {
+export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  return(
+  return (
     <AuthContext.Provider value={{ isAuthenticated }}>
-        {children}
+      {children}
     </AuthContext.Provider>
   )
 }
