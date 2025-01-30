@@ -8,7 +8,7 @@ import NewWorkerPage from './pages/Admin/NewWorkerPage';
 import NewClientPage from './pages/admin/NewClientPage';
 import TrackingPage from './pages/tracking/trackingPage';
 import DeviceNotFoundPage from './pages/admin/DeviceNotFoundPage';
-
+import MovementsTrackPage from './pages/admin/MovementsTrackPage';
 
 
 const browserRoutes = createBrowserRouter([
@@ -20,6 +20,7 @@ const browserRoutes = createBrowserRouter([
     { path: '/admin/client', element: <NewClientPage />, },
     { path: `/tracking/*`, element: <TrackingPage />, },
     { path: '/admin/notFound', element: <DeviceNotFoundPage />, },
+    { path: `/admin/trackMovements`, element: <MovementsTrackPage/>, },
 ]);
 
 
