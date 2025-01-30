@@ -57,22 +57,4 @@ public class DeviceController {
         List<Device> devices = deviceService.findByType(type);
         return ResponseEntity.ok(devices);
     }
-//    @PostMapping
-//    public ResponseEntity<Device> createDevice(@RequestBody @Valid DeviceRequestDTO device) {
-//        return deviceService.createDevice(device);
-//    }
-
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Device> updateDevice(@PathVariable Long id, @RequestBody @Valid DeviceRequestDTO device) {
-//        return deviceService.updateDevice(id, device);
-//    }
-    /*
-     *
-     * @PutMapping("/{id}/state")
-     * public ResponseEntity<Device> changeStateDevice(@PathVariable Long
-     * id, @RequestBody State newState) {
-     * return deviceService.changeStateDevice(id, newState);
-     * }
-     *
-     */
 }
