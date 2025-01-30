@@ -1,10 +1,16 @@
+import { Navigate } from "react-router-dom";
 import useGetLoginForm from "../../hooks/useGetLoginForm";
+import { useAuth } from "../AuthProvider";
 
 const Login = () => {
   const { register, handleSubmit, onSubmit, errors } = useGetLoginForm({
     email: "",
     password: "",
   });
+
+  const auth = useAuth();
+
+  if(auth.isAuthenticated) return <Navigate to="/admin" />
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">

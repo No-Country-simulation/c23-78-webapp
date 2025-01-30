@@ -29,14 +29,14 @@ export default async function authLoginUser(username, password) {
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
             const result = await response.json();
-            console.log("Respuesta exitosa:", result);
-            return result;
+            console.log("Respuesta exitosa:", result); 
         } else {
             console.warn("La respuesta no es JSON válida. Analizando como texto...");
             const result = await response.text();
             console.log("Respuesta exitosa (texto):", result);
             return result; 
         }
+        
     } catch (error) {
         console.error("Error durante el login:", error);
         throw error;
