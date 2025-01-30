@@ -26,6 +26,10 @@ services:
       DB_HOST: "jdbc:mysql://db-trackmyfix:3306/track_my_fix_db?createDatabaseIfNotExist=true&serverTimezone=UTC"
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      ACCESS_SECRET: ${ACCESS_SECRET}
+      REFRESH_SECRET: ${REFRESH_SECRET}
+      REFRESH_EXPIRATION: ${REFRESH_EXPIRATION}
+      ACCESS_EXPIRATION: ${ACCESS_EXPIRATION}
     networks:
       - trackmyfix_net
     ports:
@@ -35,8 +39,4 @@ services:
         condition: service_healthy
 networks:
   trackmyfix_net:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.3.0/24
+    external: true

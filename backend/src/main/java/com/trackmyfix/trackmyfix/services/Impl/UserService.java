@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -95,5 +96,23 @@ public class UserService {
         } else {
             throw new JwtException("Invalid refresh Token");
         }
+    }
+
+    public List<UserResponseDTO> findAll(){
+        return userRepository.findAll().stream().map(this::mapToDTO).toList();
+    }
+
+    private UserResponseDTO mapToDTO(User user) {
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .address(user.getAddress())
+                .role(user.getRole())
+                .dni(user.getDni())
+                .active(user.getActive())
+                .build();
     }
 }
