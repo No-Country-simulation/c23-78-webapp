@@ -55,38 +55,36 @@ public class UserChangeAspect {
         var auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
             jwtUser = (UserJwtData) auth.getPrincipal();
-            if (auth.isAuthenticated()) {
-                String WARN_MESSAGE = "Only technicians and client roles can interact with userChanges in Db. log not saved";
-                if (jwtUser.getAuthorities().toArray()[0] == Role.TECHNICIAN) {
-                    switch(annotation.actionUser()){
-                        case MODIFICO_DATOS_CLIENTE -> {
-                            if(user.get() != null) {
-                                if(user.get().getRole() == Role.CLIENT) {
-                                    userChangeService.save(annotation.actionUser(), jwtUser.getId(), user.get().getId());
-                                } else {
-                                    log.warn(WARN_MESSAGE);
-                                }
+            String WARN_MESSAGE = "Only technicians and client roles can interact with userChanges in Db. log not saved";
+            if (jwtUser.getAuthorities().toArray()[0] == Role.TECHNICIAN) {
+                switch(annotation.actionUser()){
+                    case MODIFICO_DATOS_CLIENTE -> {
+                        if(user.get() != null) {
+                            if(user.get().getRole() == Role.CLIENT) {
+                                userChangeService.save(annotation.actionUser(), jwtUser.getId(), user.get().getId());
+                            } else {
+                                log.warn(WARN_MESSAGE);
                             }
                         }
-                        case DESACTIVO_CUENTA_CLIENTE, ACTIVO_CUENTA_CLIENTE, ELIMINO_CLIENTE -> {
-                            if (deletedId.get() != 0L) {
-                                User found = userRepository.findById(deletedId.get()).orElseThrow(()-> new UserNotFoundException("Email not found"));
-                                if (found.getRole() == Role.CLIENT) {
-                                    userChangeService.save(annotation.actionUser(), jwtUser.getId(), deletedId.get());
-                                } else {
-                                    log.warn(WARN_MESSAGE);
-                                }
-                            }
-                        }
-                        case AGREGO_CLIENTE -> {
-                            User newUser = userRepository.findByEmail(user.get().getEmail()).orElseThrow(()-> new UserNotFoundException("Email not found"));
-                            userChangeService.save(annotation.actionUser(), jwtUser.getId(), newUser.getId());
-                        }
-                        default -> log.error("Action UserChange "+annotation.actionUser()+" doesn't exist");
                     }
-                } else {
-                    log.warn(WARN_MESSAGE);
+                    case DESACTIVO_CUENTA_CLIENTE, ACTIVO_CUENTA_CLIENTE, ELIMINO_CLIENTE -> {
+                        if (deletedId.get() != 0L) {
+                            User found = userRepository.findById(deletedId.get()).orElseThrow(()-> new UserNotFoundException("Email not found"));
+                            if (found.getRole() == Role.CLIENT) {
+                                userChangeService.save(annotation.actionUser(), jwtUser.getId(), deletedId.get());
+                            } else {
+                                log.warn(WARN_MESSAGE);
+                            }
+                        }
+                    }
+                    case AGREGO_CLIENTE -> {
+                        User newUser = userRepository.findByEmail(user.get().getEmail()).orElseThrow(()-> new UserNotFoundException("Email not found"));
+                        userChangeService.save(annotation.actionUser(), jwtUser.getId(), newUser.getId());
+                    }
+                    default -> log.error("Action UserChange "+annotation.actionUser()+" doesn't exist");
                 }
+            } else {
+                log.warn(WARN_MESSAGE);
             }
         }
     }

@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -64,5 +65,10 @@ public class UserController {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         UserJwtData user = (UserJwtData) authentication.getPrincipal();
         return ResponseEntity.ok(userService.findById(user.getId()));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<UserResponseDTO>> all(){
+        return ResponseEntity.ok(userService.findAll());
     }
 }
