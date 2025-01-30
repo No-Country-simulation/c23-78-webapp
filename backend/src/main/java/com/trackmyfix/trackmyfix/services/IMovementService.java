@@ -13,4 +13,5 @@ public interface IMovementService {
     Map<String, Object> findAll();
     List<Movement> findByAction(Action action);
     Movement findById(Long id);
+    List<String> getAllAction();
 }

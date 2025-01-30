@@ -12,16 +12,18 @@ import com.trackmyfix.trackmyfix.repository.MovementRepository;
 import com.trackmyfix.trackmyfix.repository.TechnicianRepository;
 import com.trackmyfix.trackmyfix.services.IMovementService;
 import com.trackmyfix.trackmyfix.utils.MovementUtils;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -33,7 +35,7 @@ public class MovementService implements IMovementService {
     @Transactional
     @EventListener
     public void handleOrderCreatedEvent(DeviceCreateEvent event) {
-        for (Device device : event.getOrder().getDevices()){
+        for (Device device : event.getOrder().getDevices()) {
             Order order = event.getOrder();
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
             Technician technician = technicianRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
@@ -118,8 +120,8 @@ public class MovementService implements IMovementService {
     @Override
     @Transactional
     public List<Movement> findByAction(Action action) {
-        List<Movement>movements =  movementRepository.findByAction(action);
-        if(movements.isEmpty()){
+        List<Movement> movements = movementRepository.findByAction(action);
+        if (movements.isEmpty()) {
             throw new DeviceNotFoundException("No hay movimiento con la Acción " + action.name() + " encontrados");
         }
         return movements;
@@ -130,5 +132,13 @@ public class MovementService implements IMovementService {
     public Movement findById(Long id) {
         return movementRepository.findById(id).orElseThrow(
                 () -> new MovementNotFoundException("El movimiento con el numero" + id + "No fue encontrado"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<String> getAllAction() {
+        return Arrays.stream(Action.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
     }
 }
