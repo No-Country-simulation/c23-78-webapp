@@ -1,5 +1,7 @@
 import Refresh_Token from "../../../test/refresh_token";
+import { Navigate } from "react-router-dom";
 import useGetLoginForm from "../../hooks/useGetLoginForm";
+import { useAuth } from "../AuthProvider";
 
 const Login = () => {
   const { register, handleSubmit, onSubmit, errors } = useGetLoginForm({
@@ -7,10 +9,13 @@ const Login = () => {
     password: "",
   });
 
+  const auth = useAuth();
+
+  if(auth.isAuthenticated) return <Navigate to="/admin" />
+
   return (
 
     <div className="min-h-screen flex flex-col items-center justify-center">
-      <Refresh_Token />
       <form
         className="bg-white p-10 rounded-lg shadow-md w-[580px] h-[425px] border border-black"
         onSubmit={handleSubmit(onSubmit)}
