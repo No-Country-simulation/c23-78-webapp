@@ -24,7 +24,7 @@ export const getRefreshToken = () => {
 
 /**
  * Funcion de logout experimental.
- */
+*/
 export const logout = () => {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
