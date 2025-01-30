@@ -1,3 +1,5 @@
+import { saveTokens } from "../libs/tokenStorage";
+
 export default async function authLoginUser(username, password) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -29,12 +31,14 @@ export default async function authLoginUser(username, password) {
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
             const result = await response.json();
+            
             console.log("Respuesta exitosa:", result);
             return result;
         } else {
             console.warn("La respuesta no es JSON válida. Analizando como texto...");
             const result = await response.text();
             console.log("Respuesta exitosa (texto):", result);
+            saveTokens(result)
             return result; 
         }
     } catch (error) {

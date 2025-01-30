@@ -1,3 +1,8 @@
+/*
+    Deprecated
+*/
+
+
 export default function useLoginLocalStorage() {
     const [token, setToken] = useState("");
     const [refreshToken, setRefreshToken] = useState("");

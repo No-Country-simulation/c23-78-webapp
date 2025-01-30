@@ -1,4 +1,4 @@
-export default async function renewRefreshToken(refreshToken) {
+export default async function refreshToken(refreshToken) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
