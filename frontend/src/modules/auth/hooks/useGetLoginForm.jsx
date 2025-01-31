@@ -1,37 +1,34 @@
-import { useForm } from "react-hook-form";
-import authLoginUser from "../services/authLoginUser";
+import { saveTokens } from "../libs/tokenStorage";
 
+/**
+ * Hook personalizado para manejar el formulario de inicio de sesión.
+ * @param {Object} defaultValues - Valores predeterminados para el formulario.
+ * @returns {Object} - Métodos y estados del formulario.
+ */
 const useGetLoginForm = (defaultValues) => {
     const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        reset,
-        watch,
     } = useForm({
-        defaultValues, // valores predeterminados
     });
 
-    // Manejo del
+    /**
+     * Función que se ejecuta al enviar el formulario.
+     * @param {Object} data - Contiene los valores ingresados en el formulario.
+     */
     const onSubmit = (data) => {
         (async () => {
             try {
-                console.log("enviando, data", data);    
+
+                // Llamamos a la función de autenticación con los datos ingresados
                 const result = await authLoginUser(data.email, data.password);
+                saveTokens(result);
+                // Aquí podríamos manejar la respuesta del login, como guardar tokens o redirigir
             } catch (error) {
-                console.error("Login failed:", error);
+                console.error("Error en el inicio de sesión:", error);
             }
         })();
     };
 
     return {
-        register, // conectar los inputs
-        handleSubmit, // manejo de informacion
-        onSubmit, // submit del form
-        errors, // catch para errores
-        reset, // Caso reinicio
-        watch, // Trigger 
     };
 };
 
-export default useGetLoginForm;

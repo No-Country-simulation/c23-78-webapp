@@ -1,4 +1,4 @@
-export default async function renewRefreshToken(refreshToken) {
+export default async function refreshToken(refreshToken) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -14,7 +14,7 @@ export default async function renewRefreshToken(refreshToken) {
 
     try {
         const response = await fetch(
-            "http://trackmyfix-backend.eqgrhtbfgsa4ggdk.brazilsouth.azurecontainer.io:9091/user/refresh-token",
+            "http://trackmyfix-backend.eqgrhtbfgsa4ggdk.brazilsouth.azurecontainer.io:9091/user/login",
             requestOptions
         );
 

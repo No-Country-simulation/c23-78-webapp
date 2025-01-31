@@ -13,6 +13,7 @@ const Login = () => {
   if(auth.isAuthenticated) return <Navigate to="/admin" />
 
   return (
+
     <div className="min-h-screen flex flex-col items-center justify-center">
       <form
         className="bg-white p-10 rounded-lg shadow-md w-[580px] h-[425px] border border-black"
