@@ -1,9 +1,11 @@
 package com.trackmyfix.trackmyfix.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -30,16 +32,17 @@ public class Order implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String observations;
 
-    //@DecimalMin(value = "0", inclusive = false, message = "Final price must be greater than zero")
+    @NotNull(message = "Order total is mandatory")
+    @PositiveOrZero(message = "Value must be positive or zero")
     @Column(precision = 10, scale = 2)
     private BigDecimal orderTotal;
 
     @ManyToOne
+    @NotNull(message = "Client is required")
     @JoinColumn(name = "id_client", referencedColumnName = "id_user")
-//    @JsonIgnoreProperties({ "address", "createdAt","updatedAt","role", "password"})
-
     private Client client;
 
+    @NotNull(message = "Active status is mandatory")
     @Column(nullable = false)
     private Boolean active;
 
@@ -59,13 +62,13 @@ public class Order implements Serializable {
     protected void onCreate() {
         createdAt = new Date();
         updatedAt = new Date();
-        updateOrderTotal();  // Actualiza el total al crear la orden
+        updateOrderTotal();
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = new Date();
-        updateOrderTotal();  // Actualiza el total al actualizar la orden
+        updateOrderTotal();
     }
 
     public void updateOrderTotal() {

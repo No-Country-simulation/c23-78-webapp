@@ -3,18 +3,13 @@ package com.trackmyfix.trackmyfix.controller;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderUpdateRequest;
 import com.trackmyfix.trackmyfix.entity.Order;
-import com.trackmyfix.trackmyfix.entity.State;
 import com.trackmyfix.trackmyfix.services.Impl.OrderService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/work-order")
@@ -59,6 +54,4 @@ public class OrderController {
         orderService.setActiveOrder(id, active);
         return ResponseEntity.noContent().build();
     }
-
-
 }
