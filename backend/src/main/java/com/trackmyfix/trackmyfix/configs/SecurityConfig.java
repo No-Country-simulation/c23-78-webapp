@@ -44,8 +44,7 @@ public class SecurityConfig {
     private static final String[] CLIENT_ROUTES = {"/"};
     private static final String[] PUBLIC_ROUTES = {
             "/user/login",
-            "/user/register",
-            "/user/logout"};
+            "/user/register"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -63,7 +62,8 @@ public class SecurityConfig {
                 }))
 
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(PUBLIC_ROUTES).permitAll()
+                        .requestMatchers(GET, "/user/logout").authenticated()
+                        .requestMatchers(POST, PUBLIC_ROUTES).permitAll()
                         .requestMatchers(GET, "/user/profile").authenticated()
                         .requestMatchers(POST, "/user/**").hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())
                         .requestMatchers(DELETE, "/user/**").hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())
