@@ -25,10 +25,3 @@ export default async function deleteClientOrders(clientId) {
         return { success: false, error: error.message };
     }
 };
-
-
-/*
-    ejemplo de uso:
-
-    import deleteClientOrders from "../services/deleteClientOrders";
-*/

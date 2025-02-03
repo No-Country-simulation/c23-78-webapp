@@ -33,9 +33,6 @@ export function AuthProvider({ children }) {
 }
 
 export const useAuth = () => useContext(AuthContext);
-
-
-
 /*
 
 import { useContext, createContext, useState, useEffect } from 'react'
