@@ -2,10 +2,7 @@ package com.trackmyfix.trackmyfix.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,14 +23,16 @@ public class Order implements Serializable {
     private Long idOrder;
 
     @NotBlank(message = "The work order number is mandatory")
+    @Size(max = 25, message = "Work order number cannot exceed 25 characters")
     @Column(nullable = false, unique = true, length = 25)
     private String number;
 
+    @Size(max = 65535, message = "Observations cannot exceed 65535 characters")
     @Column(columnDefinition = "TEXT")
     private String observations;
 
     @NotNull(message = "Order total is mandatory")
-    @PositiveOrZero(message = "Value must be positive or zero")
+    @PositiveOrZero(message = "Order total must be positive or zero")
     @Column(precision = 10, scale = 2)
     private BigDecimal orderTotal;
 
@@ -55,6 +54,7 @@ public class Order implements Serializable {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Size(max = 1, message = "There must be exactly one device")
     @JsonManagedReference
     private List<Device> devices = new ArrayList<>();
 

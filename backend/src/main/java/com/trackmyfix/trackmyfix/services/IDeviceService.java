@@ -12,9 +12,9 @@ import com.trackmyfix.trackmyfix.Dto.Request.DeviceRequestDTO;
 import com.trackmyfix.trackmyfix.entity.Device;
 
 public interface IDeviceService {
-    ResponseEntity<Map<String, Object>> findAll();
-    ResponseEntity<Device> findById(long id);
-    ResponseEntity<Device> findBySerialNumber(String serialNumber);
+    Map<String, Object> findAll();
+    Device findById(long id);
+    Device findBySerialNumber(String serialNumber);
     List<Device> findByState(State state);
     List<Device> findByType(Type type);
     List<Device> createDevice(List<DeviceRequestDTO> devices, Order newOrder);

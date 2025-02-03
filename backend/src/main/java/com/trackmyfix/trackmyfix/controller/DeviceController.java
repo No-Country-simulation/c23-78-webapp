@@ -21,17 +21,20 @@ public class DeviceController {
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> findAllDevices() {
-        return deviceService.findAll();
+        Map<String, Object> response = deviceService.findAll();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Device> findById(@PathVariable Long id) {
-        return deviceService.findById(id);
+        Device device = deviceService.findById(id);
+        return ResponseEntity.ok(device);
     }
 
     @GetMapping("/serial-number/{serialNumber}")
     public ResponseEntity<Device> findBySerialNumber(@PathVariable String serialNumber) {
-        return deviceService.findBySerialNumber(serialNumber);
+        Device device = deviceService.findBySerialNumber(serialNumber);
+        return ResponseEntity.ok(device);
     }
 
     @GetMapping("/states")

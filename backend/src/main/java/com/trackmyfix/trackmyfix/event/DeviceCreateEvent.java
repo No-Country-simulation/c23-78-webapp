@@ -14,7 +14,6 @@ public class DeviceCreateEvent extends ApplicationEvent {
     private final Action action;
     private  final Map<String, Object> changes;
 
-    // Constructor para creación (sin cambios)
     public DeviceCreateEvent(Order order, Action action) {
         super(order);
         this.order = order;
@@ -22,7 +21,6 @@ public class DeviceCreateEvent extends ApplicationEvent {
         this.changes = new HashMap<>();
     }
 
-    // Constructor para actualización (con cambios)
     public DeviceCreateEvent(Order order, Action action, Map<String, Object> changes) {
         super(order);
         this.order = order;
