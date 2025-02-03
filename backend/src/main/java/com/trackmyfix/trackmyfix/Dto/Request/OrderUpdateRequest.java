@@ -20,6 +20,5 @@ public class OrderUpdateRequest {
     private String observations;
 
     @Size(min = 1, max = 1, message = "There must be exactly one device")
-    @JsonManagedReference
     private List<DeviceRequestDTO> devices = new ArrayList<>();
 }

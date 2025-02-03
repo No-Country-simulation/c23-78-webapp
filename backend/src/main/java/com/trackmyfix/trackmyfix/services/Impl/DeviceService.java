@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import com.trackmyfix.trackmyfix.entity.Order;
 import com.trackmyfix.trackmyfix.utils.DeviceUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.trackmyfix.trackmyfix.Dto.Request.DeviceRequestDTO;
 import com.trackmyfix.trackmyfix.entity.Device;
@@ -16,8 +15,6 @@ import com.trackmyfix.trackmyfix.entity.State;
 import com.trackmyfix.trackmyfix.entity.Type;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 @Service
@@ -28,28 +25,27 @@ public class DeviceService implements IDeviceService {
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Map<String, Object>> findAll() {
+    public Map<String, Object> findAll() {
         Map<String, Object> response = new HashMap<>();
         List<Device> devices = (List<Device>) deviceRepository.findAll();
         response.put("devices", devices);
         response.put("deviceSize", devices.size());
-        return ResponseEntity.ok(response);
+        return response;
     }
+
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Device> findById(long id) {
-        Device device = deviceRepository.findById(id).orElseThrow(
+    public Device findById(long id) {
+        return  deviceRepository.findById(id).orElseThrow(
                 () -> new DeviceNotFoundException("The device with the number " + id + " was not found"));
-        return ResponseEntity.ok(device);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Device> findBySerialNumber(String serialNumber) {
-        Device device = deviceRepository.findBySerialNumber(serialNumber).orElseThrow(
+    public Device findBySerialNumber(String serialNumber) {
+        return deviceRepository.findBySerialNumber(serialNumber).orElseThrow(
                 () -> new DeviceNotFoundException("The device with the serial number " + serialNumber + " was not found"));
-        return ResponseEntity.ok(device);
     }
 
     @Override
