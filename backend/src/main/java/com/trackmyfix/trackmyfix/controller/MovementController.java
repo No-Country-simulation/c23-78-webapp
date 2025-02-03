@@ -1,6 +1,5 @@
 package com.trackmyfix.trackmyfix.controller;
 
-
 import com.trackmyfix.trackmyfix.entity.Action;
 import com.trackmyfix.trackmyfix.entity.Movement;
 import com.trackmyfix.trackmyfix.services.Impl.MovementService;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 import java.util.Map;
 

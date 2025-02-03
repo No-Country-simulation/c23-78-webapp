@@ -37,10 +37,9 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody @Valid OrderRequest orderRequest) {
-        Order order = orderService.createOrder(orderRequest); // Llama al Service, que ya no usa ResponseEntity
-        return ResponseEntity.status(HttpStatus.CREATED).body(order); // El Controller maneja la respuesta HTTP
+        Order order = orderService.createOrder(orderRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody @Valid OrderUpdateRequest orderUpdateRequest){

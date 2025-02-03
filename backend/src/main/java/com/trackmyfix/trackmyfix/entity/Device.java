@@ -3,10 +3,7 @@ package com.trackmyfix.trackmyfix.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,30 +25,34 @@ public class Device implements Serializable {
     private Long idDevice;
 
     @NotBlank(message = "Model is mandatory")
+    @Size(max = 100, message = "Model cannot exceed 100 characters")
     @Column(nullable = false, length = 100)
     private String model;
 
     @NotBlank(message = "Serial number is mandatory")
+    @Size(max = 100, message = "Serial number cannot exceed 100 characters")
     @Column(nullable = false, unique = true, length = 100)
     private String serialNumber;
 
+    @Size(max = 250, message = "Accessories cannot exceed 250 characters")
     @Column(length = 250)
     private String accessories;
 
-    @PositiveOrZero(message = "Value must be positive or zero")
     @NotNull(message = "Initial price is mandatory")
     @DecimalMin(value = "10.0", inclusive = false, message = "Initial price must be greater than zero")
+    @PositiveOrZero(message = "Value must be positive or zero")
     @Column(precision = 10, scale = 2)
     private BigDecimal initialPrice;
 
     @PositiveOrZero(message = "Value must be positive or zero")
-    @NotNull(message = "Final price is mandatory")
     @Column(precision = 10, scale = 2)
     private BigDecimal finalPrice;
 
+    @Size(max = 500, message = "Client description cannot exceed 500 characters")
     @Column(columnDefinition = "TEXT")
     private String clientDescription;
 
+    @Size(max = 1000, message = "Technical report cannot exceed 1000 characters")
     @Column(columnDefinition = "TEXT")
     private String technicalReport;
 
