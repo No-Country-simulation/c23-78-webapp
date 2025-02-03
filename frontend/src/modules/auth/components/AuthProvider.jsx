@@ -44,24 +44,19 @@ const itsLogged = accessToken ? true : false;
 // const authLoginUserValidated = authLoginUser();
 
 const AuthContext = createContext({
-  isAuthenticated: itsLogged,
+    isAuthenticated: false,
 })
 
-export function AuthProvider({ children }) {
+export function AuthProvider({children}) {
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  return (
+  return(
     <AuthContext.Provider value={{ isAuthenticated }}>
-      {children}
+        {children}
     </AuthContext.Provider>
   )
 }
 
-<<<<<<< HEAD
-export const useAuth = () => useContext(AuthContext)
-=======
 export const useAuth = () => useContext(AuthContext)
 
 */
->>>>>>> developer-frontend
