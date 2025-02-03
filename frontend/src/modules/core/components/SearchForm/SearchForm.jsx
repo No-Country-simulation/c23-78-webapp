@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Importar useNavigate para la redirección
 import searchForm from "../../../../assets/image/searchForm.png";
 import searchImage from "../../../../assets/image/searchImage.png";
+import lupaMainFrame from "../../../../assets/Image/lupaMainFrame.png"
 
 const SearchForm = () => {
     const [trackingNumber, setTrackingNumber] = useState(""); // Estado para el código
@@ -35,9 +36,17 @@ const SearchForm = () => {
         <>
             <div className="flex items-center justify-center min-h-screen w-full bg-muted">
                 <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
-                    <div className="w-full md:w-auto h-auto flex justify-center items-center">
-                        <img src={searchImage} alt="Cat" className="w-full md:w-auto" />
+                    <div className="w-full md:w-auto h-auto flex flex-col justify-center items-center text-center">
+                        <h2 className="text-4xl font-bold text-black mb-6 leading-tight max-w-md">
+                            Rastrea tu equipo y <br /> obtén información <br /> instantánea.
+                        </h2>
+                        <img
+                            src={lupaMainFrame}
+                            alt="Tracking Illustration"
+                            className="md:block  hidden sm:block" 
+                            />
                     </div>
+
                     <div className="w-full md:w-auto h-auto flex">
                         <div className="flex flex-col items-center justify-center p-6 w-full">
                             <form onSubmit={handleSubmit} className="bg-white p-6 md:p-10 rounded-lg shadow-md w-full max-w-2xl border border-black">
@@ -46,13 +55,13 @@ const SearchForm = () => {
                                 </div>
                                 <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-2 mb-6">
                                     <label htmlFor="tracking-number" className="text-sm font-bold text-zinc-700">Ingresa el número de seguimiento</label>
-                                    <input 
-                                        type="text" 
-                                        id="tracking-number" 
-                                        className="border border-black rounded-lg p-3 mt-1 w-full md:w-96" 
+                                    <input
+                                        type="text"
+                                        id="tracking-number"
+                                        className="border border-black rounded-lg p-3 mt-1 w-full md:w-96"
                                         placeholder="Ingrese el numero de seguimiento"
                                         value={trackingNumber}
-                                        onChange={(e) => setTrackingNumber(e.target.value)} 
+                                        onChange={(e) => setTrackingNumber(e.target.value)}
                                     />
                                     <button type="submit" className="bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto">Buscar</button>
                                 </div>

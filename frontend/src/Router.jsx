@@ -6,15 +6,9 @@ import NewClientPage from './pages/admin/NewClientPage';
 import Admin from './pages/admin/admin';
 import TrackingPage from './pages/tracking/trackingPage';
 import DeviceNotFoundPage from './pages/admin/DeviceNotFoundPage';
-<<<<<<< HEAD
-import UserData from './modules/admin/components/UserData';
-
-
-=======
 import MovementsTrackPage from './pages/admin/MovementsTrackPage';
 import { ProtectedRoute } from './modules/auth/components/ProtectedRoute';
 import { AuthProvider } from './modules/auth/components/AuthProvider';
->>>>>>> developer-frontend
 
 const browserRoutes = createBrowserRouter([
     { path: '/', element: <Principal />, },
@@ -28,11 +22,7 @@ const browserRoutes = createBrowserRouter([
     },
     { path: '/tracking/*', element: <TrackingPage />, },
     { path: '/admin/notFound', element: <DeviceNotFoundPage />, },
-<<<<<<< HEAD
-
-=======
     { path: '/admin/trackMovements', element: <MovementsTrackPage />, },
->>>>>>> developer-frontend
 ]);
 
 

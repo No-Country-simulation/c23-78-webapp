@@ -32,3 +32,4 @@ const useGetLoginForm = (defaultValues) => {
     };
 };
 
+export default useGetLoginForm;
