@@ -24,50 +24,50 @@ public class Device implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDevice;
 
-    @NotBlank(message = "Model is mandatory")
-    @Size(max = 100, message = "Model cannot exceed 100 characters")
+    @NotBlank(message = "{device.model.mandatory}")
+    @Size(max = 100, message = "{device.model.max_length}")
     @Column(nullable = false, length = 100)
     private String model;
 
-    @NotBlank(message = "Serial number is mandatory")
-    @Size(max = 100, message = "Serial number cannot exceed 100 characters")
+    @NotBlank(message = "{device.serial_number.mandatory}")
+    @Size(max = 100, message = "{device.serial_number.max_length}")
     @Column(nullable = false, unique = true, length = 100)
     private String serialNumber;
 
-    @Size(max = 250, message = "Accessories cannot exceed 250 characters")
+    @Size(max = 250, message = "{device.accessories.max_length}")
     @Column(length = 250)
     private String accessories;
 
-    @NotNull(message = "Initial price is mandatory")
-    @DecimalMin(value = "10.0", inclusive = false, message = "Initial price must be greater than zero")
-    @PositiveOrZero(message = "Value must be positive or zero")
+    @NotNull(message = "{device.initial_price.mandatory}")
+    @DecimalMin(value = "10.0", inclusive = false, message = "{device.initial_price.min_length}")
+    @PositiveOrZero(message = "{device.initial_price.positive_or_zero}")
     @Column(precision = 10, scale = 2)
     private BigDecimal initialPrice;
 
-    @PositiveOrZero(message = "Value must be positive or zero")
+    @PositiveOrZero(message = "{device.final_price.positive_or_zero}")
     @Column(precision = 10, scale = 2)
     private BigDecimal finalPrice;
 
-    @Size(max = 500, message = "Client description cannot exceed 500 characters")
+    @Size(max = 500, message = "{device.client_description.max_length}")
     @Column(columnDefinition = "TEXT")
     private String clientDescription;
 
-    @Size(max = 1000, message = "Technical report cannot exceed 1000 characters")
+    @Size(max = 1000, message = "{device.technician_report.max_length}")
     @Column(columnDefinition = "TEXT")
     private String technicalReport;
 
-    @NotNull(message = "Order is mandatory")
+    @NotNull(message = "{device.order.mandatory}")
     @JoinColumn(name = "id_order", nullable=false)
     @JsonBackReference
     @ManyToOne
     private Order order;
 
-    @NotNull(message = "State is mandatory")
+    @NotNull(message = "{device.type.mandatory}")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Type type;
 
-    @NotNull(message = "State is mandatory")
+    @NotNull(message = "{device.state.mandatory}")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private State state;
