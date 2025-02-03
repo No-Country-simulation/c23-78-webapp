@@ -38,7 +38,7 @@ public class MovementService implements IMovementService {
         for (Device device : event.getOrder().getDevices()) {
             Order order = event.getOrder();
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
-            Technician technician = technicianRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
+            Technician technician = technicianRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Technician with email " + email + " not found"));
 
             Movement movement = new Movement();
             movement.setOrder(order);
@@ -60,11 +60,11 @@ public class MovementService implements IMovementService {
 
         Order order = event.getOrder();
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Technician technician = technicianRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
+        Technician technician = technicianRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Technician with email " + email + " not found"));
 
         Movement movement = new Movement();
         movement.setOrder(order);
-        movement.setDescription(MovementUtils.generateDescription(order, new HashMap<>())); // Pasar un mapa vacío si no hay cambios
+        movement.setDescription(MovementUtils.generateDescription(order, new HashMap<>()));
         movement.setAction(event.getAction());
         movement.setTechnician(technician);
         movement.setDevice(event.getOrder().getDevices().get(0));
@@ -79,7 +79,7 @@ public class MovementService implements IMovementService {
 
         Order order = event.getOrder();
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Technician technician = technicianRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
+        Technician technician = technicianRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Technician with email " + email + " not found"));
 
         Movement movement = new Movement();
         movement.setOrder(order);
@@ -97,12 +97,12 @@ public class MovementService implements IMovementService {
     public void handleDeviceStateChange(DeviceStateChangeEvent event) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Technician technician = technicianRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("Técnico con email " + email + " no encontrado"));
+                .orElseThrow(() -> new UserNotFoundException("Technician with email " + email + " not found"));
 
         Movement movement = Movement.builder()
                 .device(event.getDevice())
-                .order(event.getDevice().getOrder()) // Asociar la orden relacionada con el dispositivo
-                .technician(technician) // Guardar el técnico que realizó la acción
+                .order(event.getDevice().getOrder())
+                .technician(technician)
                 .description(event.getDescription())
                 .action(event.getAction())
                 .build();
@@ -122,7 +122,7 @@ public class MovementService implements IMovementService {
     public List<Movement> findByAction(Action action) {
         List<Movement> movements = movementRepository.findByAction(action);
         if (movements.isEmpty()) {
-            throw new DeviceNotFoundException("No hay movimiento con la Acción " + action.name() + " encontrados");
+            throw new DeviceNotFoundException("No movements with Action " + action.name() + " found");
         }
         return movements;
     }
@@ -131,7 +131,7 @@ public class MovementService implements IMovementService {
     @Transactional
     public Movement findById(Long id) {
         return movementRepository.findById(id).orElseThrow(
-                () -> new MovementNotFoundException("El movimiento con el numero" + id + "No fue encontrado"));
+                () -> new MovementNotFoundException("Movement with ID " + id + " not found"));
     }
 
     @Override

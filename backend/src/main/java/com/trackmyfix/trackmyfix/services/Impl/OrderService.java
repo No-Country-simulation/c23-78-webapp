@@ -1,31 +1,27 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.trackmyfix.trackmyfix.Dto.Request.DeviceRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.Dto.Request.OrderUpdateRequest;
 import com.trackmyfix.trackmyfix.entity.*;
 import com.trackmyfix.trackmyfix.event.DeviceCreateEvent;
-import com.trackmyfix.trackmyfix.event.DeviceStateChangeEvent;
 import com.trackmyfix.trackmyfix.event.OrderCreateEvent;
 import com.trackmyfix.trackmyfix.event.OrderUpdateEvent;
-import com.trackmyfix.trackmyfix.exceptions.InvalidPriceException;
 import com.trackmyfix.trackmyfix.exceptions.OrderNotFoundException;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.*;
 import com.trackmyfix.trackmyfix.services.IOrderService;
 import com.trackmyfix.trackmyfix.utils.OrderUtils;
+import jakarta.validation.ValidationException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -34,6 +30,7 @@ public class OrderService implements IOrderService {
     private final ClientRepository clientRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final DeviceService deviceService;
+    private final Validator validator;
 
     @Override
     @Transactional(readOnly = true)
@@ -46,21 +43,28 @@ public class OrderService implements IOrderService {
     @Transactional(readOnly = true)
     public Order findByNumber(String number) {
         return orderRepository.findByNumber(number)
-                .orElseThrow(() -> new OrderNotFoundException("Orden con número " + number + " no encontrada"));
+                .orElseThrow(() -> new OrderNotFoundException("Order with number " + number + " was not found"));
     }
 
     @Override
     @Transactional(readOnly = true)
     public Order findById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
+                .orElseThrow(() -> new OrderNotFoundException("Order with ID " + id + " was not found"));
     }
 
     @Override
     @Transactional
     public Order createOrder(OrderRequest orderRequest) {
+        BindingResult bindingResult = new BeanPropertyBindingResult(orderRequest,"orderRequest");
+        validator.validate(orderRequest,bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException("Validation errors: " + bindingResult.getAllErrors());
+        }
+
         Client client = clientRepository.findByDni(orderRequest.getDni()).orElseThrow(
-                () -> new UserNotFoundException("Cliente con DNI " + orderRequest.getDni() + " no encontrado"));
+                () -> new UserNotFoundException("Client with DNI " + orderRequest.getDni() + " was not found"));
 
         Order newOrder = OrderUtils.createOrder(orderRequest, client, orderRepository);
 
@@ -78,7 +82,7 @@ public class OrderService implements IOrderService {
     @Transactional
     public Order updateOrder(Long orderId, OrderUpdateRequest orderUpdateRequest) {
         Order existingOrder = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + orderId + " no encontrada"));
+                .orElseThrow(() -> new OrderNotFoundException("Order with ID " + orderId + " was not found"));
 
         Order originalOrder = OrderUtils.createOriginalOrder(existingOrder);
 
@@ -99,10 +103,10 @@ public class OrderService implements IOrderService {
     @Transactional
     public void setActiveOrder(Long id, boolean active) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("Orden con ID " + id + " no encontrada"));
+                .orElseThrow(() -> new OrderNotFoundException("Order with ID " + id + " was not found"));
 
         if (order.getActive() == active) {
-            throw new IllegalStateException("La orden ya está en el estado deseado");
+            throw new IllegalStateException("The order is already in the desired state");
         }
 
         order.setActive(active);

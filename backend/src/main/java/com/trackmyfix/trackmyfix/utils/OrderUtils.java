@@ -28,7 +28,7 @@ public class OrderUtils {
 
     public static Order createOrder(OrderRequest orderRequest, Client client, OrderRepository orderRepository) {
         return Order.builder()
-                .number(generateOrderNumber(orderRepository)) // Llamada a generar el número de orden
+                .number(generateOrderNumber(orderRepository))
                 .observations(orderRequest.getObservations())
                 .client(client)
                 .active(true)
@@ -51,7 +51,6 @@ public class OrderUtils {
         return "ORD-" + String.format("%05d", number);
     }
 
-    //Update
     public static Order createOriginalOrder(Order existingOrder) {
         return Order.builder()
                 .idOrder(existingOrder.getIdOrder())

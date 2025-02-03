@@ -5,9 +5,7 @@ import java.util.stream.Collectors;
 
 import com.trackmyfix.trackmyfix.entity.Order;
 import com.trackmyfix.trackmyfix.utils.DeviceUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import com.trackmyfix.trackmyfix.Dto.Request.DeviceRequestDTO;
 import com.trackmyfix.trackmyfix.entity.Device;
 import com.trackmyfix.trackmyfix.exceptions.DeviceNotFoundException;
@@ -15,40 +13,39 @@ import com.trackmyfix.trackmyfix.repository.DeviceRepository;
 import com.trackmyfix.trackmyfix.services.IDeviceService;
 import com.trackmyfix.trackmyfix.entity.State;
 import com.trackmyfix.trackmyfix.entity.Type;
-
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.Validator;
 
 @Service
 @AllArgsConstructor
 public class DeviceService implements IDeviceService {
     private DeviceRepository deviceRepository;
+    private Validator validator;
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Map<String, Object>> findAll() {
+    public Map<String, Object> findAll() {
         Map<String, Object> response = new HashMap<>();
         List<Device> devices = (List<Device>) deviceRepository.findAll();
         response.put("devices", devices);
         response.put("deviceSize", devices.size());
-        return ResponseEntity.ok(response);
+        return response;
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public Device findById(long id) {
+        return  deviceRepository.findById(id).orElseThrow(
+                () -> new DeviceNotFoundException("The device with the number " + id + " was not found"));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Device> findById(long id) {
-        Device device = deviceRepository.findById(id).orElseThrow(
-                () -> new DeviceNotFoundException("El dispositivo con el numero" + id + "No fue encontrado"));
-        return ResponseEntity.ok(device);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public ResponseEntity<Device> findBySerialNumber(String serialNumber) {
-        Device device = deviceRepository.findBySerialNumber(serialNumber).orElseThrow(
-                () -> new DeviceNotFoundException(
-                        "El dispositivo con el numero de serial" + serialNumber + "No fue encontrado"));
-        return ResponseEntity.ok(device);
+    public Device findBySerialNumber(String serialNumber) {
+        return deviceRepository.findBySerialNumber(serialNumber).orElseThrow(
+                () -> new DeviceNotFoundException("The device with the serial number " + serialNumber + " was not found"));
     }
 
     @Override
@@ -57,7 +54,7 @@ public class DeviceService implements IDeviceService {
         List<Device> devices = deviceRepository.findByState(state);
 
         if (devices.isEmpty()) {
-            throw new DeviceNotFoundException("No hay dispositivos con el estado " + state.name() + " encontrados");
+            throw new DeviceNotFoundException("No devices found with the state " + state.name());
         }
 
         return devices;
@@ -69,7 +66,7 @@ public class DeviceService implements IDeviceService {
         List<Device> devices = deviceRepository.findByType(type);
 
         if (devices.isEmpty()) {
-            throw new DeviceNotFoundException("No hay dispositivos con el tipo " + type.name() + " encontrados");
+            throw new DeviceNotFoundException("No devices found with the type " + type.name());
         }
 
         return devices;
@@ -78,36 +75,26 @@ public class DeviceService implements IDeviceService {
     @Override
     @Transactional
     public List<Device> createDevice(List<DeviceRequestDTO> devices, Order newOrder) {
+        DeviceUtils.validateDevices(devices, validator);
 
         List<Device> devicesCreate = new ArrayList<>();
         newOrder.getDevices().clear();
         for (DeviceRequestDTO deviceAux : devices) {
-            Device device = new Device();
-            device.setModel(deviceAux.getModel());
-            device.setSerialNumber(deviceAux.getSerialNumber());
-            device.setAccessories(deviceAux.getAccessories());
-            device.setInitialPrice(deviceAux.getInitialPrice());
-            device.setFinalPrice(deviceAux.getFinalPrice());
-            device.setClientDescription(deviceAux.getClientDescription());
-            device.setTechnicalReport(deviceAux.getTechnicalReport());
-            device.setType(deviceAux.getType());
-            device.setState(State.RECIBIDO);
-            device.setOrder(newOrder);
-
+            Device device = DeviceUtils.transformDevice(deviceAux, newOrder);
             devicesCreate.add(device);
         }
+
         return devicesCreate;
     }
 
     @Override
     @Transactional
     public List<Device> updateDevice(List<DeviceRequestDTO> deviceRequestDTOs, List<Device> currentDevices) {
-        List<Device> updatedDevices = new ArrayList<>();
-
         if (deviceRequestDTOs.size() != currentDevices.size()) {
-            throw new DeviceNotFoundException("El número de dispositivos recibidos no coincide con el número de dispositivos en la orden.");
+            throw new DeviceNotFoundException("The number of devices received does not match the number of devices in the order.");
         }
 
+        List<Device> updatedDevices = new ArrayList<>();
         for (int i = 0; i < deviceRequestDTOs.size(); i++) {
             Device device = DeviceUtils.getDevice(deviceRequestDTOs, currentDevices, i);
             updatedDevices.add(device);
@@ -130,6 +117,4 @@ public class DeviceService implements IDeviceService {
                 .map(Enum::name)
                 .collect(Collectors.toList());
     }
-
-
 }

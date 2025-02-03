@@ -1,5 +1,6 @@
 package com.trackmyfix.trackmyfix.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
@@ -21,5 +22,6 @@ import java.util.Date;
 @Setter
 @SQLDelete(sql = "UPDATE user SET active = 0 WHERE id_user=?")
 public class Client extends User {
+    @JsonIgnore
     private String password;
 }

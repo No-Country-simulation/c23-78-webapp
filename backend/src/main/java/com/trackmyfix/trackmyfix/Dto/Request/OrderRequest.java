@@ -2,6 +2,7 @@ package com.trackmyfix.trackmyfix.Dto.Request;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,13 +17,15 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderRequest {
 
-    @NotBlank(message = "DNI is mandatory")
-    @Pattern(regexp = "\\d{7,8}", message = "DNI must be 7 or 8 digits")
+    @NotBlank(message = "{dni.mandatory}")
+    @Pattern(regexp = "\\d{7,8}", message = "{dni.format}")
     private String dni;
 
-    @Size(min = 10, message = "Observations must have at least 10 characters")
+    @Size(max = 65535, message = "{order.observation.max_length}")
+    @Column(columnDefinition = "TEXT")
     private String observations;
 
+    @Size(min = 1, max = 1, message = "{device.exactly.one}")
     @JsonManagedReference
     private List<DeviceRequestDTO> devices = new ArrayList<>();
 

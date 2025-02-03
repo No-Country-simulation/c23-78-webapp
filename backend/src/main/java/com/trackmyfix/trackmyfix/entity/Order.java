@@ -1,11 +1,9 @@
 package com.trackmyfix.trackmyfix.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.trackmyfix.trackmyfix.utils.MessagesUtils;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -25,24 +23,26 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOrder;
 
-    @NotBlank(message = "The work order number is mandatory")
+    @NotBlank(message = "{order.number.mandatory}")
+    @Size(max = 25, message = "{order.number.max_length}")
     @Column(nullable = false, unique = true, length = 25)
     private String number;
 
+    @Size(max = 65535, message = "{order.observation.max_length}")
     @Column(columnDefinition = "TEXT")
     private String observations;
 
-    @NotNull(message = "Order total is mandatory")
-    @PositiveOrZero(message = "Value must be positive or zero")
+    @NotNull(message = "{order.observation.max_length}")
+    @PositiveOrZero(message = "{order.total.positive_or_zero}")
     @Column(precision = 10, scale = 2)
     private BigDecimal orderTotal;
 
     @ManyToOne
-    @NotNull(message = "Client is required")
+    @NotNull(message = "{client.required}")
     @JoinColumn(name = "id_client", referencedColumnName = "id_user")
     private Client client;
 
-    @NotNull(message = "Active status is mandatory")
+    @NotNull(message = "{active.mandatory}")
     @Column(nullable = false)
     private Boolean active;
 
@@ -55,6 +55,7 @@ public class Order implements Serializable {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Size(max = 1, message = "{device.exactly.one}")
     @JsonManagedReference
     private List<Device> devices = new ArrayList<>();
 

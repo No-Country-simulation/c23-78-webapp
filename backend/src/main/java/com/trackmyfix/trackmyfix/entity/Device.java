@@ -3,10 +3,7 @@ package com.trackmyfix.trackmyfix.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,46 +24,50 @@ public class Device implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDevice;
 
-    @NotBlank(message = "Model is mandatory")
+    @NotBlank(message = "{device.model.mandatory}")
+    @Size(max = 100, message = "{device.model.max_length}")
     @Column(nullable = false, length = 100)
     private String model;
 
-    @NotBlank(message = "Serial number is mandatory")
+    @NotBlank(message = "{device.serial_number.mandatory}")
+    @Size(max = 100, message = "{device.serial_number.max_length}")
     @Column(nullable = false, unique = true, length = 100)
     private String serialNumber;
 
+    @Size(max = 250, message = "{device.accessories.max_length}")
     @Column(length = 250)
     private String accessories;
 
-    @PositiveOrZero(message = "Value must be positive or zero")
-    @NotNull(message = "Initial price is mandatory")
-    @DecimalMin(value = "10.0", inclusive = false, message = "Initial price must be greater than zero")
+    @NotNull(message = "{device.initial_price.mandatory}")
+    @DecimalMin(value = "10.0", inclusive = false, message = "{device.initial_price.min_length}")
+    @PositiveOrZero(message = "{device.initial_price.positive_or_zero}")
     @Column(precision = 10, scale = 2)
     private BigDecimal initialPrice;
 
-    @PositiveOrZero(message = "Value must be positive or zero")
-    @NotNull(message = "Final price is mandatory")
+    @PositiveOrZero(message = "{device.final_price.positive_or_zero}")
     @Column(precision = 10, scale = 2)
     private BigDecimal finalPrice;
 
+    @Size(max = 500, message = "{device.client_description.max_length}")
     @Column(columnDefinition = "TEXT")
     private String clientDescription;
 
+    @Size(max = 1000, message = "{device.technician_report.max_length}")
     @Column(columnDefinition = "TEXT")
     private String technicalReport;
 
-    @NotNull(message = "Order is mandatory")
+    @NotNull(message = "{device.order.mandatory}")
     @JoinColumn(name = "id_order", nullable=false)
     @JsonBackReference
     @ManyToOne
     private Order order;
 
-    @NotNull(message = "State is mandatory")
+    @NotNull(message = "{device.type.mandatory}")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Type type;
 
-    @NotNull(message = "State is mandatory")
+    @NotNull(message = "{device.state.mandatory}")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private State state;
