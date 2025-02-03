@@ -21,27 +21,27 @@ public class Movement implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMovement;
 
-    @NotNull(message = "Technician is required")
+    @NotNull(message = "{movement.technician.mandatory}")
     @ManyToOne
     @JoinColumn(name = "id_technician", referencedColumnName = "id_user")
     private Technician technician;
 
-    @NotNull(message = "Order is required")
+    @NotNull(message = "{movement.order.mandatory}")
     @ManyToOne
     @JoinColumn(name = "id_order")
     private Order order;
 
-    @NotNull(message = "Device is required")
+    @NotNull(message = "{movement.device.mandatory}")
     @ManyToOne
     @JoinColumn(name = "id_device")
     private Device device;
 
-    @NotNull(message = "Movement date is required")
+    @NotNull(message = "{movement.date.mandatory}")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date movementDate;
 
-    @NotNull(message = "Action is required")
+    @NotNull(message = "{movement.action.mandatory}")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Action action;

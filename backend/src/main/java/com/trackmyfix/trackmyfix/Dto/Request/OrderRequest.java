@@ -17,15 +17,15 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderRequest {
 
-    @NotBlank(message = "DNI is mandatory")
-    @Pattern(regexp = "\\d{7,8}", message = "DNI must be 7 or 8 digits")
+    @NotBlank(message = "{dni.mandatory}")
+    @Pattern(regexp = "\\d{7,8}", message = "{dni.format}")
     private String dni;
 
-    @Size(max = 65535, message = "Observations cannot exceed 65535 characters")
+    @Size(max = 65535, message = "{order.observation.max_length}")
     @Column(columnDefinition = "TEXT")
     private String observations;
 
-    @Size(min = 1, max = 1, message = "There must be exactly one device")
+    @Size(min = 1, max = 1, message = "{device.exactly.one}")
     @JsonManagedReference
     private List<DeviceRequestDTO> devices = new ArrayList<>();
 
