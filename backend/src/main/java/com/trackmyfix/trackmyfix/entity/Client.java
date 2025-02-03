@@ -20,8 +20,6 @@ import java.util.Date;
 @Getter
 @Setter
 @SQLDelete(sql = "UPDATE user SET active = 0 WHERE id_user=?")
-@FilterDef(name = "activeClientFilter", parameters = @ParamDef(name="isActive", type = Boolean.class))
-@Filter(name = "activeClientFilter", condition = "active = :isActive")
 public class Client extends User {
     private String password;
 }

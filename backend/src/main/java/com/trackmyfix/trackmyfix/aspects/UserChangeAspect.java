@@ -95,7 +95,7 @@ public class UserChangeAspect {
                             }
                         }
                         case AGREGO_CLIENTE -> {
-                            User newUser = userRepository.findByEmail(user.get().getEmail()).orElseThrow(()-> new UserNotFoundException("Email not found"));
+                            User newUser = userRepository.findByEmailAndActive(user.get().getEmail()).orElseThrow(()-> new UserNotFoundException("Email not found"));
                             userChangeService.save(actionUser, jwtUser.getId(), newUser.getId());
                         }
                         default -> log.error("Action UserChange "+actionUser+" doesn't exist");

@@ -27,11 +27,7 @@ public class UserChangeService implements IUserChangeService {
 
     @Override
     public Set<UserChangeResponseDTO> findAll() {
-        Session session = entityManager.unwrap(Session.class);
-        Filter filter = session.enableFilter("activeClientFilter");
-        filter.setParameter("isActive", true);
         List<UserChange> userChanges =  userChangeRepository.findAll();
-        session.disableFilter("activeClientFilter");
         return userChanges.stream().map(this::mapToDTO)
                 .sorted((a,b) -> Math.toIntExact(a.getId() - b.getId()))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
@@ -44,6 +40,14 @@ public class UserChangeService implements IUserChangeService {
                 technicianId,
                 userId
         );
+    }
+
+    @Override
+    public Set<UserChangeResponseDTO> findByClientId(Long clientId) {
+        List<UserChange> userChanges =  userChangeRepository.findByClientId(clientId);
+        return userChanges.stream().map(this::mapToDTO)
+                .sorted((a,b) -> Math.toIntExact(a.getId() - b.getId()))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private UserChangeResponseDTO mapToDTO(UserChange userChange) {
