@@ -46,6 +46,7 @@ const AuthContext = createContext({
 })
 
 export function AuthProvider({ children }) {
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (

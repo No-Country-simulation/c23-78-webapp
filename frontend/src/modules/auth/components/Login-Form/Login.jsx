@@ -4,7 +4,7 @@ import { useAuth } from "../AuthProvider";
 
 const Login = () => {
   const { register, handleSubmit, onSubmit, errors } = useGetLoginForm({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -30,13 +30,13 @@ const Login = () => {
           </label>
           <input
             type="email"
-            id="correo"
+            id="username"
             className="border border-black rounded-lg p-1 mt-3"
             placeholder="Ingresa tu correo"
-            {...register("email", { required: "Es necesario ingresar un correo electrónico válido" })}
+            {...register("username", { required: "Es necesario ingresar un correo electrónico válido" })}
           />
-          {errors.email && (
-            <span className="text-red-500 text-sm">{errors.email.message}</span>
+          {errors.username && (
+            <span className="text-red-500 text-sm">{errors.username.message}</span>
           )}
         </div>
 
