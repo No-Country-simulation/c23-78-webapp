@@ -1,43 +1,36 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import searchForm from "../../../../assets/image/searchForm.png";
 import lupaMainFrame from "../../../../assets/Image/lupaMainFrame.png"
 
 const SearchForm = () => {
-    const [trackingNumber, setTrackingNumber] = useState(""); 
-    const [errorMessage] = useState(""); 
-    const navigate = useNavigate(); 
+    const [trackingNumber, setTrackingNumber] = useState("");
+    const [errorMessage] = useState("");
+    const navigate = useNavigate();
 
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             const response = await fetch(`http://localhost:9091/work-order/number/${trackingNumber}`);
             const data = await response.json();
-    
+
             if (response.ok) {
-<<<<<<< HEAD
-                navigate("/"); // Cambia esta ruta según sea necesario
-=======
+
                 navigate(`/tracking?number=${trackingNumber}`);
                 console.log(1);
-                
->>>>>>> lorenzo-branch
+
+
             } else {
-                navigate("/admin/notFound");
+                navigate("/notFound");
                 console.log(2);
             }
         } catch (error) {
-<<<<<<< HEAD
-            // Si ocurre un error durante la solicitud (por ejemplo, problemas de red)
-            setErrorMessage("Ocurrió un error al realizar la solicitud.");
-            navigate("/notFound"); // Cambia esta ruta según sea necesario
-=======
+
             console.error("Error en la solicitud:", error);
-            navigate("/admin/notFound"); 
+            navigate("/notFound");
             console.log(3);
->>>>>>> lorenzo-branch
         }
     };
 
@@ -52,8 +45,8 @@ const SearchForm = () => {
                         <img
                             src={lupaMainFrame}
                             alt="Tracking Illustration"
-                            className="md:block  hidden sm:block" 
-                            />
+                            className="md:block  hidden sm:block"
+                        />
                     </div>
 
                     <div className="w-full md:w-auto h-auto flex">
