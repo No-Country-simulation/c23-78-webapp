@@ -4,10 +4,12 @@
     Crear un hook para conectar el servicio con el componente
 */
 
-import { getAccessToken } from "../../auth/libs/tokenStorage";
+import { getAccessToken, getRole } from "../../auth/libs/tokenStorage";
 
 export default async function deleteClientOrders(clientId) {
     try {
+        const itsAdmin = getRole() === "admin";
+        if (!itsAdmin) throw new Error("Your role is not authorized");
         const itsLogged = (!!getAccessToken());
         if (!itsLogged) throw new Error("User not authenticated");
 

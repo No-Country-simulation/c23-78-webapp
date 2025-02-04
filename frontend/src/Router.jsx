@@ -21,7 +21,7 @@ const browserRoutes = createBrowserRouter([
         ]
     },
     { path: '/tracking/*', element: <TrackingPage />, },
-    { path: '/admin/notFound', element: <DeviceNotFoundPage />, },
+    { path: '/notFound', element: <DeviceNotFoundPage />, },
     { path: '/admin/trackMovements', element: <MovementsTrackPage />, },
 ]);
 

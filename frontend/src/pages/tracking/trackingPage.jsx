@@ -7,7 +7,6 @@ const TrackingPage = () => {
   return (
     <>
       <NavBar />
-      <UserLoggin />
       <TrackingTimeLine />
       <OrderForm />
     </>

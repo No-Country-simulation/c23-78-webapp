@@ -24,7 +24,7 @@ export function AuthProvider({ children }) {
   };
   //pasar el estado y el login (login probablemente cambie)
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout}}>
       <button onClick={login}>Login</button>
       <button onClick={logout}>Logout</button>
       {children}

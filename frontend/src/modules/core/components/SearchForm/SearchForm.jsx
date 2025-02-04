@@ -19,7 +19,7 @@ const SearchForm = () => {
 
             // Si la respuesta es exitosa (status 200), redirigir a la página de éxito
             if (response.ok) {
-                navigate(""); // Cambia esta ruta según sea necesario
+                navigate("/"); // Cambia esta ruta según sea necesario
             } else {
                 // Si la respuesta no es 200 (por ejemplo, código incorrecto), mostrar mensaje de error
                 setErrorMessage("Código incorrecto. Intenta nuevamente.");
@@ -28,7 +28,7 @@ const SearchForm = () => {
         } catch (error) {
             // Si ocurre un error durante la solicitud (por ejemplo, problemas de red)
             setErrorMessage("Ocurrió un error al realizar la solicitud.");
-            navigate("CAMBIAR"); // Cambia esta ruta según sea necesario
+            navigate("/notFound"); // Cambia esta ruta según sea necesario
         }
     };
 

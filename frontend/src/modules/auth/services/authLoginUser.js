@@ -8,6 +8,7 @@ import { saveTokens } from "../libs/tokenStorage";
  */
 
 export default async function authLoginUser(username, password) {
+    console.log("LOGIN USER", username, password)
     // Header de la solicitud
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -25,11 +26,10 @@ export default async function authLoginUser(username, password) {
     };
 
     const {VITE_BACKEND_URL} = import.meta.env
+    console.log("URL:", `${VITE_BACKEND_URL}/user/login`)
     
     try {
         const response = await fetch(
-            // "http://trackmyfix-backend.eqgrhtbfgsa4ggdk.brazilsouth.azurecontainer.io:9091/user/login",
-            // /user/profile para devolver el rol, nombre, email
             `${VITE_BACKEND_URL}/user/login`,
             requestOptions
         );
