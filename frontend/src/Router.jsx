@@ -4,11 +4,12 @@ import LoginPage from './pages/Auth/LoginPage';
 import NewWorkerPage from './pages/Admin/NewWorkerPage';
 import NewClientPage from './pages/admin/NewClientPage';
 import Admin from './pages/admin/admin';
-import TrackingPage from './pages/tracking/trackingPage';
+import TrackingPage from './pages/tracking/TrackingPage';
 import DeviceNotFoundPage from './pages/admin/DeviceNotFoundPage';
 import MovementsTrackPage from './pages/admin/MovementsTrackPage';
 import { ProtectedRoute } from './modules/auth/components/ProtectedRoute';
 import { AuthProvider } from './modules/auth/components/AuthProvider';
+import NewOrderFormPage from './pages/admin/NewOrderFormPage';
 
 const browserRoutes = createBrowserRouter([
     { path: '/', element: <Principal />, },
@@ -18,6 +19,7 @@ const browserRoutes = createBrowserRouter([
             { path: '/admin/*', element: <Admin />, },
             { path: '/admin/worker', element: <NewWorkerPage />, },
             { path: '/admin/client', element: <NewClientPage />, },
+            { path: '/admin/newOrder', element: <NewOrderFormPage />, },
         ]
     },
     { path: '/tracking/*', element: <TrackingPage />, },
