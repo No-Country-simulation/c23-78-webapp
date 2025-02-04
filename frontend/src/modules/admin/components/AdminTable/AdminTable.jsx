@@ -23,6 +23,8 @@ const columns = [
     { id: "acciones", label: "Acciones", minWidth: 150 },
 ];
 
+
+
 export default function AdminTable() {
     const [rows, setRows] = useState([]); // Almacenará los datos del backend
     const [page, setPage] = useState(0);

@@ -13,14 +13,13 @@ export const modifyWorker = async (workerId, workerData) => {
     if (!itsLogged) throw new Error("User not authenticated");
 
     const role = getRole();
-    if(!role === 'admin') throw new Error("Your role is not authorized")
+    if(!role === 'ADMIN') throw new Error("Your role is not authorized")
 
-    const response = await fetch(`${VITE_BACKEND_URL}/${workerId}`, {
+    const response = await fetch(`${VITE_BACKEND_URL}/user/${workerId}`,  {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+          "authorization": `bearer ${getAccessToken}`,
       },
-      body: JSON.stringify(workerData),
     });
 
     if (!response.ok) {

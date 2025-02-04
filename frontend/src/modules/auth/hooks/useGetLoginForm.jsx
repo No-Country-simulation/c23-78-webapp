@@ -20,6 +20,7 @@ const useGetLoginForm = (defaultValues) => {
                 console.log("enviando, data", data);
                 const result = await authLoginUser(data.email, data.password);
                 saveTokens(result);
+                
             } catch (error) {
                 console.error("Login failed:", error);
             }

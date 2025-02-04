@@ -10,11 +10,9 @@ export const modifyOrder = async (orderId, orderData) => {
     const itsLogged = !!getAccessToken();
     if (!itsLogged) throw new Error("User not authenticated");
 
-    const response = await fetch(`${VITE_BACKEND_URL}/${orderId}`, {
+    const response = await fetch(`${VITE_BACKEND_URL}/work-order/${orderId}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: {"authorization": `bearer ${getAccessToken}`},
       body: JSON.stringify(orderData),
     });
 

@@ -13,11 +13,12 @@ export default async function deleteWorkers(workerId) {
         if (!itsLogged) throw new Error("User not authenticated");
 
         const role = getRole();
-        if(!role === 'admin') throw new Error("Your role is not authorized")
+        if(!role === 'ADMIN') throw new Error("Your role is not authorized")
 
-        // API link sujeto a cambios
-        const response = await fetch(`${VITE_BACKEND_URL}/${workerId}`, {
+        // API link sujeto a cambios - TECHNICIAN
+        const response = await fetch(`${VITE_BACKEND_URL}/user/${workerId}`, {
             method: "DELETE",
+            headers: {"authorization": `bearer ${getAccessToken}`}
         });
 
         if (!response.ok) {
