@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { PackageSearch, ChevronDown } from 'lucide-react';
+import logo from "../../../../assets/logoDark.png";
 
 export const NavBar = () => {
 
@@ -8,18 +9,24 @@ export const NavBar = () => {
   return (
     <header className="text-white bg-black body-font">
       <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <a className="flex title-font font-medium items-center text-white mb-4 md:mb-0 cursor-pointer" href="/">
-          <PackageSearch />
-          <span className="ml-3 text-xl">TrackMyFix</span>
+        <a
+          className="flex title-font font-medium items-center text-white mb-4 md:mb-0 cursor-pointer"
+          href="/"
+        >
+          <img
+            src={logo}
+            alt="trackmyfix"
+            className="h-12 w-auto object-contain"
+          />
         </a>
         <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
           <div className="relative">
-            
-              <button onClick={() => setIsServicesOpen(!isServicesOpen)} className="mr-5 hover:text-amber-600 cursor-pointer inline-flex items-center">
-                Services
-                <ChevronDown className="ml-1" />
-              </button>
-              
+
+            <button onClick={() => setIsServicesOpen(!isServicesOpen)} className="mr-5 hover:text-amber-600 cursor-pointer inline-flex items-center">
+              Services
+              <ChevronDown className="ml-1" />
+            </button>
+
             {isServicesOpen && (
               <div className="absolute left-0 mt-2 w-48 bg-white text-gray-800 shadow-lg rounded-md p-[5px]">
                 <a
@@ -40,7 +47,7 @@ export const NavBar = () => {
                 >
                   Mantenimiento preventivo
                 </a>
-            </div>
+              </div>
             )}
           </div>
           <a className="mr-5 hover:text-amber-600 cursor-pointer" href="#about-us">About us</a>

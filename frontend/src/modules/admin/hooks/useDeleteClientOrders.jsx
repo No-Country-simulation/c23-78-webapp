@@ -30,7 +30,7 @@ export default function useDeleteClientOrders() {
 
 /*
     ejemplo de uso:
-    
+
     import useDeleteClientOrders from "../hooks/useDeleteClientOrders";
 
     const [clientId, setClientId] = useState("");
@@ -54,7 +54,7 @@ export default function useDeleteClientOrders() {
     return (
         <>
             <button onClick={handleDelete}>Eliminar órdenes</button>
-                <input
+            <input
                 type="text"
                 placeholder="Ingrese el ID del cliente"
                 value={clientId}
@@ -62,6 +62,5 @@ export default function useDeleteClientOrders() {
                 className="border border-gray-300 p-2 rounded-md w-full mb-3"
             />
         </>
-     
     );
 */
