@@ -1,34 +1,43 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate para la redirección
+import { useNavigate } from "react-router-dom"; 
 import searchForm from "../../../../assets/image/searchForm.png";
-import searchImage from "../../../../assets/image/searchImage.png";
 import lupaMainFrame from "../../../../assets/Image/lupaMainFrame.png"
 
 const SearchForm = () => {
-    const [trackingNumber, setTrackingNumber] = useState(""); // Estado para el código
-    const [errorMessage, setErrorMessage] = useState(""); // Estado para los mensajes de error
-    const navigate = useNavigate(); // Hook para la navegación
+    const [trackingNumber, setTrackingNumber] = useState(""); 
+    const [errorMessage] = useState(""); 
+    const navigate = useNavigate(); 
 
-    // Función que se ejecuta cuando se hace submit
+    
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Evitar que el formulario se recargue
-
-        // Usamos fetch para hacer la solicitud al backend
+        e.preventDefault();
+        
         try {
             const response = await fetch(`http://localhost:9091/work-order/number/${trackingNumber}`);
-
-            // Si la respuesta es exitosa (status 200), redirigir a la página de éxito
+            const data = await response.json();
+    
             if (response.ok) {
+<<<<<<< HEAD
                 navigate("/"); // Cambia esta ruta según sea necesario
+=======
+                navigate(`/tracking?number=${trackingNumber}`);
+                console.log(1);
+                
+>>>>>>> lorenzo-branch
             } else {
-                // Si la respuesta no es 200 (por ejemplo, código incorrecto), mostrar mensaje de error
-                setErrorMessage("Código incorrecto. Intenta nuevamente.");
-                navigate(""); // Cambia esta ruta según sea necesario
+                navigate("/admin/notFound");
+                console.log(2);
             }
         } catch (error) {
+<<<<<<< HEAD
             // Si ocurre un error durante la solicitud (por ejemplo, problemas de red)
             setErrorMessage("Ocurrió un error al realizar la solicitud.");
             navigate("/notFound"); // Cambia esta ruta según sea necesario
+=======
+            console.error("Error en la solicitud:", error);
+            navigate("/admin/notFound"); 
+            console.log(3);
+>>>>>>> lorenzo-branch
         }
     };
 
@@ -65,7 +74,7 @@ const SearchForm = () => {
                                     />
                                     <button type="submit" className="bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto">Buscar</button>
                                 </div>
-                                <p className="text-sm text-zinc-500">Sin guiones ni puntos. Ej. 12345</p>
+                                <p className="text-sm text-zinc-500">Este es un ejemplo de como va el codigo Ej. ORD-00000</p>
                                 {errorMessage && <p className="text-red-500 text-sm mt-4">{errorMessage}</p>}
                                 <img src={searchForm} alt="searchForm" className="w-full" />
                             </form>

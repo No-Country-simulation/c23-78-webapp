@@ -3,6 +3,7 @@ import BasicTabs from "../../modules/admin/components/AdminTab/AdminTab";
 import AdminTable from "../../modules/admin/components/AdminTable/AdminTable";
 import PageHeader from "../../modules/admin/components/PageHeader/PageHeader";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate para la navegación
 import useUpdatePath from "../../modules/admin/hooks/useUpdatePath";
 import { useAuth } from "../../modules/auth/components/AuthProvider";
 import { getName, getRole } from "../../modules/auth/libs/tokenStorage";
@@ -13,6 +14,8 @@ const Admin = () => {
     const [role, setRole] = useState("trabajador");
     const [searchText, setSearchText] = useState("");
     const { logout } = useAuth();
+    const navigate = useNavigate(); // Hook para la navegación
+
 
     useUpdatePath(searchText, "search");
 
@@ -32,6 +35,11 @@ const Admin = () => {
         console.log("Buscando:", searchText);
     };
 
+    const handleCreateOrder = () => {
+        // Redirigir al formulario de crear orden
+        navigate("/admin/newOrder");
+        refreshToken
+    };
     return (
         <>
             <NavBar />
@@ -61,16 +69,24 @@ const Admin = () => {
                     Buscar
                 </button>
             </form>
+
             <div className="flex flex-col items-start justify-between w-full">
-                <a>
-                    <button onClick={refreshToken} type="submit" className="ml-20 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto">
-                        Crear factura
-                    </button>
-                </a>
+
+             
+                <button
+                    onClick={handleCreateOrder} 
+                    className="ml-20 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
+                >
+                    Crear orden
+                </button>
             </div>
+
+
+
             <BasicTabs
                 firts={<AdminTable />}
                 second={<AdminTable />}
+                third={<AdminTable />}
             />
         </>
     );

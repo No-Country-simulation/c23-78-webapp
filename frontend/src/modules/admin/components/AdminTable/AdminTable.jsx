@@ -9,7 +9,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
 const columns = [
-    { id: "factura", label: "Factura N°", minWidth: 150 },
+    { id: "orden", label: "Orden N°", minWidth: 150 },
     { id: "cliente", label: "Clientes", minWidth: 200 },
     { id: "estado", label: "Estado", minWidth: 100 },
     { id: "comentario", label: "Comentario", minWidth: 300 },
@@ -38,7 +38,7 @@ export default function AdminTable() {
             } catch (error) {
                 setRows([
                     {
-                        factura: "001",
+                        orden: "001",
                         cliente: "No Country",
                         estado: "En reparación",
                         comentario: "Lavo la pc con agua y shampoo",
