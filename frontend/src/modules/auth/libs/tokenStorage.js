@@ -31,6 +31,10 @@
  export const getRefreshToken = () => {
      return localStorage.getItem(REFRESH_TOKEN_KEY);
  };
+
+ export const getRole = () => {
+    return localStorage.getItem(USER_ROLE);
+ }
  
  /**
   * Funcion de logout experimental.
