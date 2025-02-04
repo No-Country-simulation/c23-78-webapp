@@ -1,31 +1,29 @@
 import { useState, useEffect } from "react";
-import { getUserList } from "./getUserList";
+import { modifyOrder } from "./modifyOrdersClient";
 
-const useGetUserList = () => {
-    const [users, setUsers] = useState([]);
+const useModifyOrdersClient = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
     useEffect(() => {
-        const fetchUsers = async () => {
+        const updateOrder = async (orderId, orderData) => {
             setLoading(true);
             setError(null);
-
+    
             try {
-                const userList = await getUserList();
-                setUsers(userList);
+                const updatedOrder = await modifyOrder(orderId, orderData);
+                return updatedOrder;
             } catch (err) {
                 setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
+    
+      updateOrder();
+    }, [])
+    
 
-        fetchUsers();
-    }, []);
-
-    return { users, loading, error };
+    return { updateOrder, loading, error };
 };
 
-export default useGetUserList;
-
+export default useModifyOrdersClient;

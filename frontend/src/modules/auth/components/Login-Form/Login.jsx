@@ -12,6 +12,7 @@ const Login = () => {
 
   if(auth.isAuthenticated) return <Navigate to="/admin" />
 
+
   return (
 
     <div className="min-h-screen flex flex-col items-center justify-center">
@@ -71,4 +72,3 @@ const Login = () => {
 };
 
 export default Login;
-

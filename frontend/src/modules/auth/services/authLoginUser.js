@@ -24,9 +24,13 @@ export default async function authLoginUser(username, password) {
         redirect: "follow",
     };
 
+    const {VITE_BACKEND_URL} = import.meta.env
+    
     try {
         const response = await fetch(
-            "http://trackmyfix-backend.eqgrhtbfgsa4ggdk.brazilsouth.azurecontainer.io:9091/user/login",
+            // "http://trackmyfix-backend.eqgrhtbfgsa4ggdk.brazilsouth.azurecontainer.io:9091/user/login",
+            // /user/profile para devolver el rol, nombre, email
+            `${VITE_BACKEND_URL}/user/login`,
             requestOptions
         );
 
@@ -44,7 +48,7 @@ export default async function authLoginUser(username, password) {
         } else {
             console.warn("La respuesta no es JSON válida. Analizando como texto...");
             const result = await response.text();
-            console.log("Respuesta exitosa (texto):", result);
+            console.log("Petición fallo:", result);
             saveTokens(result)
             return result;
         }

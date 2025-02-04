@@ -1,31 +1,28 @@
 import { useState, useEffect } from "react";
-import { getUserList } from "./getUserList";
+import {modifyWorker} from '../services/modifyWorkers';
 
-const useGetUserList = () => {
-    const [users, setUsers] = useState([]);
+const useModifyWorkers = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchUsers = async () => {
+        const updateWorker = async (workerId, workerData) => {
             setLoading(true);
             setError(null);
-
+    
             try {
-                const userList = await getUserList();
-                setUsers(userList);
+                const updatedWorker = await modifyWorker(workerId, workerData);
+                return updatedWorker;
             } catch (err) {
                 setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
-
-        fetchUsers();
-    }, []);
-
-    return { users, loading, error };
+      updateWorker();
+    }, [])
+    
+    return { updateWorker, loading, error };
 };
 
-export default useGetUserList;
-
+export default useModifyWorkers;
