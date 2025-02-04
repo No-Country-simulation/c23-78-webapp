@@ -48,7 +48,7 @@ const transformOrdersToRows = (data) => {
             estadoDispositivo: device.state, // Estado del dispositivo
             comentario: order.observations, // Observaciones de la orden
             precioInicial: `$${device.initialPrice.toFixed(2)}`, // Precio inicial con formato
-            fechaActualizacion: new Date(order.updatedAt).toLocaleString(), // Última actualización
+            fechaActualizacion: new Date(order.updatedAt).toLocaleString(), 
         }))
     );
 };
