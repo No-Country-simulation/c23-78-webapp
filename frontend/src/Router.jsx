@@ -4,7 +4,7 @@ import LoginPage from './pages/Auth/LoginPage';
 import NewWorkerPage from './pages/Admin/NewWorkerPage';
 import NewClientPage from './pages/admin/NewClientPage';
 import Admin from './pages/admin/admin';
-import TrackingPage from './pages/tracking/TrackingPage';
+import TrackingPage from './pages/tracking/trackingPage';
 import DeviceNotFoundPage from './pages/admin/DeviceNotFoundPage';
 import MovementsTrackPage from './pages/admin/MovementsTrackPage';
 import { ProtectedRoute } from './modules/auth/components/ProtectedRoute';
