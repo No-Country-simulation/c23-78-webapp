@@ -1,16 +1,30 @@
-/*
-    Deprecate: hook para obtener la lista de usuarios almacenadas del backend, ya no se usa.
-*/
-
-
 import { useState, useEffect } from "react";
-import { getUserList } from "../services/getUser";
-export default function useFetchUser() {
-    const [user, setUser] = useState(null);
+import { getUserList } from "./getUserList";
+
+const useGetUserList = () => {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        setUser(getUserList());
+        const fetchUsers = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const userList = await getUserList();
+                setUsers(userList);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUsers();
     }, []);
 
-    return user;
-}
+    return { users, loading, error };
+};
+
+export default useGetUserList;
