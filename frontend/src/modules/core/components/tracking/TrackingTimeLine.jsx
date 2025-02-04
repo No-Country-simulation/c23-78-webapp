@@ -75,7 +75,7 @@ const trackingData = [
   },
   {
     status: "CANCELADO",
-    description: "La reparación ha sido cancelada. No se continuará con el proceso.",
+    description: "La reparación ha sido cancelada. No se continuará con el proceso. Acerquese a la central de reparación.",
   },
 ];
 
