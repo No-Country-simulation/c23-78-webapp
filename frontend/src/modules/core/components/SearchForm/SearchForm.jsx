@@ -17,7 +17,7 @@ const SearchForm = () => {
             const data = await response.json();
     
             if (response.ok) {
-                navigate(`/tracking?number=${trackingNumber}`);
+                navigate(`/trackorder/${trackingNumber}`);
                 console.log(1);
 
             } else {

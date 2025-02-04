@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useState, useEffect } from "react";
 
 // Styled components
 const TimelineContainer = styled(Box)({
@@ -33,36 +34,67 @@ const TimelineContent = styled(Box)({
 
 const trackingData = [
   {
-    status: "Recibido en el taller",
+    status: "RECIBIDO",
     description: "Tu producto ha sido recibido. Estamos preparando el diagnóstico inicial.",
   },
   {
-    status: "En diagnóstico",
+    status: "EN_DIAGNOSTICO",
     description: "Nuestro equipo está evaluando el problema para encontrar la mejor solución.",
   },
   {
-    status: "Esperando piezas",
-    description: "Estamos esperando recibir las piezas necesarias para completar la reparación.",
+    status: "ESPERANDO_APROBACION",
+    description: "Estamos esperando recibir la aprobación para continuar con la reparación.",
   },
   {
-    status: "En reparación",
+    status: "EN_REPARACION",
     description: "Estamos trabajando en la reparación de tu producto.",
   },
   {
-    status: "En control de calidad",
+    status: "ESPERANDO_REPUESTOS",
+    description: "Estamos esperando recibir las piezas necesarias para completar la reparación.",
+  },
+  {
+    status: "REPARADO",
+    description: "La reparación ha sido completada, y el producto está listo para su verificación.",
+  },
+  {
+    status: "EN_PRUEBAS",
     description: "Estamos verificando que tu producto funcione correctamente después de la reparación.",
   },
   {
-    status: "Listo para retirar",
+    status: "LISTO_PARA_RETIRO",
     description: "Tu producto está reparado y listo para que lo retires.",
   },
   {
-    status: "Entregado al cliente",
+    status: "ENTREGADO",
     description: "Ya retiraste tu producto. ¡Gracias por confiar en nosotros!",
+  },
+  {
+    status: "NO_REPARABLE",
+    description: "Tu producto no es reparable debido a la gravedad del daño o la falta de piezas.",
+  },
+  {
+    status: "CANCELADO",
+    description: "La reparación ha sido cancelada. No se continuará con el proceso.",
   },
 ];
 
-export function TrackingTimeLine() {
+const options = [
+  "RECIBIDO",
+  "EN_DIAGNOSTICO",
+  "ESPERANDO_APROBACION",
+  "EN_REPARACION",
+  "ESPERANDO_REPUESTOS",
+  "REPARADO",
+  "EN_PRUEBAS",
+  "LISTO_PARA_RETIRO",
+  "ENTREGADO",
+  "NO_REPARABLE",
+  "CANCELADO",
+]
+
+export function TrackingTimeLine({ orderData }) {
+
   return (
     <Paper
       elevation={1}
