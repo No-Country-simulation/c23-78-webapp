@@ -20,17 +20,16 @@ const SearchForm = () => {
 
                 navigate(`/tracking?number=${trackingNumber}`);
                 console.log(1);
-            
+
             } else {
-                navigate("/admin/notFound");
+                navigate("/notFound");
                 console.log(2);
             }
         } catch (error) {
             // Si ocurre un error durante la solicitud (por ejemplo, problemas de red)
             setErrorMessage("Ocurrió un error al realizar la solicitud.");
             navigate("/notFound"); // Cambia esta ruta según sea necesario
-
-       
+     
         }
     };
 
