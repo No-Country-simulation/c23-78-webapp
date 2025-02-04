@@ -30,9 +30,7 @@ export default function TrackOrderPage() {
     return (
         <div>
             <NavBar />
-
             <PageHeader title={`Bienvenido ${userData.name}`} description="Seguimiento de su orden de reparación" />
-            
             <TrackingTimeLine orderData={orderData} />
         </div>
     );
@@ -40,6 +38,7 @@ export default function TrackOrderPage() {
 
 /**
  {
+    
     "idOrder": 4,
     "number": "ORD-00004",
     "observations": "Observation4",

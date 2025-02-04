@@ -20,11 +20,11 @@ const TimelineItem = styled(Box)({
 });
 
 const TimelineDot = styled(Box)({
-  width: "20px", 
-  height: "20px", 
+  width: "20px",
+  height: "20px",
   borderRadius: "50%",
   backgroundColor: "#f4511e",
-  margin: "15px", 
+  margin: "15px",
   position: "relative",
 });
 
@@ -91,9 +91,42 @@ const options = [
   "ENTREGADO",
   "NO_REPARABLE",
   "CANCELADO",
-]
+];
 
 export function TrackingTimeLine({ orderData }) {
+  const [orderState, setOrderState] = useState({
+    state: "CANCELADO",
+  });
+
+  useEffect(() => {
+    if (orderData && orderData.devices && orderData.devices.length > 0) {
+      setOrderState({ state: orderData.devices[0].state });
+    }
+  }, [orderData]);
+
+  const generateTimeline = (currentState) => {
+    const timeline = [];
+    const stateIndex = options.indexOf(currentState);
+
+    for (let i = 0; i <= stateIndex; i++) {
+      const state = options[i];
+      const matchingData = trackingData.find(item => item.status === state);
+      if (matchingData) {
+        timeline.push(matchingData);
+      }
+    }
+
+    if (currentState === "NO_REPARABLE" || currentState === "CANCELADO") {
+      const specialMessage = trackingData.find(item => item.status === currentState);
+      if (specialMessage) {
+        timeline.push(specialMessage);
+      }
+    }
+
+    return timeline;
+  };
+
+  const timelineItems = generateTimeline(orderState.state);
 
   return (
     <Paper
@@ -113,10 +146,9 @@ export function TrackingTimeLine({ orderData }) {
       </Typography>
 
       <TimelineContainer>
-        {trackingData.map((item, index) => (
+        {timelineItems.map((item, index) => (
           <TimelineItem key={index}>
             <TimelineDot />
-
             <TimelineContent>
               <Typography
                 variant="subtitle1"

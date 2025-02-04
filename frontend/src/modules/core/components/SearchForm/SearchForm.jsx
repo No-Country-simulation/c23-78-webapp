@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import searchForm from "../../../../assets/image/searchForm.png";
 import lupaMainFrame from "../../../../assets/Image/lupaMainFrame.png"
+import getSearchOrder from "../../services/getSearchOrder";
 
 const SearchForm = () => {
     const [trackingNumber, setTrackingNumber] = useState(""); 
@@ -13,14 +14,11 @@ const SearchForm = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`http://localhost:9091/work-order/number/${trackingNumber}`);
-            const data = await response.json();
+            const response = await getSearchOrder(trackingNumber);
 
-            if (response.ok) {
+            if (response) {
                 navigate(`/trackorder/${trackingNumber}`);
                 console.log(1);
-
-
             } else {
                 navigate("/notFound");
                 console.log(2);
