@@ -12,5 +12,6 @@ export default function useFetchUser() {
         setUser(getUserList());
     }, []);
 
-    return user;
+    return  user;
 }
+
