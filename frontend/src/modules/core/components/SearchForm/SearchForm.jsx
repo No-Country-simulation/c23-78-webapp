@@ -4,9 +4,9 @@ import searchForm from "../../../../assets/image/searchForm.png";
 import lupaMainFrame from "../../../../assets/Image/lupaMainFrame.png"
 
 const SearchForm = () => {
-    const [trackingNumber, setTrackingNumber] = useState("");
-    const [errorMessage] = useState("");
-    const navigate = useNavigate();
+    const [trackingNumber, setTrackingNumber] = useState(""); 
+    const [errorMessage] = useState(""); 
+    const navigate = useNavigate(); 
 
 
     const handleSubmit = async (e) => {
@@ -29,7 +29,7 @@ const SearchForm = () => {
         } catch (error) {
 
             console.error("Error en la solicitud:", error);
-            navigate("/notFound");
+            navigate("/notFound"); 
             console.log(3);
         }
     };

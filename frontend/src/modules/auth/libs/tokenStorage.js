@@ -1,4 +1,4 @@
-import getUserData from "../../admin/services/getUserData";
+import getUserData from "../../admin/services/getUserdata";
 
 const TOKEN_KEY = "access_token";
 const REFRESH_TOKEN_KEY = "refresh_token";
