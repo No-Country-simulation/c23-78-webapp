@@ -3,18 +3,20 @@ import BasicTabs from "../../modules/admin/components/AdminTab/AdminTab";
 import AdminTable from "../../modules/admin/components/AdminTable/AdminTable";
 import PageHeader from "../../modules/admin/components/PageHeader/PageHeader";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate para la navegación
+import { useNavigate } from "react-router-dom";
 import useUpdatePath from "../../modules/admin/hooks/useUpdatePath";
 import { useAuth } from "../../modules/auth/components/AuthProvider";
 import { getName, getRole } from "../../modules/auth/libs/tokenStorage";
 import refreshToken from "../../modules/auth/services/refreshToken";
+import checkUserToken from "../../modules/auth/libs/checkUserToken";
+
 
 const Admin = () => {
     const [name, setName] = useState("roger@trackmyfix.com");
     const [role, setRole] = useState("trabajador");
     const [searchText, setSearchText] = useState("");
     const { logout } = useAuth();
-    const navigate = useNavigate(); // Hook para la navegación
+    const navigate = useNavigate();
     useUpdatePath(searchText, "search");
     useEffect(() => {
         const name = getName();
@@ -27,13 +29,16 @@ const Admin = () => {
         logout();
     };
 
+    useEffect(() => {
+        checkUserToken();
+    }, []);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Buscando:", searchText);
     };
 
     const handleCreateOrder = () => {
-        // Redirigir al formulario de crear orden
         navigate("/admin/newOrder");
         refreshToken
     };
