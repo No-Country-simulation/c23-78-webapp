@@ -1,59 +1,45 @@
 <h1 align="center">
-  <br>
-  <a href=""><img src="https://media.discordapp.net/attachments/1326628838939295815/1336097155458400300/image.png?ex=67a290f1&is=67a13f71&hm=82ca390cd723719005162c6a49c6e1b4515f09e2a8d16bb8fdbe8cb9a7f5ccea&=&format=webp&quality=lossless&width=665&height=148" width="400"></a>
+  <a href=""><img src="https://media.discordapp.net/attachments/1326628838939295815/1336097155458400300/image.png?ex=67a290f1&is=67a13f71&hm=82ca390cd723719005162c6a49c6e1b4515f09e2a8d16bb8fdbe8cb9a7f5ccea&=&format=webp&quality=lossless&width=665&height=148" width="400" alt="Logo"></a>
 </h1>
 
-<h4 align="center">Esta aplicación web permite a los clientes realizar un seguimiento de sus equipos en el servicio técnico. Los usuarios con rol de Técnico pueden registrar las órdenes de trabajo asociadas a los productos. Los usuarios con rol de Administrador pueden ver y generar informes de las acciones y movimientos realizados por los técnicos. Además, la aplicación permite gestionar a los empleados y trabajar con seguridad, limitando los accesos según el tipo de rol asignado.</h4>
-
+<h3 align="center">📌 Gestión de Equipos en Servicio Técnico</h3>
 <p align="center">
-  <a href="">
-    <img src="https://img.shields.io/badge/spring%20boot-2.5.3-brightgreen">
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/badge/react-18.2.0-blue">
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/badge/tailwind%20css-latest-purple">
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/badge/figma-latest-orange">
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/badge/jasmine-3.8.0-yellow">
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/badge/git-latest-lightgrey">
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/badge/github-latest-darkblue">
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/badge/docker-20.10.12-blue">
-  </a>
+  Una aplicación web que permite a los clientes realizar un seguimiento de sus equipos en el servicio técnico. <br>
+  Los técnicos pueden registrar órdenes de trabajo y los administradores pueden generar informes y gestionar usuarios.
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/spring%20boot-2.5.3-brightgreen">
+  <img src="https://img.shields.io/badge/react-18.2.0-blue">
+  <img src="https://img.shields.io/badge/tailwind%20css-latest-purple">
+  <img src="https://img.shields.io/badge/figma-latest-orange">
+  <img src="https://img.shields.io/badge/jasmine-3.8.0-yellow">
+  <img src="https://img.shields.io/badge/git-latest-lightgrey">
+  <img src="https://img.shields.io/badge/github-latest-darkblue">
+  <img src="https://img.shields.io/badge/docker-20.10.12-blue">
+</p>
 
-
-![screenshot](https://media.discordapp.net/attachments/1326630298812813352/1336102303110791199/image.png?ex=67a295bc&is=67a1443c&hm=afaaa01bd8e7f7cdb48c12464500f410773e2876336c2a81289565636e8f07e7&=&format=webp&quality=lossless&width=806&height=623)
+<p align="center">
+  <img src="https://media.discordapp.net/attachments/1326630298812813352/1336102303110791199/image.png?ex=67a295bc&is=67a1443c&hm=afaaa01bd8e7f7cdb48c12464500f410773e2876336c2a81289565636e8f07e7&=&format=webp&quality=lossless&width=806&height=623" alt="Vista de la aplicación" width="800">
+</p>
 
 ## 📋 **Índice**
 1. [🚀 Tecnologías Utilizadas](#-tecnologías-utilizadas)  
 2. [🛠️ Instalación y Configuración](#️-instalación-y-configuración)  
 3. [🗄️ Modelo de Datos](#️-modelo-de-datos)  
-4. [📡 Endpoints de la API](#-endpoints-de-la-api)  
+4. [📡 Documentación de la API](#-documentación-de-la-api)  
 5. [👥 Contribuidores](#-contribuidores)  
-6. [📄 Licencia](#-licencia)
 
 ---
 
 ## 🚀 **Tecnologías Utilizadas**  
 
-- ☕ **Backend:** Java 17, Spring Boot, Spring Security, JWT
-- 💻 **Frontend:** React.js, Tailwind CSS, Figma
-- 🗄️ **Base de Datos:** MySQL, Hibernate, JPA  
-- 🔍 **QA:** Jasmine
-- 🌐 **Colaboración:** Git ![logo](https://img.shields.io/badge/GitHub-latest-darkblue)
-- 🐳 **DevOps:** Docker
+- **Backend:** ☕ Java 17, Spring Boot, Spring Security, JWT  
+- **Frontend:** 💻 React.js, Tailwind CSS, Figma  
+- **Base de Datos:** 🗄️ MySQL, Hibernate, JPA  
+- **QA:** 🔍 Jasmine  
+- **Colaboración:** 🌐 GitHub  
+- **DevOps:** 🐳 Docker  
 
 ## 🛠️ **Instalación y Configuración**  
 
@@ -66,44 +52,105 @@
 
 ### ⚙️ **Configuración del Proyecto**  
 
-#### **1️⃣ Clonar el Repositorio**  
+#### **1️⃣ Clonar el Repositorio**
 ```bash
 git clone https://github.com/No-Country-simulation/c23-78-webapp.git
 cd c23-78-webapp
 ```
-2️⃣ Configurar la Base de Datos
-Modifica el archivo application.properties con tus credenciales:
-```bash
-spring.datasource.url=jdbc:mysql://localhost:3306/trackmyfix
-spring.datasource.username=root
-spring.datasource.password=tu_clave
-spring.jpa.hibernate.ddl-auto=update
+
+#### **2️⃣ Configurar la Base de Datos**
+Edita `application.properties` con tus credenciales:
+
+```properties
+spring.application.name=trackmyfix
+spring.datasource.url=${DB_HOST}
+spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASSWORD}
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.show-sql=true
+spring.jpa.defer-datasource-initialization=false
+spring.sql.init.mode=never
+spring.output.ansi.enabled=ALWAYS
+logging.pattern.console=%clr(%d{yyyy-MM-dd HH:mm:ss}){magenta} %clr(%-5p) %clr(%c{1}){blue}:%clr(%L){cyan} - %m%n
+server.port=9091
+server.error.whitelabel.enabled=false
 ```
-3️⃣ Configurar la Base de Datos
+
+#### **3️⃣ Configurar las Variables de Entorno**
+Crea un archivo `.env` con las siguientes variables:
+
+```plaintext
+DB_HOST=jdbc:mysql://localhost:3306/track_my_fix_db?createDatabaseIfNotExist=true&serverTimezone=UTC
+DB_USER=root
+DB_PASSWORD=admin
+MYSQL_ROOT_PASSWORD=admin
+MYSQL_PASSWORD=admin
+MYSQL_DATABASE=track_my_fix_db
+ACCESS_SECRET="404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+REFRESH_SECRET="3vk+1tEK9e7FRXVLiKZmlfpCUqML7hY4ppptgminQmk="
+REFRESH_EXPIRATION=900000
+ACCESS_EXPIRATION=600000
+```
+
+#### **4️⃣ Configurar el IDE para Utilizar el Archivo .env**
+Para que tu IDE (por ejemplo, IntelliJ IDEA) reconozca las variables de entorno del archivo `.env`, sigue estos pasos:
+
+1. Instala el plugin **"EnvFile"** en IntelliJ IDEA.
+2. Ve a **Run/Debug Configurations**.
+3. Selecciona tu configuración de ejecución.
+4. Marca la opción **"Enable EnvFile"**.
+5. Añade el archivo `.env` a la lista de archivos de entorno.
+
+#### **5️⃣ Ejecutar el Backend**
 ```bash
 mvn spring-boot:run
 ```
-4️⃣ Probar la API
-```
-curl -X GET http://localhost:8080/api/equipos
+
+#### **6️⃣ Probar la API**
+```bash
+curl -X GET http://localhost:9091/api/equipos
 ```
 
-## 🗄️ **Modelo de Datos**
-La aplicación utiliza una base de datos relacional con las siguientes entidades principales:
+## 🗄️ **Modelo de Datos**  
 
-### **📌 Diagrama Entidad-Relación (ER)**
+### 📌 **Diagrama Entidad-Relación (ER)**
 <p align="center">
   <img src="https://media.discordapp.net/attachments/1326630298812813352/1336111977042284604/image.png?ex=67a29ebf&is=67a14d3f&hm=37bda4cab5e6717da3879bf1b52275cf86e842f059133a355bed25e73a20cf92&=&format=webp&quality=lossless&width=675&height=623" alt="Modelo de Datos" width="800">
 </p>
 
-### **📄 Explicación de las Entidades**
-- User (Usuarios): Representa a los clientes, técnicos y administradores.
-- Device (Dispositivos): Dispositivos enviados al servicio técnico.
-- State (Estado): lista de posibles estados.
+### 📄 **Explicación de las Entidades**
+- **User:** Representa a los clientes y técnicos.
+- **Order:** Orden de servicio generada para cada equipo.
+- **Device:** Equipos registrados en servicio técnico.
+- **Movement:** Historial de movimientos del equipo.
+- **UserChange:** Registro de cambios realizados sobre los clientes.
 
-### **🔍 Migraciones**
-Si utilizas Flyway, ejecuta:
-```bash
-mvn flyway:migrate
-```
+### 🏷️ **Enums Importantes**
+- **Action:** Acciones realizadas en órdenes de trabajo.
+- **ActionUser:** Acciones relacionadas con clientes.
+- **Role:** Roles disponibles (Admin, Technician, Client).
+- **State:** Estados de un dispositivo en reparación.
+- **Type:** Tipos de dispositivos registrados.
+
+---
+
+## 📖 **Documentación de la API**  
+La API está documentada con **Swagger**. Accede en:  
+🔗 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)  
+
+---
+
+## 👥 **Contribuidores**  
+
+| **Rol**   | **Nombre** | **Correo** |
+|-----------|--------------------------------|-------------------------------|
+| Frontend  | Daniel Perez  | danny2003renato@gmail.com  |
+| Frontend  | Lorenzo Segada López  | lorenzosegada@gmail.com  |
+| Frontend  | Dennis Benavides Ponce  | denizponce16@gmail.com  |
+| Backend   | Delmer Rodríguez  | jindrg@gmail.com  |
+| Backend   | Esteban Christian Durante  | estebandurante194@gmail.com  |
+| Backend   | Gustavo Rodolfo Paz  | gusti.paz@gmail.com  |
+| QA        | Gregori Rafael Urbaneja Morales  | gregorirafaelurbanejamorales@gmail.com  |
+
 ---
