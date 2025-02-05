@@ -15,10 +15,7 @@ const Admin = () => {
     const [searchText, setSearchText] = useState("");
     const { logout } = useAuth();
     const navigate = useNavigate(); // Hook para la navegación
-
-
     useUpdatePath(searchText, "search");
-
     useEffect(() => {
         const name = getName();
         setName(name);

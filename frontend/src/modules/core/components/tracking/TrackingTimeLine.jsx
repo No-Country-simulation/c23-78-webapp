@@ -3,6 +3,7 @@ import { Box, Typography, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useState, useEffect } from "react";
 
+
 // Styled components
 const TimelineContainer = styled(Box)({
   position: "relative",
@@ -97,7 +98,6 @@ export function TrackingTimeLine({ orderData }) {
   const [orderState, setOrderState] = useState({
     state: "CANCELADO",
   });
-
   useEffect(() => {
     if (orderData && orderData.devices && orderData.devices.length > 0) {
       setOrderState({ state: orderData.devices[0].state });
