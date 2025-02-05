@@ -7,54 +7,67 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import getWorksOrders from "../../services/getWorksOrders";
 
 const columns = [
-    { id: "factura", label: "Factura N°", minWidth: 150 },
-    { id: "cliente", label: "Clientes", minWidth: 200 },
-    { id: "estado", label: "Estado", minWidth: 100 },
-    { id: "comentario", label: "Comentario", minWidth: 300 },
+    { id: "orden", label: "Orden N°", minWidth: 150 },
+    { id: "cliente", label: "Cliente", minWidth: 200 },
+    { id: "estado", label: "Estado Orden", minWidth: 150 },
+    { id: "dispositivo", label: "Dispositivo", minWidth: 200 },
+    { id: "estadoDispositivo", label: "Estado Dispositivo", minWidth: 150 },
+    { id: "comentario", label: "Observaciones", minWidth: 200 },
     {
-        id: "precio",
-        label: "Precio",
-        minWidth: 100,
+        id: "precioInicial",
+        label: "Precio Inicial",
+        minWidth: 120,
         align: "right",
         format: (value) => `$${value.toFixed(2)}`,
+    },
+    {
+        id: "fechaActualizacion",
+        label: "Última Actualización",
+        minWidth: 200,
+        align: "center",
+        format: (value) => new Date(value).toLocaleString(),
     },
     { id: "acciones", label: "Acciones", minWidth: 150 },
 ];
 
+const transformOrdersToRows = (data) => {
+    if (!data.orders || !Array.isArray(data.orders)) {
+        console.error("Error: 'orders' no es un array válido.");
+        return [];
+    }
 
+    return data.orders.flatMap((order) =>
+        order.devices.map((device) => ({
+            orden: order.number, // Número de orden
+            cliente: `${order.client.name} ${order.client.lastName}`, // Cliente con nombre y apellido
+            estado: order.active ? "Activa" : "Cerrada", // Estado de la orden
+            dispositivo: device.model, // Modelo del dispositivo
+            estadoDispositivo: device.state, // Estado del dispositivo
+            comentario: order.observations, // Observaciones de la orden
+            precioInicial: `$${device.initialPrice.toFixed(2)}`, // Precio inicial con formato
+            fechaActualizacion: new Date(order.updatedAt).toLocaleString(), 
+        }))
+    );
+};
 
 export default function AdminTable() {
     const [rows, setRows] = useState([]); // Almacenará los datos del backend
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    // Llamada al backend
+
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const response = await fetch("/api/facturas"); // Cambia la URL por la correcta
-                const data = await response.json();
-                setRows(data); // Supone que el backend devuelve un arreglo con las facturas
-            } catch (error) {
-                setRows([
-                    {
-                        factura: "001",
-                        cliente: "No Country",
-                        estado: "En reparación",
-                        comentario: "Lavo la pc con agua y shampoo",
-                        precio: "100000$",
-                        acciones: "asdasd",
-                    },
-
-                ]);
-                console.error("Error al obtener los datos:", error);
-            }
+            const response = await getWorksOrders();
+            console.log(response);
+            const transformedRows = transformOrdersToRows(response);
+            setRows(transformedRows);
         };
-
         fetchData();
-    }, []);
+    }, [setRows]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -95,18 +108,25 @@ export default function AdminTable() {
                                                     {column.id === "acciones" ? (
                                                         <div>
                                                             <button
-                                                                onClick={() => console.log(row.factura)}
+                                                                onClick={() => console.log("editando" + row.orden)}
                                                                 type="submit"
                                                                 className="mr-3 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
                                                             >
                                                                 Editar
                                                             </button>
                                                             <button
-                                                                onClick={() => console.log("eliminando: " + row.factura)}
+                                                                onClick={() => console.log("eliminando: " + row.orden)}
                                                                 type="submit"
                                                                 className="bg-[red] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
                                                             >
                                                                 Eliminar
+                                                            </button>
+                                                            <button
+                                                                onClick={() => console.log("viendo: " + row.orden)}
+                                                                type="submit"
+                                                                className="ml-3 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
+                                                            >
+                                                                Ver
                                                             </button>
                                                         </div>
                                                     ) : column.format && typeof value === "number" ? (

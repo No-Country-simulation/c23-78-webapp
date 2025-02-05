@@ -1,6 +1,7 @@
-import React from "react"
-import { useForm, Controller } from "react-hook-form"
-import { TextField, Button, Box, Typography, MenuItem, Paper, FormControl, InputLabel, Select } from "@mui/material"
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { TextField, Button, Box, Typography, MenuItem, Paper, FormControl, InputLabel, Select, Alert } from "@mui/material";
+import { getAccessToken } from "../../../auth/libs/tokenStorage";
 
 const options = [
   "RECIBIDO",
@@ -14,9 +15,9 @@ const options = [
   "ENTREGADO",
   "NO_REPARABLE",
   "CANCELADO",
-]
+];
 
-const deviceTypes = ["Laptop", "Desktop", "Tablet", "Smartphone", "Printer", "Monitor", "Other"]
+const deviceTypes = ["Laptop", "Desktop", "Tablet", "Smartphone", "Printer", "Monitor", "Other"];
 
 export function OrderForm() {
   const {
@@ -28,26 +29,70 @@ export function OrderForm() {
       deviceType: "",
       status: "",
     },
-  })
+  });
 
-  const onSubmit = (data) => {
-    console.log(data)
-    // Handle form submission
-  }
+  const [message, setMessage] = useState(null); // Estado para mostrar mensajes
+
+  const onSubmit = async (data) => {
+    // Transformamos los datos al formato esperado por el backend
+    const payload = {
+      observations: data.orderObservation,
+      devices: [
+        {
+          model: data.deviceBrand,
+          serialNumber: data.serialNumber,
+          accessories: data.accessoryObservation,
+          initialPrice: parseFloat(data.initialBudget) || 0,
+          finalPrice: parseFloat(data.finalBudget) || 0,
+          clientDescription: data.clientProblem,
+          technicalReport: data.technicalDiagnosis,
+          type: data.deviceType.toUpperCase(),
+          state: data.status,
+        },
+      ],
+    };
+    const accessToken = getAccessToken()
+
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${accessToken}`);
+
+    try {
+      const response = await fetch("http://localhost:9091/work-order", {
+        method: "PUT",
+        headers:
+          myHeaders
+        ,
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Hubo un problema al enviar la orden.");
+      }
+
+      setMessage({ type: "success", text: "Orden enviada con éxito." });
+    } catch (error) {
+      setMessage({ type: "error", text: "Error al enviar la orden. Inténtalo de nuevo." });
+    }
+  };
 
   return (
-    <Paper elevation={2} sx={{
-      width: "100%",
-      maxWidth: { xs: "100%", sm: 700 },
-      margin: "auto",
-      mt: { xs: 2, sm: 4},
-      p: { xs: 2, sm:3},
-      backgroundColor: "#fff",
-      borderRadius: "8px",
-    }}>
+    <Paper
+      elevation={2}
+      sx={{
+        width: "100%",
+        maxWidth: { xs: "100%", sm: 700 },
+        margin: "auto",
+        mt: { xs: 2, sm: 4 },
+        p: { xs: 2, sm: 3 },
+        backgroundColor: "#fff",
+        borderRadius: "8px",
+      }}
+    >
       <Typography variant="h5" component="h2" gutterBottom>
         Nueva Orden
       </Typography>
+
+      {message && <Alert severity={message.type}>{message.text}</Alert>} {/* Mensaje de éxito o error */}
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
         <Controller
@@ -204,6 +249,5 @@ export function OrderForm() {
         </Button>
       </Box>
     </Paper>
-  )
+  );
 }
-

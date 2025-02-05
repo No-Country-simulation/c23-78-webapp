@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import authLoginUser from "../services/authLoginUser";
 import { saveTokens } from "../libs/tokenStorage";
 
+
 const useGetLoginForm = (defaultValues) => {
     const {
         register,
@@ -18,7 +19,7 @@ const useGetLoginForm = (defaultValues) => {
         (async () => {
             try {
                 console.log("enviando, data", data);
-                const result = await authLoginUser(data.email, data.password);
+                const result = await authLoginUser(data.username, data.password);
                 saveTokens(result);
                 
             } catch (error) {

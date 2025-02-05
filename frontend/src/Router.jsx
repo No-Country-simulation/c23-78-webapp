@@ -9,6 +9,8 @@ import DeviceNotFoundPage from './pages/admin/DeviceNotFoundPage';
 import MovementsTrackPage from './pages/admin/MovementsTrackPage';
 import { ProtectedRoute } from './modules/auth/components/ProtectedRoute';
 import { AuthProvider } from './modules/auth/components/AuthProvider';
+import NewOrderFormPage from './pages/admin/NewOrderFormPage';
+import TrackOrderPage from './pages/tracking/TrackOrderPage';
 
 const browserRoutes = createBrowserRouter([
     { path: '/', element: <Principal />, },
@@ -18,11 +20,13 @@ const browserRoutes = createBrowserRouter([
             { path: '/admin/*', element: <Admin />, },
             { path: '/admin/worker', element: <NewWorkerPage />, },
             { path: '/admin/client', element: <NewClientPage />, },
+            { path: '/admin/newOrder', element: <NewOrderFormPage />, },
         ]
     },
     { path: '/tracking/*', element: <TrackingPage />, },
-    { path: '/admin/notFound', element: <DeviceNotFoundPage />, },
+    { path: '/notFound', element: <DeviceNotFoundPage />, },
     { path: '/admin/trackMovements', element: <MovementsTrackPage />, },
+    { path: '/trackorder/:orderNumber', element: <TrackOrderPage /> },
 ]);
 
 

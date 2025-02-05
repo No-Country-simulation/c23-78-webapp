@@ -2,10 +2,9 @@ import { useForm } from "react-hook-form";
 
 const ContactForm = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+    <div id="contact" className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
       <h2 className="text-2xl sm:text-3xl font-bold text-[#F55F1D] mb-4 sm:mb-6">CONTÁCTENOS</h2>
       <form className="bg-white p-6 sm:p-10 rounded-lg shadow-md w-full max-w-lg sm:max-w-2xl border border-black">
-        
         <div className="flex flex-col sm:flex-row gap-4 mb-4 sm:mb-6">
           <div className="flex flex-col w-full">
             <input
