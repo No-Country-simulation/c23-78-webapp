@@ -8,7 +8,7 @@ import useUpdatePath from "../../modules/admin/hooks/useUpdatePath";
 import { useAuth } from "../../modules/auth/components/AuthProvider";
 import { getName, getRole } from "../../modules/auth/libs/tokenStorage";
 import refreshToken from "../../modules/auth/services/refreshToken";
-import checkUserToken from "../../modules/auth/libs/checkUserToken";
+
 
 
 const Admin = () => {
@@ -29,10 +29,6 @@ const Admin = () => {
         logout();
     };
 
-    useEffect(() => {
-        checkUserToken();
-    }, []);
-
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Buscando:", searchText);
@@ -47,7 +43,7 @@ const Admin = () => {
             <NavBar />
             <PageHeader
                 title={`Bienvenido, ${name}`}
-                description={`Bienvenido a la sección de ${role}`} 
+                description={`Bienvenido a la sección de ${role}`}
                 buttonText="Cerrar sesión"
                 onButtonClick={handleLogout}
             />
@@ -74,9 +70,9 @@ const Admin = () => {
 
             <div className="flex flex-col items-start justify-between w-full">
 
-             
+
                 <button
-                    onClick={handleCreateOrder} 
+                    onClick={handleCreateOrder}
                     className="ml-20 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
                 >
                     Crear orden

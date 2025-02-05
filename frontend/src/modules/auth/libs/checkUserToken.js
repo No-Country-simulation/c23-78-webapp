@@ -1,18 +1,23 @@
 import getUserData from "../../admin/services/getUserdata";
 import renewToken from "./renewToken";
-import { AuthProvider } from "../components/AuthProvider";
-export default async function checkUserToken() {
-    const { logout } = AuthProvider;
+
+export default async function checkUserToken(logout) {
     try {
-        const userData = await getUserData();
+        await getUserData();
+        return true; // El token es válido
     } catch (error) {
-        console.error("Error en la solicitud, intentando renovar token:");
-        renewToken();
-    }
-    try {
-        const refreshToken = await renewToken();
-    } catch (error) {
-        console.error("Error en la solicitud, cerrando sesion");
-        logout();
+        console.warn("⚠ Token inválido, intentando renovarlo...");
+
+        try {
+            const newToken = await renewToken();
+            if (newToken) {
+                console.log("✅ Token renovado exitosamente");
+                return true;
+            }
+        } catch (renewError) {
+            console.error("❌ No se pudo renovar el token, cerrando sesión...");
+            logout(); // Llamamos a logout desde el componente React
+            return false;
+        }
     }
 }

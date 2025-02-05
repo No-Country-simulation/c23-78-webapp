@@ -1,5 +1,6 @@
 import { useContext, createContext, useState, useEffect } from 'react';
 import { getAccessToken } from '../libs/tokenStorage';
+import checkUserToken from '../libs/checkUserToken';
 
 const AuthContext = createContext({
   isAuthenticated: false,
@@ -22,9 +23,9 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setIsAuthenticated(false);
   };
-  //pasar el estado y el login (login probablemente cambie)
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout}}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       <button onClick={login}>Login</button>
       <button onClick={logout}>Logout</button>
       {children}
