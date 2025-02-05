@@ -2,26 +2,39 @@ package com.trackmyfix.trackmyfix.services.Impl;
 
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
+import com.trackmyfix.trackmyfix.entity.ActionUser;
 import com.trackmyfix.trackmyfix.entity.Admin;
+import com.trackmyfix.trackmyfix.entity.Technician;
+import com.trackmyfix.trackmyfix.entity.UserChange;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
+import com.trackmyfix.trackmyfix.repository.UserChangeRepository;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
 import com.trackmyfix.trackmyfix.services.IUserService;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.sql.SQLException;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
 public class AdminService implements IUserService<UserResponseDTO> {
 
-    private final UserRepository<Admin> adminRepository;
+    private UserRepository<Admin> adminRepository;
+    private BCryptPasswordEncoder encoder;
+    private UserChangeRepository userChangeRepository;
 
     @Override
     public UserResponseDTO findById(Long id) {
-        return mapToDTO(adminRepository.findById(id).orElseThrow(()-> new UserNotFoundException("Admin "+id+" not found")));
+        return mapToDTO(adminRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Admin " + id + " not found")));
     }
 
     @Override
     public UserResponseDTO save(UserRequestDTO user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         return mapToDTO(adminRepository.save(mapToEntity(user)));
     }
 
@@ -32,9 +45,24 @@ public class AdminService implements IUserService<UserResponseDTO> {
     }
 
     @Override
-    public void delete(Long id) {
-        this.findById(id);
-        adminRepository.deleteById(id);
+    @SneakyThrows
+    public Map<String,String> delete(Long id) {
+        Admin admin = adminRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found"));
+        if (admin.getActive()){
+            adminRepository.deleteById(id);
+            return Map.of("message","User id: "+id+" marked as INACTIVE success");
+        } else {
+            admin.setActive(true);
+            adminRepository.save(admin);
+            return Map.of("message","User id: "+id+" marked as ACTIVE success");
+        }
+    }
+
+    private void createUserChange(ActionUser actionUser, Technician technician) {
+        UserChange userChange = new UserChange();
+        userChange.setActionUser(actionUser);
+        userChange.setTechnician(technician);
+        userChangeRepository.save(userChange);
     }
 
     private Admin mapToEntity(UserRequestDTO user) {
@@ -51,6 +79,7 @@ public class AdminService implements IUserService<UserResponseDTO> {
                 .password(user.getPassword())
                 .build();
     }
+
     private UserResponseDTO mapToDTO(Admin user) {
         return UserResponseDTO.builder()
                 .id(user.getId())

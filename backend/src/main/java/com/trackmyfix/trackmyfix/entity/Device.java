@@ -1,17 +1,24 @@
 package com.trackmyfix.trackmyfix.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Device implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,19 +33,32 @@ public class Device implements Serializable {
     @Column(length = 250)
     private String accessories;
 
+    @NotNull(message = "Initial price is mandatory")
+    @DecimalMin(value = "10.0", inclusive = false, message = "Initial price must be greater than zero")
+    @Column(precision = 10, scale = 2)
+    private BigDecimal initialPrice;
+
+    //@DecimalMin(value = "0", inclusive = false, message = "Final price must be greater than zero")
+    @Column(precision = 10, scale = 2)
+    private BigDecimal finalPrice;
+
     @Column(columnDefinition = "TEXT")
-    private String description;
+    private String clientDescription; // Problema reportado por el cliente
+
+    @Column(columnDefinition = "TEXT")
+    private String technicalReport; // Análisis técnico y diagnóstico
 
     @ManyToOne
-    @JoinColumn(name = "id_order")
+    @JoinColumn(name = "id_order", nullable=false)
+    @JsonBackReference
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "id_type")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Type type;
 
-    @ManyToOne
-    @JoinColumn(name = "id_state")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private State state;
 
     @Column(name = "created_at", nullable = false, updatable = false)

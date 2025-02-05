@@ -1,21 +1,27 @@
 package com.trackmyfix.trackmyfix.entity;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
+import jakarta.persistence.Entity;
 
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Type implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idType;
-
-    @Column(nullable = false, unique = true, length = 50)
-    private String typeName;
+public enum Type {
+    COMPUTADORA_PORTATIL,
+    COMPUTADORA_DE_ESCRITORIO,
+    TABLET,
+    SMARTPHONE,
+    IMPRESORA,
+    MONITOR,
+    TECLADO,
+    MOUSE,
+    ROUTER,
+    SWITCH_RED,
+    DISCO_DURO_EXTERNO,
+    MEMORIA_USB,
+    CONSOLA_DE_VIDEOJUEGOS,
+    TARJETA_GRAFICA,
+    FUENTE_DE_PODER,
+    PLACA_BASE,
+    SERVIDOR,
+    ESCANER,
+    PROYECTOR,
+    LECTOR_DE_CODIGOS_DE_BARRA,
+    NOTEBOOK;
 }

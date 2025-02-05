@@ -1,21 +1,11 @@
 package com.trackmyfix.trackmyfix.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.io.Serializable;
+import jakarta.persistence.Entity;
 
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ActionUser implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idActionUser;
-
-    @Column(nullable = false, unique = true, length = 50)
-    private String name;
+public enum ActionUser {
+    AGREGO_CLIENTE,
+    MODIFICO_DATOS_CLIENTE,
+    ELIMINO_CLIENTE,
+    ACTIVO_CUENTA_CLIENTE,
+    DESACTIVO_CUENTA_CLIENTE
 }

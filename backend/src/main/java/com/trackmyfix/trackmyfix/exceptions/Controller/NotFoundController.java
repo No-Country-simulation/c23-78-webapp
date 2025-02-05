@@ -17,7 +17,7 @@ public class NotFoundController {
     private final Integer statusCode = HttpStatus.NOT_FOUND.value();
 
     @ExceptionHandler(UserNotFoundException.class)
-    public BaseErrorResponse handleExpenseException(UserNotFoundException exception){
+    public BaseErrorResponse handleUserNotFoundException(UserNotFoundException exception){
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .status(status)

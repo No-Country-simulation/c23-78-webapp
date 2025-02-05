@@ -1,8 +1,12 @@
 package com.trackmyfix.trackmyfix.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DialectOverride;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,6 +23,7 @@ public abstract class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_user")
+    @JsonBackReference
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -37,12 +42,15 @@ public abstract class User implements Serializable {
     @Column(nullable = false, length = 250)
     private String address;
 
+    @JsonBackReference
     @Column(length = 20)
     private String phone;
 
+    @JsonBackReference
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    @JsonBackReference
     @Column(nullable = false)
     private Boolean active;
 

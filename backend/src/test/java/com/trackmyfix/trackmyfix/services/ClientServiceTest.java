@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Date;
@@ -29,9 +30,12 @@ public class ClientServiceTest {
 
     @Mock
     private UserRepository<Client> clientRepository;
+    @Mock
+    private BCryptPasswordEncoder encoder;
 
     @InjectMocks
     private ClientService clientService;
+
 
     private UserRequestDTO sampleClientRequest;
 
@@ -61,7 +65,7 @@ public class ClientServiceTest {
                 .email("asd3@asd.com")
                 .address("evergreen avenue 150")
                 .phone("1154658599")
-                .password("asdasdasd20")
+                .password(encoder.encode("asdasdasd20"))
                 .role(Role.CLIENT)
                 .createdAt(new Date())
                 .updatedAt(new Date())
