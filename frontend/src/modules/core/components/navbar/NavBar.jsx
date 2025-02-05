@@ -29,29 +29,20 @@ export const NavBar = () => {
 
             {isServicesOpen && (
               <div className="absolute left-0 mt-2 w-48 bg-white text-gray-800 shadow-lg rounded-md p-[5px]">
-                <a
-                  href="#repair"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                >
+                <a href="#services" className="block px-4 py-2 hover:bg-gray-100">
                   Reparación de laptops
                 </a>
-                <a
-                  href="#mobile-repair"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                >
+                <a href="#services" className="block px-4 py-2 hover:bg-gray-100">
                   Reparación de celulares
                 </a>
-                <a
-                  href="#maintenance"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                >
+                <a href="#services" className="block px-4 py-2 hover:bg-gray-100">
                   Mantenimiento preventivo
                 </a>
               </div>
             )}
           </div>
           <a className="mr-5 hover:text-amber-600 cursor-pointer" href="#about-us">About us</a>
-          <a className="mr-5 hover:text-amber-600 cursor-pointer">Contact</a>
+          <a className="mr-5 hover:text-amber-600 cursor-pointer" href="#contact">Contact</a>
         </nav>
         {/* <button className="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">
           Login

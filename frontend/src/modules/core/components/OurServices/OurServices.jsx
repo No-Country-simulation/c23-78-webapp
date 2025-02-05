@@ -21,7 +21,7 @@ const services = [
 
 const OurServices = () => {
     return (
-      <section className="p-10 w-full mb-10">
+      <section id="services" className="p-10 w-full mb-10">
         <div className="mb-10 flex flex-col justify-center items-center w-[90%] lg:w-[70%] mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-[#F55F1D]">NUESTROS SERVICIOS</h2>
           <p className="font-bold mt-3 text-lg md:text-xl">
