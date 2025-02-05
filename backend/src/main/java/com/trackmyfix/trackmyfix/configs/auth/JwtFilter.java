@@ -1,6 +1,7 @@
 package com.trackmyfix.trackmyfix.configs.auth;
 
 import com.trackmyfix.trackmyfix.Dto.Request.TokenType;
+import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -53,7 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-        } catch (JwtException e) {
+        } catch (JwtException | UserNotFoundException e) {
             log.error(e.getMessage());
         }
         filterChain.doFilter(request, response);

@@ -8,6 +8,7 @@ import com.trackmyfix.trackmyfix.aspects.annotations.UserChangeNotify;
 import com.trackmyfix.trackmyfix.configs.auth.JWTService;
 import com.trackmyfix.trackmyfix.configs.auth.MyUserDetailsService;
 import com.trackmyfix.trackmyfix.entity.ActionUser;
+import com.trackmyfix.trackmyfix.entity.Role;
 import com.trackmyfix.trackmyfix.entity.User;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
@@ -22,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -95,5 +97,25 @@ public class UserService {
         } else {
             throw new JwtException("Invalid refresh Token");
         }
+    }
+
+    public List<UserResponseDTO> findAll(Role role){
+        return userRepository.findAll().stream()
+                    .filter(user -> user.getRole() == role)
+                    .map(this::mapToDTO).toList();
+    }
+
+    private UserResponseDTO mapToDTO(User user) {
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .address(user.getAddress())
+                .role(user.getRole())
+                .dni(user.getDni())
+                .active(user.getActive())
+                .build();
     }
 }

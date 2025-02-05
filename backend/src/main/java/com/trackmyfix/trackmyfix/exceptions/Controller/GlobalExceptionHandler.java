@@ -60,8 +60,8 @@ public class GlobalExceptionHandler {
     }
 
     // ⚠️ Excepción genérica para recursos no encontrados
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String,String>> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+    @ExceptionHandler({ResourceNotFoundException.class, MovementNotFoundException.class})
+    public ResponseEntity<Map<String,String>> handleNotFoundExceptions(Exception ex, WebRequest request) {
         return generateErrorResponse(ex, request, HttpStatus.NOT_FOUND);
     }
 

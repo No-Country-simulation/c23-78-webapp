@@ -9,4 +9,6 @@ public interface IUserChangeService {
 
     Set<UserChangeResponseDTO> findAll();
     void save(ActionUser actionUser, Long technicianId, Long userId);
+
+    Set<UserChangeResponseDTO> findByClientId(Long clientId);
 }

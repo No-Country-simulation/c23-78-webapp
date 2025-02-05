@@ -3,16 +3,18 @@ package com.trackmyfix.trackmyfix.controller;
 import com.trackmyfix.trackmyfix.Dto.Request.LoginRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
+import com.trackmyfix.trackmyfix.entity.Role;
 import com.trackmyfix.trackmyfix.entity.UserJwtData;
 import com.trackmyfix.trackmyfix.services.Impl.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -64,5 +66,10 @@ public class UserController {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         UserJwtData user = (UserJwtData) authentication.getPrincipal();
         return ResponseEntity.ok(userService.findById(user.getId()));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<UserResponseDTO>> all(@RequestParam(name="role") Optional<Role> role){
+        return ResponseEntity.ok(userService.findAll(role.orElse(Role.CLIENT)));
     }
 }
