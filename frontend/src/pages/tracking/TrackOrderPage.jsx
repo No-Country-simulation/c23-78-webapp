@@ -4,9 +4,13 @@ import getSearchOrder from "../../modules/core/services/getSearchOrder";
 import { Footer, NavBar } from "../../modules/core/components";
 import TrackTimeLine from "../../modules/tracking/componentes/TrackTimeLine/TrackTimeLine";
 import { CheckCircle, AlertCircle, XCircle } from "lucide-react";
+import renewToken from "../../modules/auth/libs/renewToken";
 
 export default function TrackOrderPage() {
     const { orderNumber } = useParams();
+
+    renewToken();
+
     const [orderData, setOrderData] = useState({
         number: "",
         devices: [{
@@ -17,7 +21,6 @@ export default function TrackOrderPage() {
             name: "",
 
         },
-
     });
     const [userData, setUserData] = useState({
         name: "",
@@ -36,8 +39,6 @@ export default function TrackOrderPage() {
         };
         fetchOrderData();
     }, [orderNumber]);
-
-
 
     return (
         <div>

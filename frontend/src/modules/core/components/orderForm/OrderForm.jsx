@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { TextField, Button, Box, Typography, MenuItem, Paper, FormControl, InputLabel, Select, Alert } from "@mui/material";
 import { getAccessToken } from "../../../auth/libs/tokenStorage";
-import { Logs } from "lucide-react";
+import postWorkOrder from "../../services/postWorkOrder";
 
 export function OrderForm() {
   const { control, handleSubmit, formState: { errors } } = useForm({
@@ -25,51 +25,44 @@ export function OrderForm() {
 
         const types = await typesRes.json();
         const states = await statesRes.json();
+        console.log("states", states[0]);
 
         setDeviceTypes(types);
         setStatuses(states);
       } catch (error) {
         console.error("Error fetching data:", error);
-        
+
       }
     };
     fetchData();
   }, []);
 
   const onSubmit = async (data) => {
+    console.log("data", data);
     const payload = {
-      observations: data.orderObservation,
-      client: {
-          dni: data.dni,
-      },
+      dni: data.dni,
+      observations: data.orderObservation || "Sin observaciones",
 
-      devices: [{
-        dipositivo: data.device,
-        model: data.deviceBrand,
-        serialNumber: data.serialNumber,
-        accessories: data.accessoryObservation,
-        initialPrice: parseFloat(data.initialBudget) || 0,
-        finalPrice: parseFloat(data.finalBudget) || 0,
-        clientDescription: data.clientProblem,
-        technicalReport: data.technicalDiagnosis,
-        type: data.deviceType,
-        state: data.status,
-        
-      }],
+      devices: [
+        {
+          model: data.deviceBrand || "Desconocido",
+          serialNumber: data.serialNumber || "Sin número de serie",
+          accessories: data.accessoryObservation || "No especificado",
+          initialPrice: parseFloat(data.initialBudget) || 0,
+          finalPrice: parseFloat(data.finalBudget) || 0,
+          clientDescription: data.clientProblem || "No especificado",
+          technicalReport: data.technicalDiagnosis || "Pendiente",
+          type: data.deviceType || "SIN_TIPO",
+          state: data.status || "RECIBIDO",
+        }
+      ]
     };
 
+    console.log("payload", payload);
+
     try {
-      const token = getAccessToken();
-      const response = await fetch('http://localhost:9091/work-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(payload)
-      });
-
-     if (!response.ok) {
-        throw new Error("Hubo un problema al enviar la orden.");
-      }
-
+      const result = await postWorkOrder(payload);
+      console.log("result", result);
       setMessage({ type: "success", text: "Orden enviada con éxito." });
     } catch (error) {
       setMessage({ type: "error", text: "Error al enviar la orden. Inténtalo de nuevo." });
@@ -183,8 +176,8 @@ export function OrderForm() {
             <FormControl fullWidth margin="normal">
               <InputLabel>Estado</InputLabel>
               <Select {...field} label="Estado">
-                {statuses.map((status) => (
-                  <MenuItem key={status} value={status}>
+                {statuses.map((status, index) => (
+                  <MenuItem key={status} value={status} index={index}>
                     {status.replace(/_/g, " ")}
                   </MenuItem>
                 ))}
