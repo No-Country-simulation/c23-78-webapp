@@ -65,6 +65,7 @@ public class SecurityConfig {
                         .requestMatchers(POST, "/user/login").permitAll()
                         .requestMatchers(GET,"/work-order/number/**").permitAll()
                         .requestMatchers(GET, "/user/profile").authenticated()
+                        .requestMatchers(GET, "/user/**").hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())
                         .requestMatchers(POST, "/user/**").hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())
                         .requestMatchers(DELETE, "/user/**").hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())
                         .requestMatchers(PUT, "/user/**").hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())
