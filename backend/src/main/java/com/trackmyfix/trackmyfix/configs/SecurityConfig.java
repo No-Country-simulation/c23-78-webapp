@@ -64,6 +64,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PUBLIC_ROUTES).permitAll()
+                        //.requestMatchers(GET,"/work-order/number/**").permitAll()
                         .requestMatchers(GET, "/user/profile").authenticated()
                         .requestMatchers(POST, "/user/**").hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())
                         .requestMatchers(DELETE, "/user/**").hasAnyAuthority(TECHNICIAN.name(), ADMIN.name())

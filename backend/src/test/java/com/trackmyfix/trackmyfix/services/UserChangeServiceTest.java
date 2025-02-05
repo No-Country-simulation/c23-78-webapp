@@ -43,17 +43,8 @@ public class UserChangeServiceTest {
     private static Client sampleClient;
     private static UserChangeResponseDTO sampleUserChangeResponseDTO;
 
-//    private Session session;
-//    private Filter filter;
-
     @BeforeEach
     void init(){
-//        session = Mockito.mock(Session.class);
-//        filter = Mockito.mock(Filter.class);
-//
-//        when(entityManager.unwrap(Session.class)).thenReturn(session);
-//        when(session.enableFilter("activeClientFilter")).thenReturn(filter);
-
         sampleTechnician = Technician.builder()
                 .id(2L)
                 .name("Jhony")
@@ -87,10 +78,6 @@ public class UserChangeServiceTest {
                 .build();
     }
 
-    @AfterEach
-    void then(){
-        //session.disableFilter("activeClientFilter");
-    }
 
     @Test
     @DisplayName("Test Find All user Changes")
@@ -100,7 +87,6 @@ public class UserChangeServiceTest {
         given(userChangeRepository.findAll())
                 .willReturn(List.of(sampleUserChange, userChange2));
 
-        //filter.setParameter("isActive", false);
         Set<UserChangeResponseDTO> userChangeSet = userChangeService.findAll();
 
         assertThat(userChangeSet).isNotNull();

@@ -8,6 +8,7 @@ import com.trackmyfix.trackmyfix.aspects.annotations.UserChangeNotify;
 import com.trackmyfix.trackmyfix.configs.auth.JWTService;
 import com.trackmyfix.trackmyfix.configs.auth.MyUserDetailsService;
 import com.trackmyfix.trackmyfix.entity.ActionUser;
+import com.trackmyfix.trackmyfix.entity.Role;
 import com.trackmyfix.trackmyfix.entity.User;
 import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
@@ -98,8 +99,10 @@ public class UserService {
         }
     }
 
-    public List<UserResponseDTO> findAll(){
-        return userRepository.findAll().stream().map(this::mapToDTO).toList();
+    public List<UserResponseDTO> findAll(Role role){
+        return userRepository.findAll().stream()
+                    .filter(user -> user.getRole() == role)
+                    .map(this::mapToDTO).toList();
     }
 
     private UserResponseDTO mapToDTO(User user) {
