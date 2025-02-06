@@ -69,6 +69,10 @@ export function OrderForm() {
     }
   };
 
+  const addOrderForm = () => {
+    
+  }
+
   return (
     <Paper elevation={2} sx={{ width: "100%", maxWidth: 700, margin: "auto", mt: 4, p: 3 }}>
       <Typography variant="h5" gutterBottom>Nueva Orden de Trabajo</Typography>
@@ -217,6 +221,7 @@ export function OrderForm() {
           )}
         />
 
+       
         {/* Botones */}
         <Button
           type="submit"
