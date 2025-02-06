@@ -5,26 +5,32 @@
 import { getAccessToken } from "../../auth/libs/tokenStorage";
 const { VITE_BACKEND_URL } = import.meta.env;
 
-export const modifyOrder = async (orderId, orderData) => {
+export const modifyClientOrder = async (orderData, orderId) => {
   try {
     const itsLogged = !!getAccessToken();
     if (!itsLogged) throw new Error("User not authenticated");
 
-    const response = await fetch(`${VITE_BACKEND_URL}/${orderId}`, {
+    console.log(`${VITE_BACKEND_URL}/work-order/${orderId}`);
+
+    const response = await fetch(`${VITE_BACKEND_URL}/work-order/${orderId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${getAccessToken()}`,
       },
       body: JSON.stringify(orderData),
     });
 
     if (!response.ok) {
-      throw new Error("Error al modificar la orden");
+      const errorData = await response.json();
+      console.error("Error completo:", errorData);
+      throw new Error(`Error al modificar la orden: ${JSON.stringify(errorData)}`);
     }
 
+    console.log("Modificación de orden exitosa");
     return await response.json();
   } catch (error) {
     console.error("Error en modifyClientOrder:", error);
-    throw error;
+    throw error; 
   }
 };

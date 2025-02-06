@@ -4,9 +4,9 @@ import { TextField, Button, Box, Typography, MenuItem, Paper, FormControl, Input
 import { getAccessToken } from "../../../auth/libs/tokenStorage";
 import postWorkOrder from "../../../core/services/postWorkOrder";
 import getSearchOrder from "../../../core/services/getSearchOrder";
+import { modifyClientOrder } from "../../services/modifyClientOrders";
 
 export function ModifyOrderForm({ orderNumber }) {
-    console.log("orderNumber", orderNumber);
     const { control, handleSubmit, formState: { errors }, reset } = useForm({
         defaultValues: {
             dni: "",
@@ -24,6 +24,7 @@ export function ModifyOrderForm({ orderNumber }) {
     const [statuses, setStatuses] = useState([]);
     const [message, setMessage] = useState(null);
     const [orderData, setOrderData] = useState({});
+    const [orderID, setOrderID] = useState("");
 
     useEffect(() => {
         const fetchOrderData = async () => {
@@ -32,6 +33,7 @@ export function ModifyOrderForm({ orderNumber }) {
             console.log("Llamando a getSearchOrder con:", orderNumber);
             const order = await getSearchOrder(orderNumber);
             setOrderData(order);
+            setOrderID(order.idOrder);
             console.log("order", order);
         };
         fetchOrderData();
@@ -81,10 +83,9 @@ export function ModifyOrderForm({ orderNumber }) {
     }
 
     const formattedData = formatOrderData(orderData);
-    console.log(formattedData);
-
 
     const onSubmit = async (data) => {
+
         const payload = {
             dni: data.dni,
             observations: data.orderObservation || "Sin observaciones",
@@ -103,14 +104,12 @@ export function ModifyOrderForm({ orderNumber }) {
                 }
             ]
         };
-
-        console.log("payload", payload);
-
+        
         try {
-            const result = await postWorkOrder(payload);
+            const result = await modifyClientOrder(payload, orderID);
             console.log("result", result);
             setMessage({ type: "success", text: "Orden enviada con éxito." });
-            window.history.back()
+
         } catch (error) {
             setMessage({ type: "error", text: "Error al enviar la orden. Inténtalo de nuevo." });
         }
@@ -119,7 +118,11 @@ export function ModifyOrderForm({ orderNumber }) {
     return (
         <Paper elevation={2} sx={{ width: "100%", maxWidth: 700, margin: "auto", mt: 4, p: 3 }}>
             <Typography variant="h5" gutterBottom>Modificar Orden de Trabajo</Typography>
-            <Box component="form" onSubmit={handleSubmit((data) => console.log(data))} sx={{ mt: 3 }}>
+            <Box
+                component="form"
+                onSubmit={handleSubmit(onSubmit)}
+                sx={{ mt: 3 }}
+            >
 
                 <Controller name="dni" control={control} rules={{ required: "DNI es obligatorio" }}
                     render={({ field }) => <TextField {...field} fullWidth label="DNI del Cliente" margin="normal" error={!!errors.dni} helperText={errors.dni?.message} />} />
