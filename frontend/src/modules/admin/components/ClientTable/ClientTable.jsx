@@ -79,17 +79,35 @@ export function ClientTable() {
                   <TableCell>{client.phone}</TableCell>
                   <TableCell>
                     <Tooltip title="Editar">
-                      <IconButton onClick={() => handleEdit(client.id)} size="small">
+                      <IconButton
+                        onClick={() => handleEdit(worker.id)}
+                        size="small" sx={{
+                          transition: "color 0.3s",
+                          "&:hover": { color: "orange" }
+                        }}
+                      >
                         <Pencil />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Ver">
-                      <IconButton onClick={() => handleView(client.id)} size="small">
+                      <IconButton
+                        onClick={() => handleView(worker.id)}
+                        size="small" sx={{
+                          transition: "color 0.3s",
+                          "&:hover": { color: "green" }
+                        }}
+                      >
                         <Eye />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Eliminar">
-                      <IconButton onClick={() => handleDelete(client.id)} size="small">
+                      <IconButton
+                        onClick={() => handleDelete(worker.id)}
+                        size="small" sx={{
+                          transition: "color 0.3s",
+                          "&:hover": { color: "red" }
+                        }}
+                      >
                         <Trash />
                       </IconButton>
                     </Tooltip>
