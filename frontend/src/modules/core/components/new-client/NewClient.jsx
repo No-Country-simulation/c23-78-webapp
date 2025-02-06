@@ -15,7 +15,7 @@ const NewClient = () => {
             address: data.direccion ?? "Dirección no proporcionada",
             email: data.correo ?? "Correo no proporcionado",
             password: data.password ?? "Contraseña no proporcionada",
-            role: "TECHNICIAN",
+            role: "CLIENT",
         };
         const clientData = payload;
         const response = await createUserOrder(clientData);
