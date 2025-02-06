@@ -8,6 +8,8 @@ import useUpdatePath from "../../modules/admin/hooks/useUpdatePath";
 import { useAuth } from "../../modules/auth/components/AuthProvider";
 import { getName, getRole } from "../../modules/auth/libs/tokenStorage";
 import refreshToken from "../../modules/auth/services/refreshToken";
+import { ClientTable } from "../../modules/admin/components/ClientTable/ClientTable";
+import { WorkerTable } from "../../modules/admin/components/WorkerTable/WorkerTable";
 
 
 
@@ -83,8 +85,8 @@ const Admin = () => {
 
             <BasicTabs
                 firts={<AdminTable />}
-                second={<AdminTable />}
-                third={<AdminTable />}
+                second={<ClientTable />}
+                third={<WorkerTable />}
             />
         </>
     );

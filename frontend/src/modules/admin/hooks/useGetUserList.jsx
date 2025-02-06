@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
-import { getUserList } from "./getUserList";
+import getClientList from "../services/getClientList";
 
-const useGetUserList = () => {
-    const [users, setUsers] = useState([]);
+const useGetClientList = () => {
+    const [clients, setClients] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchClients = async () => {
             setLoading(true);
             setError(null);
 
             try {
-                const userList = await getUserList();
-                setUsers(userList);
+                const clientList = await getClientList();
+                setClients(clientList);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -21,11 +21,11 @@ const useGetUserList = () => {
             }
         };
 
-        fetchUsers();
+        fetchClients();
     }, []);
 
-    return { users, loading, error };
+    return { clients, loading, error };
 };
 
-export default useGetUserList;
+export default useGetClientList;
 

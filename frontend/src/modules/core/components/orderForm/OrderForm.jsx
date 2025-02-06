@@ -75,6 +75,10 @@ export function OrderForm() {
     }
   };
 
+  const addOrderForm = () => {
+    
+  }
+
   return (
     <Paper
       elevation={2}
@@ -222,7 +226,6 @@ export function OrderForm() {
         />
 
         <Button
-          type="submit"
           variant="contained"
           fullWidth
           sx={{
@@ -232,6 +235,7 @@ export function OrderForm() {
             "&:hover": {
               bgcolor: "#e64a19",
             },
+            
           }}
         >
           Añadir nueva orden
