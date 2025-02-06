@@ -10,7 +10,7 @@ const NewWorker = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch(`${VITE_BACKEND_URL}/workers`, {
+      const response = await fetch(`${VITE_BACKEND_URL}/user/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
