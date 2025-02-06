@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -13,23 +13,24 @@ import {
 } from "@mui/material";
 
 import { Pencil, Trash, Eye } from "lucide-react";
-
-// Datos ficticios de clientes (aumentados para demostrar la paginación)
-const workers = [
-  {
-    id: "001",
-    dni: "22345567840",
-    firstName: "Emilio",
-    lastName: "Yong",
-    phone: "612345678",
-    email: "emilio-y89@gmail.com",
-    address: "Guayaquil, Mz 291 solar 1"
-  }
-];
+import getTechnicianList from "../../services/getTechnicianList";
 
 export function WorkerTable() {
+  const [workers, setWorkers] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  useEffect(() => {
+    async function fetchWorkers() {
+      try {
+        const data = await getTechnicianList();
+        setWorkers(data);
+      } catch (error) {
+        console.error("Error al obtener la lista de técnicos:", error);
+      }
+    }
+    fetchWorkers();
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -85,7 +86,7 @@ export function WorkerTable() {
                     {worker.id}
                   </TableCell>
                   <TableCell>{worker.dni}</TableCell>
-                  <TableCell>{worker.firstName}</TableCell>
+                  <TableCell>{worker.name}</TableCell>
                   <TableCell>{worker.lastName}</TableCell>
                   <TableCell>{worker.phone}</TableCell>
                   <TableCell>{worker.email}</TableCell>
