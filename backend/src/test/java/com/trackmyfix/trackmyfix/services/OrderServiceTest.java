@@ -20,13 +20,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.validation.Validator;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -45,12 +44,14 @@ public class OrderServiceTest {
     private OrderService orderService;
 
     private Order sampleOrder;
+    private Device sampleDevice;
     private DeviceRequestDTO sampleDeviceRequest;
     private OrderRequest sampleOrderRequest;
+    private Client sampleClient;
 
     @BeforeEach
     void setup(){
-        Client client1 = Client.builder()
+        sampleClient = Client.builder()
                 .role(Role.CLIENT)
                 .name("Client1")
                 .lastName("ClientLastName1")
@@ -59,6 +60,19 @@ public class OrderServiceTest {
                 .phone("1122540461")
                 .email("client1@example.com")
                 .active(true)
+                .build();
+        sampleDevice = Device.builder()
+                .idDevice(1L)
+                .model("MacBook Pro 2020")
+                .serialNumber("SN-00002")
+                .accessories("Cargador original")
+                .initialPrice(new BigDecimal(2000))
+                .finalPrice(new BigDecimal(20000))
+                .clientDescription("Pantalla con rayas")
+                .technicalReport("Falla en GPU")
+                .type(Type.NOTEBOOK)
+                .state(State.RECIBIDO)
+                .createdAt(new Date())
                 .build();
         sampleDeviceRequest = new DeviceRequestDTO(
                 null,
@@ -77,15 +91,15 @@ public class OrderServiceTest {
                 1L,
                 "ORD-00001",
                 "Observation1",
-                new BigDecimal(0),
-                client1,
+                sampleDevice.getFinalPrice(),
+                sampleClient,
                 true,
+                new Date(),
                 null,
-                null,
-                new ArrayList<>());
+                List.of(sampleDevice));
 
         sampleOrderRequest = new OrderRequest(
-                client1.getDni(),
+                sampleClient.getDni(),
                 "Obervation1",
                 List.of(sampleDeviceRequest)
         );
@@ -123,7 +137,16 @@ public class OrderServiceTest {
         assertThat(resultList.get("orderSize")).isEqualTo(resultList.size());
         List<Order> orderList = (List<Order>) resultList.get("orders");
         assertThat(orderList.get(0).getObservations()).isEqualTo(sampleOrder.getObservations());
-
     }
+    @Test
+    @DisplayName("Test save orders")
+    void testSave(){
+        given(clientRepository.findByDni(any(String.class)))
+                .willReturn(Optional.of(sampleClient));
 
+        when(orderRepository.save(any(Order.class)))
+                .thenReturn(sampleOrder);
+        Order created = orderService.createOrder(sampleOrderRequest);
+        verify(orderRepository,times(1)).save(any(Order.class));
+    }
 }
