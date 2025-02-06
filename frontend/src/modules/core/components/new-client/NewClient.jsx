@@ -4,28 +4,22 @@ import createUserOrder from "../../services/createUserOrder";
 
 const NewClient = () => {
     const { control, handleSubmit, formState: { errors } } = useForm();
-
-
     const onSubmit = async (data) => {
         const payload = {
+
             dni: data.dni ?? "DNI no proporcionado",
-            observations: data.orderObservation ?? "Sin observaciones",
-            nombre: data.nombre ?? "Nombre no proporcionado",
-            apellido: data.apellido ?? "Apellido no proporcionado",
-            telefono: data.telefono ?? "Teléfono no proporcionado",
-            direccion: data.direccion ?? "Dirección no proporcionada",
-            correo: data.correo ?? "Correo no proporcionado",
+            //observations: data.orderObservation ?? "Sin observaciones",
+            name: data.nombre ?? "Nombre no proporcionado",
+            lastName: data.apellido ?? "Apellido no proporcionado",
+            phone: data.telefono ?? "Teléfono no proporcionado",
+            address: data.direccion ?? "Dirección no proporcionada",
+            email: data.correo ?? "Correo no proporcionado",
             password: data.password ?? "Contraseña no proporcionada",
+            role: "TECHNICIAN",
         };
-
-        const expectedKeys = ["dni", "observations", "nombre", "apellido", "telefono", "direccion", "correo", "password"];
-        const missingKeys = expectedKeys.filter(key => payload[key].includes("no proporcionado"));
-
-        if (missingKeys.length > 0) {
-            console.warn("Los siguientes datos no están presentes en la carga útil:", missingKeys);
-        }
         const clientData = payload;
         const response = await createUserOrder(clientData);
+
         if (response) {
             console.log("Cliente creado exitosamente:", response);
         } else {
@@ -111,7 +105,10 @@ const NewClient = () => {
                 <Button type="submit" variant="contained" fullWidth sx={{ mt: 3, bgcolor: "#F55F1D", "&:hover": { bgcolor: "#d14e19" } }}>
                     Añadir nuevo cliente
                 </Button>
-                <Button fullWidth sx={{ color: "text.secondary", mt: 1 }}>
+                <Button
+                    fullWidth sx={{ color: "text.secondary", mt: 1 }}
+                    onClick={() => window.history.back()}
+                >
                     No añadir cliente
                 </Button>
             </Box>
