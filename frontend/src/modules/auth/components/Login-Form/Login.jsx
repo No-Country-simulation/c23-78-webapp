@@ -1,16 +1,10 @@
-import { Navigate } from "react-router-dom";
 import useGetLoginForm from "../../hooks/useGetLoginForm";
-import { useAuth } from "../AuthProvider";
 
 const Login = () => {
   const { register, handleSubmit, onSubmit, errors } = useGetLoginForm({
-    username: "",
+    email: "",
     password: "",
   });
-
-  const auth = useAuth();
-
-  if(auth.isAuthenticated) return <Navigate to="/admin" />
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
@@ -29,13 +23,13 @@ const Login = () => {
           </label>
           <input
             type="email"
-            id="username"
+            id="correo"
             className="border border-black rounded-lg p-1 mt-3"
             placeholder="Ingresa tu correo"
-            {...register("username", { required: "Es necesario ingresar un correo electrónico válido" })}
+            {...register("email", { required: "Es necesario ingresar un correo electrónico válido" })}
           />
-          {errors.username && (
-            <span className="text-red-500 text-sm">{errors.username.message}</span>
+          {errors.email && (
+            <span className="text-red-500 text-sm">{errors.email.message}</span>
           )}
         </div>
 
@@ -70,3 +64,4 @@ const Login = () => {
 };
 
 export default Login;
+

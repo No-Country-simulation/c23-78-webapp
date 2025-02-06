@@ -1,11 +1,9 @@
-export default async function authLoginUser(username, password) {
+export default async function renewRefreshToken(refreshToken) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
     const urlencoded = new URLSearchParams();
-    console.log(username, password)
-    urlencoded.append("username", username);
-    urlencoded.append("password", password);
+    urlencoded.append("refresh_token", refreshToken);
 
     const requestOptions = {
         method: "POST",
@@ -16,7 +14,7 @@ export default async function authLoginUser(username, password) {
 
     try {
         const response = await fetch(
-            "http://trackmyfix-backend.eqgrhtbfgsa4ggdk.brazilsouth.azurecontainer.io:9091/user/login",
+            "http://trackmyfix-backend.eqgrhtbfgsa4ggdk.brazilsouth.azurecontainer.io:9091/user/refresh-token",
             requestOptions
         );
 
@@ -29,16 +27,16 @@ export default async function authLoginUser(username, password) {
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
             const result = await response.json();
-            console.log("Respuesta exitosa:", result);
+            console.log("Token renovado con éxito:", result);
             return result;
         } else {
             console.warn("La respuesta no es JSON válida. Analizando como texto...");
             const result = await response.text();
-            console.log("Respuesta exitosa (texto):", result);
-            return result; 
+            console.log("Respuesta (texto):", result);
+            return result;
         }
     } catch (error) {
-        console.error("Error durante el login:", error);
+        console.error("Error durante la renovación del token:", error);
         throw error;
     }
 }

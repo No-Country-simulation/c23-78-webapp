@@ -19,17 +19,17 @@ const services = [
     }
   ];
 
-const OurServices = () => {
+  const OurServices = () => {
     return (
-      <section id="services" className="p-10 w-full mb-10">
-        <div className="mb-10 flex flex-col justify-center items-center w-[90%] lg:w-[70%] mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#F55F1D]">NUESTROS SERVICIOS</h2>
-          <p className="font-bold mt-3 text-lg md:text-xl">
+      <section className="p-10 w-auto mb-10">
+        <div className="mb-10 flex flex-col justify-center align-center w-[70%] m-auto text-center">
+          <h2 className="text-2xl font-bold text-[#F55F1D]">NUESTROS SERVICIOS</h2>
+          <p className="font-bold mt-3 text-xl	">
             Confía en nosotros para devolverle la vida a tus dispositivos. ¡Tu satisfacción es nuestra prioridad!
           </p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+        <div className="flex justify-center gap-10">
           {services.map((service, index) => (
             <ServiceCard
               key={index}
@@ -41,6 +41,6 @@ const OurServices = () => {
         </div>
       </section>
     );
-};
+  };
   
-export default OurServices;
+  export default OurServices;

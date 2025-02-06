@@ -1,142 +1,104 @@
-import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { TextField, Button, Box, Typography, MenuItem, Paper, FormControl, InputLabel, Select, Alert } from "@mui/material";
-import { getAccessToken } from "../../../auth/libs/tokenStorage";
-import postWorkOrder from "../../services/postWorkOrder";
+import React from "react"
+import { useForm, Controller } from "react-hook-form"
+import { TextField, Button, Box, Typography, MenuItem, Paper, FormControl, InputLabel, Select } from "@mui/material"
+
+const options = [
+  "RECIBIDO",
+  "EN_DIAGNOSTICO",
+  "ESPERANDO_APROBACION",
+  "EN_REPARACION",
+  "ESPERANDO_REPUESTOS",
+  "REPARADO",
+  "EN_PRUEBAS",
+  "LISTO_PARA_RETIRO",
+  "ENTREGADO",
+  "NO_REPARABLE",
+  "CANCELADO",
+]
+
+const deviceTypes = ["Laptop", "Desktop", "Tablet", "Smartphone", "Printer", "Monitor", "Other"]
 
 export function OrderForm() {
-  const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: { deviceType: "", status: "" },
-  });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      deviceType: "",
+      status: "",
+    },
+  })
 
-  const [deviceTypes, setDeviceTypes] = useState([]);
-  const [statuses, setStatuses] = useState([]);
-  const [message, setMessage] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = getAccessToken();
-        const headers = { Authorization: `Bearer ${token}` };
-        const [typesRes, statesRes] = await Promise.all([
-          fetch("http://localhost:9091/device/types", { headers }),
-          fetch("http://localhost:9091/device/states", { headers })
-        ]);
-
-        const types = await typesRes.json();
-        const states = await statesRes.json();
-        console.log("states", states[0]);
-
-        setDeviceTypes(types);
-        setStatuses(states);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-
-      }
-    };
-    fetchData();
-  }, []);
-
-  const onSubmit = async (data) => {
-    console.log("data", data);
-    const payload = {
-      dni: data.dni,
-      observations: data.orderObservation || "Sin observaciones",
-
-      devices: [
-        {
-          model: data.deviceBrand || "Desconocido",
-          serialNumber: data.serialNumber || "Sin número de serie",
-          accessories: data.accessoryObservation || "No especificado",
-          initialPrice: parseFloat(data.initialBudget) || 0,
-          finalPrice: parseFloat(data.finalBudget) || 0,
-          clientDescription: data.clientProblem || "No especificado",
-          technicalReport: data.technicalDiagnosis || "Pendiente",
-          type: data.deviceType || "SIN_TIPO",
-          state: data.status || "RECIBIDO",
-        }
-      ]
-    };
-
-    console.log("payload", payload);
-
-    try {
-      const result = await postWorkOrder(payload);
-      console.log("result", result);
-      setMessage({ type: "success", text: "Orden enviada con éxito." });
-    } catch (error) {
-      setMessage({ type: "error", text: "Error al enviar la orden. Inténtalo de nuevo." });
-    }
-  };
-
-  const addOrderForm = () => {
-    
+  const onSubmit = (data) => {
+    console.log(data)
+    // Handle form submission
   }
 
   return (
-    <Paper elevation={2} sx={{ width: "100%", maxWidth: 700, margin: "auto", mt: 4, p: 3 }}>
-      <Typography variant="h5" gutterBottom>Nueva Orden de Trabajo</Typography>
-      {message && <Alert severity={message.type}>{message.text}</Alert>}
+    <Paper elevation={2} sx={{
+      width: "100%",
+      maxWidth: { xs: "100%", sm: 700 },
+      margin: "auto",
+      mt: { xs: 2, sm: 4},
+      p: { xs: 2, sm:3},
+      backgroundColor: "#fff",
+      borderRadius: "8px",
+    }}>
+      <Typography variant="h5" component="h2" gutterBottom>
+        Nueva Orden
+      </Typography>
+
       <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
-        {/* DNI */}
         <Controller
           name="dni"
           control={control}
-          rules={{ required: "DNI es obligatorio" }}
+          rules={{
+            required: "DNI es obligatorio",
+            pattern: {
+              value: /^[0-9]+$/,
+              message: "El DNI debe ser numérico",
+            },
+          }}
           render={({ field }) => (
             <TextField
               {...field}
               fullWidth
-              label="DNI del Cliente"
+              label="DNI"
               margin="normal"
               error={!!errors.dni}
               helperText={errors.dni?.message}
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             />
           )}
         />
 
-        {/* Presupuesto Inicial */}
         <Controller
           name="initialBudget"
           control={control}
           render={({ field }) => (
-            <TextField
-              {...field}
-              fullWidth
-              label="Presupuesto Inicial"
-              type="number"
-              margin="normal"
-            />
+            <TextField {...field} fullWidth label="Presupuesto Inicial" type="number" margin="normal" />
           )}
         />
 
-        {/* Observación de Orden */}
         <Controller
           name="orderObservation"
           control={control}
           render={({ field }) => (
-            <TextField
-              {...field}
-              fullWidth
-              label="Observación de Orden"
-              multiline
-              rows={3}
-              margin="normal"
-            />
+            <TextField {...field} fullWidth label="Observación de orden" multiline rows={3} margin="normal" />
           )}
         />
 
-        {/* Tipo de Dispositivo */}
         <Controller
           name="deviceType"
           control={control}
           render={({ field }) => (
             <FormControl fullWidth margin="normal">
-              <InputLabel>Tipo de Dispositivo</InputLabel>
-              <Select {...field} label="Tipo de Dispositivo">
+              <InputLabel>Tipo de dispositivo</InputLabel>
+              <Select {...field} label="Tipo de dispositivo">
                 {deviceTypes.map((type) => (
-                  <MenuItem key={type} value={type}>
-                    {type.replace(/_/g, " ")}
+                  <MenuItem key={type} value={type.toLowerCase()}>
+                    {type}
                   </MenuItem>
                 ))}
               </Select>
@@ -144,35 +106,28 @@ export function OrderForm() {
           )}
         />
 
-        {/* Número de Serie */}
+        <Controller
+          name="accessoryObservation"
+          control={control}
+          render={({ field }) => (
+            <TextField {...field} fullWidth label="Observación (accesorios)" multiline rows={3} margin="normal" />
+          )}
+        />
+
         <Controller
           name="serialNumber"
           control={control}
           render={({ field }) => (
-            <TextField
-              {...field}
-              fullWidth
-              label="Número de Serie"
-              margin="normal"
-            />
+            <TextField {...field} fullWidth label="Número de serie del dispositivo" margin="normal" />
           )}
         />
 
-        {/* Marca de Dispositivo */}
         <Controller
           name="deviceBrand"
           control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              fullWidth
-              label="Marca del Dispositivo"
-              margin="normal"
-            />
-          )}
+          render={({ field }) => <TextField {...field} fullWidth label="Marca del dispositivo" margin="normal" />}
         />
 
-        {/* Estado */}
         <Controller
           name="status"
           control={control}
@@ -180,8 +135,8 @@ export function OrderForm() {
             <FormControl fullWidth margin="normal">
               <InputLabel>Estado</InputLabel>
               <Select {...field} label="Estado">
-                {statuses.map((status, index) => (
-                  <MenuItem key={status} value={status} index={index}>
+                {options.map((status) => (
+                  <MenuItem key={status} value={status}>
                     {status.replace(/_/g, " ")}
                   </MenuItem>
                 ))}
@@ -190,7 +145,6 @@ export function OrderForm() {
           )}
         />
 
-        {/* Problema Reportado */}
         <Controller
           name="clientProblem"
           control={control}
@@ -198,7 +152,7 @@ export function OrderForm() {
             <TextField
               {...field}
               fullWidth
-              label="Problema Reportado"
+              label="Problema reportado por el cliente"
               multiline
               rows={3}
               margin="normal"
@@ -206,39 +160,50 @@ export function OrderForm() {
           )}
         />
 
-        {/* Presupuesto Final */}
+        <Controller
+          name="technicalDiagnosis"
+          control={control}
+          render={({ field }) => (
+            <TextField {...field} fullWidth label="Diagnóstico del técnico" multiline rows={3} margin="normal" />
+          )}
+        />
+
         <Controller
           name="finalBudget"
           control={control}
           render={({ field }) => (
-            <TextField
-              {...field}
-              fullWidth
-              label="Presupuesto Final "
-              type="number"
-              margin="normal"
-            />
+            <TextField {...field} fullWidth label="Presupuesto final" type="number" margin="normal" />
           )}
         />
 
-       
-        {/* Botones */}
         <Button
           type="submit"
           variant="contained"
           fullWidth
-          sx={{ mt: 3, mb: 1, bgcolor: "#f4511e", "&:hover": { bgcolor: "#e64a19" } }}
+          sx={{
+            mt: 3,
+            mb: 1,
+            bgcolor: "#f4511e",
+            "&:hover": {
+              bgcolor: "#e64a19",
+            },
+          }}
         >
-          Crear Orden
+          Añadir nueva orden
         </Button>
+
         <Button
           fullWidth
           onClick={() => window.history.back()}
-          sx={{ color: "text.secondary", mt: 1 }}
+          sx={{
+            color: "text.secondary",
+            textTransform: "none",
+          }}
         >
-          Cancelar
+          No añadir orden
         </Button>
       </Box>
     </Paper>
-  );
+  )
 }
+

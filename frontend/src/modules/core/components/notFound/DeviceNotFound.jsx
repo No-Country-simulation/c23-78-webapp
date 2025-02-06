@@ -18,6 +18,3 @@ export const DeviceNotFound = () => {
     </section>
   )
 }
-
-
-export default DeviceNotFound
