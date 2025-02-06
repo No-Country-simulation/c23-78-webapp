@@ -10,6 +10,7 @@ import { getName, getRole } from "../../modules/auth/libs/tokenStorage";
 import refreshToken from "../../modules/auth/services/refreshToken";
 import { ClientTable } from "../../modules/admin/components/ClientTable/ClientTable";
 import { WorkerTable } from "../../modules/admin/components/WorkerTable/WorkerTable";
+import AdminMenu from "../../modules/admin/components/AdminMenu/AdminMenu";
 
 
 
@@ -71,17 +72,10 @@ const Admin = () => {
             </form>
 
             <div className="flex flex-col items-start justify-between w-full">
-
-
-                <button
-                    onClick={handleCreateOrder}
-                    className="ml-20 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
-                >
-                    Crear orden
-                </button>
+                <div className="ml-20">
+                    <AdminMenu />
+                </div>
             </div>
-
-
 
             <BasicTabs
                 firts={<AdminTable />}

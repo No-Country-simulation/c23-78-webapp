@@ -12,10 +12,11 @@ const createUserOrder = async (clientData) => {
         email: "ragnaar@lothbrok.com",
         dni: 44351651,
         address: "cathegat 101",
-        role: "ADMIN",
+        role: "TECHNICIAN",
         phone: "+11385598738",
         password: "ragnarok9"
     };
+    console.log(clientData.password)
     const body = JSON.stringify(clientData);
     console.log("datos de ejemplo: ", exampleData);
     headers.append("Content-Type", "application/json");
@@ -31,7 +32,9 @@ const createUserOrder = async (clientData) => {
     try {
         const response = await fetch(url, requestOptions);
         if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
+            const errorData = await response.json();
+            console.error("Error completo:", errorData);
+            throw new Error(`Error al modificar la orden: ${JSON.stringify(errorData)}`);
         }
         const result = await response.json();
         return result;
