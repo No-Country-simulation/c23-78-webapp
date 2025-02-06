@@ -13,9 +13,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
@@ -49,6 +55,7 @@ public class MovementServiceTest {
 
     @BeforeEach
     void setup(){
+
         sampleTechnician = Technician.builder()
                 .id(1L)
                 .name("client1")
@@ -120,9 +127,17 @@ public class MovementServiceTest {
         assertThat(movementList.get(0).getDescription()).isEqualTo(sampleMovement.getDescription());
     }
 
-//    @Test
-//    @DisplayName("Test Save Movement")
-    void testSaveMovement(){
+    @Test
+    @DisplayName("Test Save Movement")
+    void testSaveMovement() throws InstantiationException, IllegalAccessException {
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication auth = Mockito.mock(Authentication.class);
+        when(securityContext.getAuthentication())
+                .thenReturn(auth);
+        when(auth.getName())
+                .thenReturn("tech1@example.com");
+        SecurityContextHolder.setContext(securityContext);
+
         given(technicianRepository.findByEmail(any(String.class)))
                 .willReturn(Optional.of(sampleTechnician));
 
