@@ -1,146 +1,56 @@
+--INSERT INTO track_my_fix_db.`user` (active,created_at,updated_at,dni,phone,discriminator,email,last_name,name,password,address,`role`) VALUES
+--	 (1,'2025-02-05 20:27:20.251000','2025-02-05 20:27:20.251000','94807936','1122540454','admin','jindrg@gmail.com','Apellido','NombreAdmin1','$2a$12$N7Sbsq4a6DtNbGXxjfYhOuV7JmrxeBFELmLSopANN3YsQR76Satpi','blanco 5126','ADMIN'),
+--	 (1,'2025-02-05 20:27:21.043000','2025-02-05 20:27:21.043000','94807937','1122540455','Technician','tech1@example.com','TechLastName1','Technician1','$2a$12$iQp0zQhNmlwhjxSipDNdS.6hMFf4iack3mI.yq.MWgBPq0XqQLv36','calle 123','TECHNICIAN'),
+--	 (1,'2025-02-05 20:27:21.046000','2025-02-05 20:27:21.046000','94807938','1122540456','Technician','tech2@example.com','TechLastName2','Technician2','$2a$12$pO/KetPjcFwFsqDv6tJbS.dpAakAPtuqn5xMHdyRrToqr61Cwx5h.','calle 124','TECHNICIAN'),
+--	 (1,'2025-02-05 20:27:21.050000','2025-02-05 20:27:21.050000','94807939','1122540457','Technician','tech3@example.com','TechLastName3','Technician3','$2a$12$cii1PmJ6gfvjBHIRYNdTKeRaVEClUtcKKXhv1pi.R4K/DkOIu1Oeq','calle 125','TECHNICIAN'),
+--	 (1,'2025-02-05 20:27:21.068000','2025-02-05 20:27:21.068000','94808001','1122540461','Client','client1@example.com','ClientLastName1','Client1',NULL,'calle client 1','CLIENT'),
+--	 (1,'2025-02-05 20:27:21.072000','2025-02-05 20:27:21.072000','94808002','1122540462','Client','client2@example.com','ClientLastName2','Client2',NULL,'calle client 2','CLIENT'),
+--	 (1,'2025-02-05 20:27:21.076000','2025-02-05 20:27:21.076000','94808003','1122540463','Client','client3@example.com','ClientLastName3','Client3',NULL,'calle client 3','CLIENT'),
+--	 (1,'2025-02-05 20:27:21.080000','2025-02-05 20:27:21.080000','94808004','1122540464','Client','client4@example.com','ClientLastName4','Client4',NULL,'calle client 4','CLIENT'),
+--	 (1,'2025-02-05 20:27:21.083000','2025-02-05 20:27:21.083000','94808005','1122540465','Client','client5@example.com','ClientLastName5','Client5',NULL,'calle client 5','CLIENT'),
+--	 (1,'2025-02-05 20:27:21.087000','2025-02-05 20:27:21.087000','94808006','1122540466','Client','client6@example.com','ClientLastName6','Client6',NULL,'calle client 6','CLIENT'),
+--	 (1,'2025-02-05 20:27:21.090000','2025-02-05 20:27:21.090000','94808007','1122540467','Client','client7@example.com','ClientLastName7','Client7',NULL,'calle client 7','CLIENT'),
+--	 (1,'2025-02-05 20:27:21.093000','2025-02-05 20:27:21.093000','94808008','1122540468','Client','client8@example.com','ClientLastName8','Client8',NULL,'calle client 8','CLIENT');
 --
---insert into `action`(action_name) values
---("LOGIN"),("LOGOUT"),("CREATE_ORDER"),("UPDATE_ORDER"),("DELETE_ORDER");
---
---insert into user(discriminator, name, last_name, phone, dni, email, address, password, active, role) values
---('Admin','Raylene','Coleman','-26894333411','76415901','nemanjaivanovic@test.trade','North Dakota 521','$2a$10$qZbZgi7CQjPxRJvfQfi.LecIniFbuM/54KL9F8CySHeitaJ9UbCJy',1,'ADMIN'),
---('Admin','Hai','Cummings','6886865200415','80998288','marcobarbosa@test.homegoods','Montana 770','$2a$10$.9uCGgiEuUL2Hdv8vo3BteSNrv/hJI3DTym7z0m3jPyFjnk8xhFdi',1,'ADMIN'),
---('Admin','Hassan','Page','-34537986175','73466300','soyjavi@example.codes','North Carolina 643','$2a$10$uPOlWlJGdmro9NTRPVNk0unzVqG1jE37WF9UCRE.QVS5JSym12Goa',1,'ADMIN'),
---('Admin','Manual','Logan','908422930690','73084716','nandini_m@example.xn--mgbb9fbpob','Massachusetts 136','$2a$10$WaiPYW2UTvX9h2lG.5W18.BuauW/QJ/rwYY2GkBlnQJW9NWfzr1W2',1,'ADMIN'),
---('Technician','Francoise','Robinson','9951367577407','44809493','sgaurav_baghel@example.ubs','Pennsylvania 864','$2a$10$Ucx13pk7h0a6VNpGD0FJI.2TYR..ek4r.jUeLUqGP7zIDVSAZ14em',1,'TECHNICIAN'),
---('Technician','Sandie','Pierce','5088543501975','73561628','mutlu82@example.jo','Florida 77','$2a$10$rNdMpzgiD7zJfF5d1S6WKORUVXZ21Bs9sNNJwhNmpfmPO6YYyW4ZW',1,'TECHNICIAN'),
---('Technician','Danuta','Wagner','3573903361278','32771239','leemunroe@test.onyourside','Indiana 983','$2a$10$Tlv48P9oWQvQ5ACQEtt1zOfHG7AwpMDMhKmtoiZfozTPXCsbE0TCi',1,'TECHNICIAN'),
---('Technician','Hong','Ellis','559222718892','73236667','syropian@test.cooking','New York 834','$2a$10$P4usHMnaFumCjh9ROtwu3uLFl0.rmg3PGss41aNUB3fHTpcBXCo9e',1,'TECHNICIAN'),
---('Client','Porter','Jacobs','632348530864','30778676','jeremiaha@test.buzz','Ohio 535','$2a$10$jHQNvjl1RK2jZ34JHQ/WiuYkUFlvZiustaWvxebxiItY2dUob.wUy',1,'CLIENT'),
---('Client','Olen','Chapman','501202873710','58754351','soyjavi@test.td','Utah 667','$2a$10$6j7FmHHr.bQ8c1jAMhaygeE4p2QNcqAFcLMAQkDBXSvdKxSNuTWIq',1,'CLIENT'),
---('Client','Brenton','Doyle','9648491165459','49615138','anoff@example.nikon','Missouri 78','$2a$10$3KdciiXvHBKqP9HpQHq4RuG735GqXP3Mo.qqtlmp06.rHilIFOY6C',1,'CLIENT'),
---('Client','Hai','Nunez','2261619234495','29783685','madysondesigns@test.site','Nevada 878','$2a$10$5Dg3GLQYOhwuMod/ZGlvO.ooZPxjbM9MoKp/xG/PHg3zGbDD0T9Dq',1,'CLIENT'),
---('Client','Columbus','George','3735254485422','23424060','beweinreich@test.lpl','Missouri 63','$2a$10$kbA9xVp.R1NNxXWGuwXQZOuWaOU.nOO3RZiAzge4o5lARH8VrhR5i',1,'CLIENT'),
---('Client','Arminda','Evans','2421478367900','48918760','tgerken@test.globo','Maryland 730','$2a$10$o6Yl.biDVqHmeAEEQMhUreWz0gbc/iwgaHhcaCVWeLBvDd7BgSBf2',1,'CLIENT'),
---('Client','Jamey','Knight','9606310246291','11291010','krasnoukhov@test.dentist','California 380','$2a$10$JoS6GshSZuOSLUqeQRv3B.wi2n3f8yRh4Dvxy3HWanmcCOgN1YI4.',0,'CLIENT');
---
---
---
---insert into `order`(number, observations, initial_price, final_price, id_client) values
---("ORD001", "Order 1", 100.0, 150.0, 1 ),
---("ORD002", "Order 2", 200.0, 250.0, 2 ),
---("ORD003", "Order 3", 300.0, 350.0, 3 ),
---("ORD004", "Order 4", 400.0, 450.0, 4 ),
---("ORD005", "Order 5", 500.0, 550.0, 5 ),
---("ORD006", "Order 6", 600.0, 650.0, 6 ),
---("ORD007", "Order 7", 700.0, 750.0, 7 ),
---("ORD008", "Order 8", 800.0, 850.0, 8 ),
---("ORD009", "Order 9", 900.0, 950.0, 9 ),
---("ORD010", "Order 10", 1000.0, 1050.0, 10 );
---
---insert into `state`(state_name) values
---("NEW"),
---("REPAIRED"),
---("DISPATCHED"),
---("DELIVERED"),
---("CANDELLED");
---
---insert into type(type_name) values
---("Laptop"),
---("Phone"),
---("Tablet"),
---("Desktop"),
---("Wearable");
---
---insert into device(model, serial_number, accessories, description, id_order, id_state, id_type) values
---("Model A", "SN12345", "Charger", "New device",1,1,1 ),
---("Model B", "SN54321", "Cover", "Used device",2,2,2 ),
---("Model C", "SN67890", "Keyboard", "Refurbished device",3,3,3 ),
---("Model D", "SN09876", "Mouse", "Old device",4,4,4 ),
---("Model E", "SN11223", "Stand", "Damaged device",5,5,5 ),
---("Model F", "SN44556", "Headphones", "New device",6,1,1 ),
---("Model G", "SN77889", "Cable", "Used device",7,2,2 ),
---("Model H", "SN99000", "Adapter", "Refurbished device",8,3,3 ),
---("Model I", "SN11334", "Battery", "Old device",9,4,4 ),
---("Model J", "SN55667", "Screen Protector", "Damaged device",10,5,5 );
---
---("CREATE"),("DELETE"),("EXPORT"),("READ"),("UPDATE");
---
---insert into user(discriminator, name, last_name, phone, dni, email, address, password, active, role) values
---('Admin','Raylene','Coleman','-26894333411','76415901','coleman@test.com','North Dakota 521','$2a$10$qZbZgi7CQjPxRJvfQfi.LecIniFbuM/54KL9F8CySHeitaJ9UbCJy',1,'ADMIN'),
---('Technician','Francoise','Robinson','9951367577407','44809493','franco@example.com','Pennsylvania 864','$2a$10$Ucx13pk7h0a6VNpGD0FJI.2TYR..ek4r.jUeLUqGP7zIDVSAZ14em',1,'TECHNICIAN'),
---('Technician','Sandie','Pierce','5088543501975','73561628','sandy@example.com','Florida 77','$2a$10$rNdMpzgiD7zJfF5d1S6WKORUVXZ21Bs9sNNJwhNmpfmPO6YYyW4ZW',1,'TECHNICIAN'),
---('Technician','Danuta','Wagner','3573903361278','32771239','wagner@test.com','Indiana 983','$2a$10$Tlv48P9oWQvQ5ACQEtt1zOfHG7AwpMDMhKmtoiZfozTPXCsbE0TCi',1,'TECHNICIAN'),
---('Client','Porter','Jacobs','632348530864','30778676','jeremiaha@test.buzz','Ohio 535',NULL,1,'CLIENT'),
---('Client','Olen','Chapman','501202873710','58754351','soyjavi@test.td','Utah 667',NULL,1,'CLIENT'),
---('Client','Brenton','Doyle','9648491165459','49615138','anoff@example.nikon','Missouri 78',NULL,1,'CLIENT'),
---('Client','Hai','Nunez','2261619234495','29783685','madysondesigns@test.site','Nevada 878',NULL,1,'CLIENT'),
---('Client','Columbus','George','3735254485422','23424060','beweinreich@test.lpl','Missouri 63',NULL,1,'CLIENT'),
---('Client','Arminda','Evans','2421478367900','48918760','tgerken@test.globo','Maryland 730',NULL,1,'CLIENT'),
---('Client','Jhon','Doe','2421478367910','48918761','jhondoe@test.globo','kentucky 710',NULL,1,'CLIENT'),
---('Client','Hai','Cummings','6886865200415','80998288','marcobarbosa@test.homegoods','Montana 770',NULL,1, 'CLIENT'),
---('Client','Hassan','Page','-34537986175','73466300','soyjavi@example.codes','North Carolina 643',NULL,1, 'CLIENT'),
---('Client','Manual','Logan','908422930690','73084716','nandini_m@example.xn--mgbb9fbpob','Massachusetts 136',NULL,1, 'CLIENT'),
---('Client','Jamey','Knight','9606310246291','11291010','krasnoukhov@test.dentist','California 380',NULL,0,'CLIENT');
+--INSERT INTO track_my_fix_db.`order` (active,order_total,created_at,id_client,updated_at,`number`,observations) VALUES
+--	 (1,33000.00,'2025-02-05 20:27:21.170000',5,'2025-02-05 20:27:21.333000','ORD-00001','Observation1'),
+--	 (1,22000.00,'2025-02-05 20:27:21.184000',6,'2025-02-05 20:27:21.334000','ORD-00002','Observation2'),
+--	 (1,88000.00,'2025-02-05 20:27:21.187000',7,'2025-02-05 20:27:21.334000','ORD-00003','Observation3'),
+--	 (1,99000.00,'2025-02-05 20:27:21.190000',8,'2025-02-05 20:27:21.334000','ORD-00004','Observation4'),
+--	 (1,110000.00,'2025-02-05 20:27:21.193000',9,'2025-02-05 20:27:21.334000','ORD-00005','Observation5'),
+--	 (1,165000.00,'2025-02-05 20:27:21.196000',10,'2025-02-05 20:27:21.334000','ORD-00006','Observation6'),
+--	 (1,165000.00,'2025-02-05 20:27:21.199000',11,'2025-02-05 20:27:21.334000','ORD-00007','Observation7'),
+--	 (1,550000.00,'2025-02-05 20:27:21.202000',12,'2025-02-05 20:27:21.334000','ORD-00008','Observation8'),
+--	 (0,1100000.00,'2025-02-05 20:27:21.205000',5,'2025-02-05 20:27:21.334000','ORD-00009','Observation9'),
+--	 (0,77000.00,'2025-02-05 20:27:21.208000',6,'2025-02-05 20:27:21.334000','ORD-00010','Observation10');
 --
 --
+--INSERT INTO track_my_fix_db.device (final_price,initial_price,created_at,id_order,updated_at,model,serial_number,accessories,client_description,technical_report,state,`type`) VALUES
+--	 (30000.00,3000.00,'2025-02-05 20:27:21.260000',1,'2025-02-05 20:27:21.260000','Dell OptiPlex 3080','SN-00001','Teclado y Mouse','No enciende','Fuente dañada','RECIBIDO','COMPUTADORA_DE_ESCRITORIO'),
+--	 (20000.00,2000.00,'2025-02-05 20:27:21.265000',2,'2025-02-05 20:27:21.265000','MacBook Pro 2020','SN-00002','Cargador original','Pantalla con rayas','Falla en GPU','RECIBIDO','NOTEBOOK'),
+--	 (80000.00,8000.00,'2025-02-05 20:27:21.269000',3,'2025-02-05 20:27:21.269000','HP Pavilion 15','SN-00003','Cargador genérico','No carga','Batería agotada','EN_DIAGNOSTICO','NOTEBOOK'),
+--	 (90000.00,9000.00,'2025-02-05 20:27:21.271000',4,'2025-02-05 20:27:21.271000','Samsung Galaxy S21','SN-00004','Sin accesorios','No enciende','Falla en la placa','EN_DIAGNOSTICO','SMARTPHONE'),
+--	 (100000.00,10000.00,'2025-02-05 20:27:21.275000',5,'2025-02-05 20:27:21.275000','Dell Inspiron 5000','SN-00005','Teclado y Mouse','No enciende','Fuente dañada','EN_REPARACION','COMPUTADORA_DE_ESCRITORIO'),
+--	 (150000.00,15000.00,'2025-02-05 20:27:21.278000',6,'2025-02-05 20:27:21.278000','iPhone 13','SN-00006','Cargador','Pantalla dañada','Falla en la cámara','EN_REPARACION','SMARTPHONE'),
+--	 (150000.00,15000.00,'2025-02-05 20:27:21.281000',7,'2025-02-05 20:27:21.281000','Samsung Galaxy Tab S7','SN-00007','Cargador','Pantalla rota','Batería dañada','LISTO_PARA_RETIRO','TABLET'),
+--	 (500000.00,50000.00,'2025-02-05 20:27:21.284000',8,'2025-02-05 20:27:21.284000','Lenovo ThinkPad X1 Carbon','SN-00008','Mouse inalámbrico','No carga','Placa base dañada','ENTREGADO','NOTEBOOK'),
+--	 (1000000.00,100000.00,'2025-02-05 20:27:21.287000',9,'2025-02-05 20:27:21.287000','MacBook Air 2020','SN-00009','Cargador original','Pantalla parpadeante','Problema en la GPU','RECIBIDO','NOTEBOOK'),
+--	 (70000.00,7000.00,'2025-02-05 20:27:21.291000',10,'2025-02-05 20:27:21.291000','Sony Xperia 5','SN-00010','Cargador','No enciende','Falla en la placa base','CANCELADO','SMARTPHONE');
 --
---INSERT INTO `order`(final_price,initial_price,id_client,number,observations) VALUES
---	 (1000.00,.0,5,'ORD-0001','Observation1'),
---	 (.0,2000.00,6,'ORD-0002','Observation2'),
---	 (1500.00,500.00,7,'ORD-0003','Observation3'),
---	 (2000.00,800.00,8,'ORD-0004','Observation4'),
---	 (2500.00,1200.00,9,'ORD-0005','Observation5'),
---	 (1700.00,300.00,10,'ORD-0006','Observation6'),
---	 (2200.00,600.00,11,'ORD-0007','Observation7'),
---	 (2700.00,900.00,12,'ORD-0008','Observation8'),
---	 (1900.00,400.00,5,'ORD-0009','Observation9'),
---	 (3000.00,1100.00,6,'ORD-0010','Observation10');
---
---
---insert into `state`(state_name) values
---("RECEIVED"),
---("REPAIRED"),
---("DISPATCHED"),
---("DELIVERED"),
---("CANDELLED");
---
---insert into type(type_name) values
---("MONITOR"),
---("TV"),
---("CPU"),
---("PLACA DE VIDEO"),
---("TABLET");
---
---INSERT INTO `device` (id_order,id_state,id_type,model,serial_number,accessories,description) VALUES
---	 (1,5,3,'Model1','SN-00001','Accessories1','Description1'),
---	 (2,4,1,'Model2','SN-00002','Accessories2','Description2'),
---	 (3,3,4,'Model3','SN-00003','Accessories3','Description3'),
---	 (4,1,5,'Model4','SN-00004','Accessories4','Description4'),
---	 (5,2,2,'Model5','SN-00005','Accessories5','Description5'),
---	 (6,5,3,'Model6','SN-00006','Accessories6','Description6'),
---	 (7,4,1,'Model7','SN-00007','Accessories7','Description7'),
---	 (8,3,4,'Model8','SN-00008','Accessories8','Description8'),
---	 (9,1,5,'Model9','SN-00009','Accessories9','Description9'),
---	 (10,2,2,'Model10','SN-00010','Accessories10','Description10');
---	 (1,5,3,'Model11','SN-00011','Accessories11','Description11'),
---	 (2,4,1,'Model12','SN-00012','Accessories12','Description12'),
---	 (3,3,4,'Model13','SN-00013','Accessories13','Description13'),
---	 (4,1,5,'Model14','SN-00014','Accessories14','Description14'),
---	 (5,2,2,'Model15','SN-00015','Accessories15','Description15');
+--INSERT INTO track_my_fix_db.movement (id_device,id_order,id_technician,movement_date,description,`action`) VALUES
+--	 (1,1,2,'2025-02-05 20:27:21.447000','Description1','AGREGO_DISPOSITIVO'),
+--	 (2,2,3,'2025-02-05 20:27:21.449000','Description2','AGREGO_DISPOSITIVO'),
+--	 (3,3,4,'2025-02-05 20:27:21.451000','Description3','AGREGO_DISPOSITIVO'),
+--	 (4,4,2,'2025-02-05 20:27:21.454000','Description4','CAMBIO_ESTADO_DISPOSITIVO'),
+--	 (5,5,3,'2025-02-05 20:27:21.456000','Description5','MODIFICO_DATOS_DISPOSITIVO'),
+--	 (6,6,4,'2025-02-05 20:27:21.458000','Description6','MODIFICO_DATOS_DISPOSITIVO'),
+--	 (7,8,2,'2025-02-05 20:27:21.460000','Description7','MODIFICO_ORDEN_TRABAJO'),
+--	 (7,8,3,'2025-02-05 20:27:21.462000','Description8','MODIFICO_ORDEN_TRABAJO');
 --
 --
---
---insert into action_user(name) values
---("CREATE"),
---("READ"),
---("UPDATE"),
---("DELETE"),
---("EXPORT");
---
---INSERT into user_changes(id_action_user,id_technician) values
---(1,1 ),
---(2,2 ),
---(3,3 ),
---(4,4 ),
---(5,5 ),
---(1,6 ),
---(2,7 ),
---(3,8 ),
---(4,9 ),
---(5,10 );
+--INSERT INTO track_my_fix_db.user_change (created_at,id_client,id_technician,action_user) VALUES
+--	 ('2025-02-05 20:27:21',5,2,'AGREGO_CLIENTE'),
+--	 ('2025-02-05 20:27:21',5,3,'MODIFICO_DATOS_CLIENTE'),
+--	 ('2025-02-05 20:27:21',5,4,'AGREGO_CLIENTE'),
+--	 ('2025-02-05 20:27:21',8,2,'DESACTIVO_CUENTA_CLIENTE'),
+--	 ('2025-02-05 20:27:21',9,3,'MODIFICO_DATOS_CLIENTE');

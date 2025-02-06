@@ -1,0 +1,57 @@
+services:
+  db-trackmyfix:
+    image: mysql:8.0
+    container_name: db-trackmyfix
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    networks:
+      - trackmyfix_net
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      retries: 5
+      timeout: 10s
+  trackmyfix:
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    image: openjdk17
+    container_name: trackmyfix
+    mem_limit: 512m
+    environment:
+      DB_HOST: "jdbc:mysql://db-trackmyfix:3306/track_my_fix_db?createDatabaseIfNotExist=true&serverTimezone=UTC"
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ACCESS_SECRET: ${ACCESS_SECRET}
+      REFRESH_SECRET: ${REFRESH_SECRET}
+      REFRESH_EXPIRATION: ${REFRESH_EXPIRATION}
+      ACCESS_EXPIRATION: ${ACCESS_EXPIRATION}
+    networks:
+      - trackmyfix_net
+    ports:
+      - 9091:9091
+    depends_on:
+      db-trackmyfix:
+        condition: service_healthy
+  front-trackmyfix:
+    container_name: front
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    image: frontend-front-trackmyfix
+    volumes:
+      - ./src:/usr/code/src
+      - ./index.html:/usr/code/index.html
+      - ./eslint.config.js:/usr/code/eslint.config.js
+      - ./tailwind.config.js:/usr/code/tailwind.config.js
+      - ./postcss.config.js:/usr/code/postcss.config.js
+      - ./vite.config.js:/usr/code/vite.config.js
+    ports:
+      - 5173:5173
+    command: npm run host
+    networks:
+      - trackmyfix_net
