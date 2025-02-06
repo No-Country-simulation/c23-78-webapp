@@ -50,15 +50,35 @@
 - Node.js 
 - Docker  
 
-### ⚙️ **Configuración del Proyecto**  
+## 🚀 **Tecnologías Utilizadas**  
 
-#### **1️⃣ Clonar el Repositorio**
+- **Backend:** ☕ Java 17, Spring Boot, Spring Security, JWT  
+- **Frontend:** 💻 React.js, Tailwind CSS, Figma  
+- **Base de Datos:** 🗄️ MySQL, Hibernate, JPA  
+- **QA:** 🔍 Jasmine  
+- **Colaboración:** 🌐 GitHub  
+- **DevOps:** 🐳 Docker  
+
+## 🛠️ **Instalación y Configuración**  
+
+### 🔧 **Requisitos Previos**
+- Java 17+
+- Maven
+- MySQL 
+- Node.js 
+- Docker  
+
+---
+
+## ⚙️ **Configuración del Proyecto Backend**  
+
+### **1️⃣ Clonar el Repositorio**
 ```bash
 git clone https://github.com/No-Country-simulation/c23-78-webapp.git
 cd c23-78-webapp
 ```
 
-#### **2️⃣ Configurar la Base de Datos**
+### **2️⃣ Configurar la Base de Datos**
 Edita `application.properties` con tus credenciales:
 
 ```properties
@@ -77,10 +97,10 @@ server.port=9091
 server.error.whitelabel.enabled=false
 ```
 
-#### **3️⃣ Configurar las Variables de Entorno**
+### **3️⃣ Configurar las Variables de Entorno**
 Crea un archivo `.env` con las siguientes variables:
 
-```plaintext
+```env
 DB_HOST=jdbc:mysql://localhost:3306/track_my_fix_db?createDatabaseIfNotExist=true&serverTimezone=UTC
 DB_USER=root
 DB_PASSWORD=admin
@@ -93,7 +113,7 @@ REFRESH_EXPIRATION=900000
 ACCESS_EXPIRATION=600000
 ```
 
-#### **4️⃣ Configurar el IDE para Utilizar el Archivo .env**
+### **4️⃣ Configurar el IDE para Utilizar el Archivo .env**
 Para que tu IDE (por ejemplo, IntelliJ IDEA) reconozca las variables de entorno del archivo `.env`, sigue estos pasos:
 
 1. Instala el plugin **"EnvFile"** en IntelliJ IDEA.
@@ -102,16 +122,65 @@ Para que tu IDE (por ejemplo, IntelliJ IDEA) reconozca las variables de entorno 
 4. Marca la opción **"Enable EnvFile"**.
 5. Añade el archivo `.env` a la lista de archivos de entorno.
 
-#### **5️⃣ Ejecutar el Backend**
-```bash
-mvn spring-boot:run
-```
+### **5️⃣ Ejecutar el Backend desde IntelliJ IDEA**
+- **Usando el Atajo de Teclado**:  
+  Presiona `Shift + F10` para ejecutar el proyecto desde IntelliJ IDEA.
 
-#### **6️⃣ Probar la API**
-```bash
-curl -X GET http://localhost:9091/api/equipos
-```
+- **Usando el Botón de Ejecución**:  
+  Haz clic en el ícono de **play verde** en la esquina superior derecha de IntelliJ IDEA para ejecutar el backend.
 
+IntelliJ IDEA detectará automáticamente el comando de Maven y lo ejecutará, sin necesidad de usar la terminal directamente.
+
+### **6️⃣ Probar la API desde Postman**
+1. **Acceder a la documentación de la API**:  
+   Para comenzar, abre la documentación de la API en Postman desde el siguiente enlace:  
+   [Documentación API - Postman](https://documenter.getpostman.com/view/27409208/2sAYX2LiFz).  
+   En la documentación, encontrarás todos los detalles sobre los endpoints disponibles y cómo interactuar con ellos.
+
+2. **Iniciar sesión**:  
+   Antes de poder acceder a las APIs, necesitas autenticarte con uno de los dos roles disponibles: **Technician** o **Admin**. Según el rol con el que te loguees, tendrás acceso a diferentes permisos para interactuar con las APIs.
+
+   - **Login como Technician**:  
+     Realiza una solicitud `POST` a la URL indicada en la documentación para obtener un **token de acceso** con los permisos de Technician.
+
+   - **Login como Admin**:  
+     De manera similar, realiza una solicitud `POST` para obtener un **token de acceso** con los permisos de Admin.  
+     El proceso de autenticación para ambos roles está detallado en la documentación, incluyendo los parámetros necesarios.
+
+3. **Acceder a las APIs protegidas**:  
+   Una vez que hayas obtenido el token correspondiente, puedes incluirlo en las cabeceras de tus solicitudes para acceder a las APIs protegidas. Por ejemplo, para probar el endpoint de equipos, realiza una solicitud `GET` a la siguiente URL:
+   ```bash
+   GET http://localhost:9091/work-order
+   ```
+---
+## ⚙️ **Configuración del Proyecto Frontend**
+### **1️⃣ Clonar el Repositorio**
+```bash
+git clone https://github.com/No-Country-simulation/c23-78-webapp.git
+cd c23-78-webapp
+cd frontend
+```
+### **2️⃣ Instalar Dependencias**
+Una vez dentro del directorio `frontend`, instala las dependencias necesarias para ejecutar el proyecto:
+```bash
+npm install
+```
+### **3️⃣ Ejecutar el Proyecto**
+Luego de instalar las dependencias, puedes ejecutar el proyecto en modo desarrollo con el siguiente comando:
+```bash
+npm run dev
+```
+### **4️⃣ Abrir la Web**
+Después de ejecutar el proyecto, verás en la terminal un mensaje similar al siguiente:
+```bash
+VITE v6.1.0  ready in 1337 ms
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+ ```
+Haz clic en el enlace Local: http://localhost:5173/ para abrir la aplicación en tu navegador.
+
+---
 ## 🗄️ **Modelo de Datos**  
 
 ### 📌 **Diagrama Entidad-Relación (ER)**
