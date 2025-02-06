@@ -12,6 +12,7 @@ import { AuthProvider } from './modules/auth/components/AuthProvider';
 import NewOrderFormPage from './pages/admin/NewOrderFormPage';
 import ModifyOrder from './pages/admin/ModifyOrder';
 import TrackOrderPage from './pages/tracking/TrackOrderPage';
+import NewClient from './modules/core/components/new-client/NewClient';
 
 const browserRoutes = createBrowserRouter([
     { path: '/', element: <Principal />, },
@@ -25,6 +26,7 @@ const browserRoutes = createBrowserRouter([
             { path: '/admin/modifyOrder/:orderNumber', element: <ModifyOrder/>, },
         ]
     },
+    { path: '/newClient', element: <NewClient />, },
     { path: '/tracking/*', element: <TrackingPage />, },
     { path: '/notFound', element: <DeviceNotFoundPage />, },
     { path: '/admin/trackMovements', element: <MovementsTrackPage />, },
