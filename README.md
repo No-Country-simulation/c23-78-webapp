@@ -56,7 +56,7 @@
 ### **1️⃣ Clonar el Repositorio**
 ```bash
 git clone https://github.com/No-Country-simulation/c23-78-webapp.git
-cd c23-78-webapp
+cd c23-78-webapp/backend
 ```
 
 ### **2️⃣ Configurar la Base de Datos**
@@ -138,8 +138,7 @@ IntelliJ IDEA detectará automáticamente el comando de Maven y lo ejecutará, s
 ### **1️⃣ Clonar el Repositorio**
 ```bash
 git clone https://github.com/No-Country-simulation/c23-78-webapp.git
-cd c23-78-webapp
-cd frontend
+cd c23-78-webapp/frontend
 ```
 ### **2️⃣ Instalar Dependencias**
 Una vez dentro del directorio `frontend`, instala las dependencias necesarias para ejecutar el proyecto:
