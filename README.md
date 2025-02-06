@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-  <img src="https://media.discordapp.net/attachments/1326630298812813352/1336102303110791199/image.png?ex=67a295bc&is=67a1443c&hm=afaaa01bd8e7f7cdb48c12464500f410773e2876336c2a81289565636e8f07e7&=&format=webp&quality=lossless&width=806&height=623" alt="Vista de la aplicación" width="800">
+  <img src="https://media.discordapp.net/attachments/1326647355289632898/1336874791843532905/image.png?ex=67a5652c&is=67a413ac&hm=0537439c0173ba45896b740489ffa712aaba2711cdce17c06ce682ced0bfa796&=&format=webp&quality=lossless&width=1158&height=623" alt="Vista de la aplicación" width="800">
 </p>
 
 ## 📋 **Índice**
