@@ -40,6 +40,17 @@ const Admin = () => {
         navigate("/admin/newOrder");
         refreshToken
     };
+
+    const handleCreateClient = () => {
+        navigate("/admin/client");
+        refreshToken
+    }
+
+    const handleCreateWorker = () => {
+        navigate("/admin/worker");
+        refreshToken
+    }
+
     return (
         <>
             <NavBar />
@@ -70,18 +81,26 @@ const Admin = () => {
                 </button>
             </form>
 
-            <div className="flex flex-col items-start justify-between w-full">
-
-
+            <div className="flex flex-col items-start justify-between w-full ">
                 <button
                     onClick={handleCreateOrder}
                     className="ml-20 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
                 >
                     Crear orden
                 </button>
+                <button
+                    onClick={handleCreateClient}
+                    className="ml-20 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
+                >
+                    Crear cliente
+                </button>
+                <button
+                    onClick={handleCreateWorker}
+                    className="ml-20 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
+                >
+                    Crear trabajador
+                </button>
             </div>
-
-
 
             <BasicTabs
                 firts={<AdminTable />}

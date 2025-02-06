@@ -69,9 +69,6 @@ export function OrderForm() {
     }
   };
 
-  const addOrderForm = () => {
-    
-  }
 
   return (
     <Paper elevation={2} sx={{ width: "100%", maxWidth: 700, margin: "auto", mt: 4, p: 3 }}>
@@ -221,8 +218,6 @@ export function OrderForm() {
           )}
         />
 
-       
-        {/* Botones */}
         <Button
           type="submit"
           variant="contained"
