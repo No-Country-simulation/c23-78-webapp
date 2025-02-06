@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href=""><img src="https://media.discordapp.net/attachments/1326628838939295815/1336097155458400300/image.png?ex=67a290f1&is=67a13f71&hm=82ca390cd723719005162c6a49c6e1b4515f09e2a8d16bb8fdbe8cb9a7f5ccea&=&format=webp&quality=lossless&width=665&height=148" width="400" alt="Logo"></a>
+  <a href=""><img src="https://media.discordapp.net/attachments/1326628838939295815/1336888044044812328/image.png?ex=67a57183&is=67a42003&hm=fd28b2754b725a1f97bb72b2578c7b6ad3432a65f3262199405e134ca96a843c&=&format=webp&quality=lossless&width=1191&height=294" width="400" alt="Logo"></a>
 </h1>
 
 <h3 align="center">📌 Gestión de Equipos en Servicio Técnico</h3>
@@ -30,26 +30,7 @@
 4. [📡 Documentación de la API](#-documentación-de-la-api)  
 5. [👥 Contribuidores](#-contribuidores)  
 
----
-
-## 🚀 **Tecnologías Utilizadas**  
-
-- **Backend:** ☕ Java 17, Spring Boot, Spring Security, JWT  
-- **Frontend:** 💻 React.js, Tailwind CSS, Figma  
-- **Base de Datos:** 🗄️ MySQL, Hibernate, JPA  
-- **QA:** 🔍 Jasmine  
-- **Colaboración:** 🌐 GitHub  
-- **DevOps:** 🐳 Docker  
-
-## 🛠️ **Instalación y Configuración**  
-
-### 🔧 **Requisitos Previos**
-- Java 17+
-- Maven
-- MySQL 
-- Node.js 
-- Docker  
-
+---  
 ## 🚀 **Tecnologías Utilizadas**  
 
 - **Backend:** ☕ Java 17, Spring Boot, Spring Security, JWT  
