@@ -8,6 +8,7 @@ const { VITE_BACKEND_URL } = import.meta.env;
 
 export default async function getSearchOrder(orderNumber) {
     try {
+        console.log(`${VITE_BACKEND_URL}/work-order/number/` + orderNumber)
         const response = await fetch(`${VITE_BACKEND_URL}/work-order/number/${orderNumber}`);
         const data = await response.json();
 

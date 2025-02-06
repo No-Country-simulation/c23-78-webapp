@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { PackageSearch, ChevronDown } from 'lucide-react';
 import logo from "../../../../assets/logoDark.png";
+import TrackMyFixLogo from "../../../../assets/Image/TrackMyFixLogo.png"
 
 export const NavBar = () => {
 
@@ -14,7 +15,7 @@ export const NavBar = () => {
           href="/"
         >
           <img
-            src={logo}
+            src={TrackMyFixLogo}
             alt="trackmyfix"
             className="h-12 w-auto object-contain"
           />

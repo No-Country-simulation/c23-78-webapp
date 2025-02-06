@@ -33,7 +33,7 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs({firts, second, third}) {
+export default function BasicTabs({ firts, second, third }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -45,8 +45,8 @@ export default function BasicTabs({firts, second, third}) {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Ordenes" {...a11yProps(0)} />
-          <Tab label="Trabajadores" {...a11yProps(1)} />
-          <Tab label="Clientes" {...a11yProps(2)} />
+          <Tab label="Clientes" {...a11yProps(1)} />
+          <Tab label="Trabajadores" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

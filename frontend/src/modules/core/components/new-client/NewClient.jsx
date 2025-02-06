@@ -73,6 +73,17 @@ const NewClient = () => {
                     />
                 </div>
 
+                <div className="flex flex-col mb-6">
+                    <label htmlFor="password" className="text-sm font-bold"> </label>
+                    <input
+                        type="password"
+                        id="password"
+                        className="border border-black rounded-lg p-3 mt-1"
+                        placeholder="Contraseña"
+                    />
+                </div>
+
+
 
                 <button
                     type="submit"
