@@ -2,14 +2,10 @@ import { createBrowserRouter } from 'react-router-dom';
 import { RouterProvider } from 'react-router-dom';
 import Principal from './pages/Principal';
 import LoginPage from './pages/Auth/LoginPage';
-
 import NewWorkerPage from './pages/admin/NewWorkerPage';
 import NewClientPage from './pages/admin/NewClientPage';
 import TrackingPage from './pages/tracking/trackingPage';
 import DeviceNotFoundPage from './pages/admin/DeviceNotFoundPage';
-
-
-
 import MovementsTrackPage from './pages/admin/MovementsTrackPage';
 import { ProtectedRoute } from './modules/auth/components/ProtectedRoute';
 import { AuthProvider } from './modules/auth/components/AuthProvider';
