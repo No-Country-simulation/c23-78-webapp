@@ -25,12 +25,13 @@ const browserRoutes = createBrowserRouter([
             { path: '/admin/client', element: <NewClientPage />, },
             { path: '/admin/newOrder', element: <NewOrderFormPage />, },
             { path: '/admin/modifyOrder/:orderNumber', element: <ModifyOrder/>, },
+            { path: '/admin/trackMovements', element: <MovementsTrackPage />, },
+            { path: '/admin/newClient', element: <NewClient />, },
         ]
     },
-    { path: '/newClient', element: <NewClient />, },
+
     { path: '/tracking/*', element: <TrackingPage />, },
     { path: '/notFound', element: <DeviceNotFoundPage />, },
-    { path: '/admin/trackMovements', element: <MovementsTrackPage />, },
     { path: '/trackorder/:orderNumber', element: <TrackOrderPage/> },
 ]);
 
@@ -38,7 +39,9 @@ const browserRoutes = createBrowserRouter([
 const Router = () => {
     return (
         <div>
-            <RouterProvider router={browserRoutes} />
+            <AuthProvider>
+                <RouterProvider router={browserRoutes} />
+            </AuthProvider>
         </div>
     )
 }

@@ -19,8 +19,10 @@ export default async function postWorkOrder(workOrderData) {
         console.log("trying to post work order");
         const response = await fetch(url, requestOptions);
         if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
+            const errorData = await response.json();
+            console.error("Error completo:", errorData);
+            throw new Error(`Error al modificar la orden: ${JSON.stringify(errorData)}`);
+          }
         const result = await response.json();
         return result;
     } catch (error) {
