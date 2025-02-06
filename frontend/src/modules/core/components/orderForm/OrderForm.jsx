@@ -30,9 +30,70 @@ export function OrderForm() {
     },
   })
 
-  const onSubmit = (data) => {
-    console.log(data)
-    // Handle form submission
+
+  const [deviceTypes, setDeviceTypes] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+  const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = getAccessToken();
+        const headers = { Authorization: `Bearer ${token}` };
+        const [typesRes, statesRes] = await Promise.all([
+          fetch("http://localhost:9091/device/types", { headers }),
+          fetch("http://localhost:9091/device/states", { headers })
+        ]);
+
+        const types = await typesRes.json();
+        const states = await statesRes.json();
+        console.log("states", states[0]);
+
+        setDeviceTypes(types);
+        setStatuses(states);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+
+      }
+    };
+    fetchData();
+  }, []);
+
+  const onSubmit = async (data) => {
+    console.log("data", data);
+    const payload = {
+      dni: data.dni,
+      observations: data.orderObservation || "Sin observaciones",
+
+      devices: [
+        {
+          model: data.deviceBrand || "Desconocido",
+          serialNumber: data.serialNumber || "Sin número de serie",
+          accessories: data.accessoryObservation || "No especificado",
+          initialPrice: parseFloat(data.initialBudget) || 0,
+          finalPrice: parseFloat(data.finalBudget) || 0,
+          clientDescription: data.clientProblem || "No especificado",
+          technicalReport: data.technicalDiagnosis || "Pendiente",
+          type: data.deviceType || "SIN_TIPO",
+          state: data.status || "RECIBIDO",
+        }
+      ]
+    };
+
+    console.log("payload", payload);
+
+    try {
+      const result = await postWorkOrder(payload);
+      console.log("result", result);
+      setMessage({ type: "success", text: "Orden enviada con éxito." });
+      window.history.back()
+    } catch (error) {
+      setMessage({ type: "error", text: "Error al enviar la orden. Inténtalo de nuevo." });
+    }
+  };
+
+  const addOrderForm = () => {
+    
   }
 
   return (

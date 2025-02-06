@@ -8,6 +8,10 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
+import getWorksOrders from "../../services/getWorksOrders";
+import { useNavigate } from "react-router-dom";
+import refreshToken from "../../../auth/services/refreshToken";
+
 const columns = [
     { id: "factura", label: "Factura N°", minWidth: 150 },
     { id: "cliente", label: "Clientes", minWidth: 200 },
@@ -24,9 +28,11 @@ const columns = [
 ];
 
 export default function AdminTable() {
-    const [rows, setRows] = useState([]); // Almacenará los datos del backend
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const [rows, setRows] = useState([]); // Almacenará los datos del backend
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const navigate = useNavigate();
 
     // Llamada al backend
     useEffect(() => {
@@ -63,73 +69,99 @@ export default function AdminTable() {
         setPage(0);
     };
 
-    return (
-        <Paper sx={{ width: "100%", overflow: "hidden", background: "transparent" }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                    style={{ minWidth: column.minWidth }}
-                                >
-                                    {column.label}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
-                                return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.factura}>
-                                        {columns.map((column) => {
-                                            const value = row[column.id];
-                                            return (
-                                                <TableCell key={column.id} align={column.align}>
-                                                    {column.id === "acciones" ? (
-                                                        <div>
-                                                            <button
-                                                                onClick={() => console.log(row.factura)}
-                                                                type="submit"
-                                                                className="mr-3 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
-                                                            >
-                                                                Editar
-                                                            </button>
-                                                            <button
-                                                                onClick={() => console.log("eliminando: " + row.factura)}
-                                                                type="submit"
-                                                                className="bg-[red] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
-                                                            >
-                                                                Eliminar
-                                                            </button>
-                                                        </div>
-                                                    ) : column.format && typeof value === "number" ? (
-                                                        column.format(value)
-                                                    ) : (
-                                                        value
-                                                    )}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-        </Paper>
-    );
+
+
+
+  const handleNavigate = (orderNumber) => {
+    navigate(`/admin/modifyOrder/${orderNumber}`);
+    refreshToken(); 
+  };
+
+  return (
+    <Paper
+      sx={{ width: "100%", overflow: "hidden", background: "transparent" }}
+    >
+      <TableContainer sx={{ maxHeight: 440 }}>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  align={column.align}
+                  style={{ minWidth: column.minWidth }}
+                >
+                  {column.label}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => {
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={row.factura}
+                  >
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.id === "acciones" ? (
+                            <div>
+                              <button
+                                onClick={() => handleNavigate(row.orden)}
+                                type="submit"
+                                className="mr-3 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
+                              >
+                                Editar
+                              </button>
+                              <button
+                                onClick={() =>
+                                  console.log("eliminando: " + row.orden)
+                                }
+                                type="submit"
+                                className="bg-[red] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
+                              >
+                                Eliminar
+                              </button>
+                              <button
+                                onClick={() =>
+                                  console.log("viendo: " + row.orden)
+                                }
+                                type="submit"
+                                className="ml-3 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
+                              >
+                                Ver
+                              </button>
+                            </div>
+                          ) : column.format && typeof value === "number" ? (
+                            column.format(value)
+                          ) : (
+                            value
+                          )}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
+  );
 }
