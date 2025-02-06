@@ -91,10 +91,13 @@ export function WorkerTable() {
                   <TableCell>{worker.phone}</TableCell>
                   <TableCell>{worker.email}</TableCell>
                   <TableCell>
-                    <Tooltip title="Editar">
+                  <Tooltip title="Editar">
                       <IconButton
                         onClick={() => handleEdit(worker.id)}
-                        size="small"
+                        size="small" sx={{
+                          transition: "color 0.3s",
+                          "&:hover": { color: "orange" }
+                        }}
                       >
                         <Pencil />
                       </IconButton>
@@ -102,7 +105,10 @@ export function WorkerTable() {
                     <Tooltip title="Ver">
                       <IconButton
                         onClick={() => handleView(worker.id)}
-                        size="small"
+                        size="small" sx={{
+                          transition: "color 0.3s",
+                          "&:hover": { color: "green" }
+                        }}
                       >
                         <Eye />
                       </IconButton>
@@ -110,7 +116,10 @@ export function WorkerTable() {
                     <Tooltip title="Eliminar">
                       <IconButton
                         onClick={() => handleDelete(worker.id)}
-                        size="small"
+                        size="small" sx={{
+                          transition: "color 0.3s",
+                          "&:hover": { color: "red" }
+                        }}
                       >
                         <Trash />
                       </IconButton>
