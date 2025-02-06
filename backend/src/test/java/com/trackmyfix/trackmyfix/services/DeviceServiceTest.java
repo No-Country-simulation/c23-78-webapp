@@ -1,7 +1,5 @@
 package com.trackmyfix.trackmyfix.services;
 
-import com.trackmyfix.trackmyfix.Dto.Request.DeviceRequestDTO;
-import com.trackmyfix.trackmyfix.Dto.Request.OrderRequest;
 import com.trackmyfix.trackmyfix.entity.*;
 import com.trackmyfix.trackmyfix.repository.DeviceRepository;
 import com.trackmyfix.trackmyfix.services.Impl.DeviceService;
@@ -22,7 +20,6 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 
 @Slf4j
 @ActiveProfiles("test")

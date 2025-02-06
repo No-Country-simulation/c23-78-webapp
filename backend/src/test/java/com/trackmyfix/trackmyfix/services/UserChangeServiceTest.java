@@ -6,15 +6,11 @@ import com.trackmyfix.trackmyfix.entity.*;
 import com.trackmyfix.trackmyfix.repository.UserChangeRepository;
 import com.trackmyfix.trackmyfix.services.Impl.UserChangeService;
 import jakarta.persistence.EntityManager;
-import org.hibernate.Filter;
-import org.hibernate.Session;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Date;
 import java.util.List;
@@ -27,7 +23,6 @@ import static com.trackmyfix.trackmyfix.entity.Role.TECHNICIAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserChangeServiceTest {

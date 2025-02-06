@@ -1,7 +1,6 @@
 package com.trackmyfix.trackmyfix.services;
 
 
-import com.trackmyfix.trackmyfix.TrackmyfixApplication;
 import com.trackmyfix.trackmyfix.entity.*;
 import com.trackmyfix.trackmyfix.event.DeviceCreateEvent;
 import com.trackmyfix.trackmyfix.repository.MovementRepository;
@@ -15,15 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
@@ -129,7 +122,7 @@ public class MovementServiceTest {
 
     @Test
     @DisplayName("Test Save Movement")
-    void testSaveMovement() throws InstantiationException, IllegalAccessException {
+    void testSaveMovement() {
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication auth = Mockito.mock(Authentication.class);
         when(securityContext.getAuthentication())

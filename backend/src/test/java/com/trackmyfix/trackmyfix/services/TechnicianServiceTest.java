@@ -2,7 +2,6 @@ package com.trackmyfix.trackmyfix.services;
 
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
-import com.trackmyfix.trackmyfix.entity.Client;
 import com.trackmyfix.trackmyfix.entity.Role;
 import com.trackmyfix.trackmyfix.entity.Technician;
 import com.trackmyfix.trackmyfix.repository.UserRepository;

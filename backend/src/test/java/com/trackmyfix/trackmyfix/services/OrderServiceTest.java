@@ -140,7 +140,7 @@ public class OrderServiceTest {
     }
     @Test
     @DisplayName("Test save orders")
-    void testSave(){
+    void testSave() {
         given(clientRepository.findByDni(any(String.class)))
                 .willReturn(Optional.of(sampleClient));
 

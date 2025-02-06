@@ -82,6 +82,7 @@ public class TechnicianService implements IUserService<UserResponseDTO> {
                 .role(user.getRole())
                 .active(user.getActive())
                 .dni(user.getDni())
+                .password(user.getPassword())
                 .build();
     }
 }
