@@ -11,6 +11,7 @@ import { ProtectedRoute } from './modules/auth/components/ProtectedRoute';
 import { AuthProvider } from './modules/auth/components/AuthProvider';
 import NewOrderFormPage from './pages/admin/NewOrderFormPage';
 import TrackOrderPage from './pages/tracking/TrackOrderPage';
+import NewClient from './modules/core/components/new-client/NewClient';
 
 const browserRoutes = createBrowserRouter([
     { path: '/', element: <Principal />, },
@@ -23,6 +24,7 @@ const browserRoutes = createBrowserRouter([
             { path: '/admin/newOrder', element: <NewOrderFormPage />, },
         ]
     },
+    { path: '/newClient', element: <NewClient />, },
     { path: '/tracking/*', element: <TrackingPage />, },
     { path: '/notFound', element: <DeviceNotFoundPage />, },
     { path: '/admin/trackMovements', element: <MovementsTrackPage />, },

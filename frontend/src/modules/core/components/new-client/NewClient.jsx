@@ -4,28 +4,35 @@ import createUserOrder from "../../services/createUserOrder";
 
 const NewClient = () => {
     const { control, handleSubmit, formState: { errors } } = useForm();
-    
- 
+
+
     const onSubmit = async (data) => {
         const payload = {
-            dni: data.dni,
-            observations: data.orderObservation || "Sin observaciones",
-            nombre: data.name,
-            apellido: data.lastName,
-            telefono: data.phone,
-            direccion: data.address,
-            correo: data.email,
-            password: data.password
+            dni: data.dni ?? "DNI no proporcionado",
+            observations: data.orderObservation ?? "Sin observaciones",
+            nombre: data.nombre ?? "Nombre no proporcionado",
+            apellido: data.apellido ?? "Apellido no proporcionado",
+            telefono: data.telefono ?? "Teléfono no proporcionado",
+            direccion: data.direccion ?? "Dirección no proporcionada",
+            correo: data.correo ?? "Correo no proporcionado",
+            password: data.password ?? "Contraseña no proporcionada",
         };
-    
-        const response = await createUserOrder(payload);
+
+        const expectedKeys = ["dni", "observations", "nombre", "apellido", "telefono", "direccion", "correo", "password"];
+        const missingKeys = expectedKeys.filter(key => payload[key].includes("no proporcionado"));
+
+        if (missingKeys.length > 0) {
+            console.warn("Los siguientes datos no están presentes en la carga útil:", missingKeys);
+        }
+        const clientData = payload;
+        const response = await createUserOrder(clientData);
         if (response) {
             console.log("Cliente creado exitosamente:", response);
         } else {
             console.error("Error al crear el cliente");
         }
     };
-   
+
 
 
     return (
