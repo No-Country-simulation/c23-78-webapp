@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
 @RestController
@@ -20,34 +19,38 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> findAllOrders() {
-        return orderService.findAll();
+        Map<String, Object> response = orderService.findAll();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/number/{number}")
     public ResponseEntity<Order> findOrderByNumber(@PathVariable String number) {
-        return orderService.findByNumber(number);
+        Order order = orderService.findByNumber(number);
+        return ResponseEntity.ok(order);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Order> findById(@PathVariable Long id) {
-        return orderService.findById(id);
+        Order order = orderService.findById(id);
+        return ResponseEntity.ok(order);
     }
 
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody @Valid OrderRequest orderRequest) {
-        Order order = orderService.createOrder(orderRequest); // Llama al Service, que ya no usa ResponseEntity
-        return ResponseEntity.status(HttpStatus.CREATED).body(order); // El Controller maneja la respuesta HTTP
+        Order order = orderService.createOrder(orderRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody @Valid OrderUpdateRequest orderUpdateRequest){
-    return this.orderService.updateOrder(id,orderUpdateRequest);
+        Order updatedOrder = orderService.updateOrder(id, orderUpdateRequest);
+        return ResponseEntity.ok(updatedOrder);
     }
 
-    @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivateOrder(@PathVariable Long id) {
-        return orderService.deactivateOrder(id);
+    @PatchMapping("/{id}/set-active")
+    public ResponseEntity<Void> setActiveOrder(@PathVariable Long id, @RequestBody Map<String, Boolean> requestBody) {
+        boolean active = requestBody.get("active");
+        orderService.setActiveOrder(id, active);
+        return ResponseEntity.noContent().build();
     }
-
 }

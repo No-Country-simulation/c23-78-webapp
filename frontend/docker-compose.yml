@@ -1,0 +1,22 @@
+services:
+  front-trackmyfix:
+    container_name: front
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    image: frontend-front-trackmyfix
+    volumes:
+      - ./src:/usr/code/src
+      - ./index.html:/usr/code/index.html
+      - ./eslint.config.js:/usr/code/eslint.config.js
+      - ./tailwind.config.js:/usr/code/tailwind.config.js
+      - ./postcss.config.js:/usr/code/postcss.config.js
+      - ./vite.config.js:/usr/code/vite.config.js
+    ports:
+      - 5173:5173
+    command: npm run host
+    networks:
+      - trackmyfix_net
+networks:
+  trackmyfix_net:
+    external: true

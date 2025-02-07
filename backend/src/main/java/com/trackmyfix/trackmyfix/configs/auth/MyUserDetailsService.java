@@ -1,6 +1,7 @@
 package com.trackmyfix.trackmyfix.configs.auth;
 
 import com.trackmyfix.trackmyfix.entity.*;
+import com.trackmyfix.trackmyfix.exceptions.UserNotFoundException;
 import com.trackmyfix.trackmyfix.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +31,8 @@ public class MyUserDetailsService implements UserDetailsService {
     private final UserRepository<Client> clientRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Email " + email + " not found"));
+    public UserDetails loadUserByUsername(String email) throws UserNotFoundException {
+        User user = userRepository.findByEmailAndActive(email).orElseThrow(() -> new UserNotFoundException("Email " + email + " not found"));
         String userPass = null;
         switch (user.getRole()) {
             case ADMIN -> userPass = adminRepository.findById(user.getId()).get().getPassword();

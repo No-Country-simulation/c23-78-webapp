@@ -15,6 +15,12 @@ public interface UserChangeRepository extends CrudRepository<UserChange,Long> {
 
     List<UserChange> findAll();
 
+    @Query(value =  "SELECT u FROM user_change u WHERE u.id_client = :clientId", nativeQuery = true)
+    List<UserChange> findByClientId(@Param("clientId") Long clientId);
+
+    @Query(value="SELECT u FROM user_change u WHERE u.id_technician = :technicianId", nativeQuery = true)
+    List<UserChange> findByTechnicianId(@Param("technicianId") Long technicianId);
+
     @Modifying
     @Query(value = "INSERT INTO user_change (action_user, id_technician, id_client) VALUES (:actionUser, :technicianId, :clientId)", nativeQuery = true)
     @Transactional

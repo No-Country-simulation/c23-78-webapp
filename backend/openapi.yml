@@ -1,0 +1,728 @@
+openapi: 3.0.3
+info:
+  title: TrackMyFix-API
+  version: 0.0.1
+
+servers:
+  - url: "http://localhost:9091"
+    description: URL local
+
+paths:
+  /user/register:
+    post:
+      tags:
+        - usuarios
+      operationId: saveUser
+      summary: Crea a un usuario
+      requestBody:
+        required: true
+        content:
+          raw:
+            schema:
+              type: object
+              description: Usuario a crear
+              properties:
+                id:
+                  type: integer
+                  description: Id del usuario
+                  nullable: true
+                  default: null
+                name:
+                  type: string
+                  description: Nombre del usuario
+                lastname:
+                  type: string
+                  description: Apellido del usuario
+                email:
+                  type: string
+                dni:
+                  type: string
+                  minLength: 8
+                address:
+                  type: string
+                role:
+                  type: string
+                  description: Rol del usuario
+                  enum:
+                    - CLIENT
+                    - TECHNICIAN
+                    - ADMIN
+                  discriminator:
+                    propertyName: role
+                phone:
+                  type: string
+                password:
+                  type: string
+
+      responses:
+        "201":
+          description: Creacion de usuario exitosa
+        "500":
+          description: Error del back-end
+        "400":
+          description: Error en un campo
+  /user/login:
+    post:
+      tags:
+        - usuarios
+      operationId: loginUser
+      summary: Se logea a un usuario
+      requestBody:
+        required: true
+        content:
+          x-www-form-urlencoded:
+            schema:
+              type: object
+              description: Usuario a logear
+              properties:
+                username:
+                  type: string 
+                  description: email del usuario
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Logeo exitoso
+        "500":
+          description: Credenciales incorrectas
+  /user/all:
+    get:
+      tags:
+        - usuarios
+      operationId: getAllusuarios
+      summary: Obtiene a todos los usuarios (Debes de ser admin)
+      responses:
+        "200":
+          description: Usuarios obtenidos
+        "500":
+          description: Error del back-end
+        "401":
+          description: No tienes permisos
+  /user/{id}:
+    get:
+      tags:
+        - usuarios
+      operationId: getUser
+      summary: Obtiene a un usuario por su id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del usuario
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Usuario obtenido
+        "500":
+          description: Error del back-end
+        "404":
+          description: Usuario no encontrado
+  /user/profile:
+    get:
+      tags:
+        - usuarios
+      operationId: getProfile
+      summary: Obtiene el perfil del usuario
+      responses:
+        "200":
+          description: Perfil obtenido
+        "500":
+          description: Error del back-end
+        "401":
+          description: No estas logeado
+        "400":
+          description: Error en un campo
+  /user/update:
+    put:
+      tags:
+        - usuarios
+      operationId: updateUser
+      summary: Actualiza el perfil del usuario
+      requestBody:
+        required: true
+        content:
+          raw:
+            schema:
+              type: object
+              description: Usuario a actualizar
+              properties:
+                id:
+                  type: integer
+                  description: Id del usuario a actualizar
+                  nullable: false
+                name:
+                  type: string
+                  description: Nombre del usuario
+                lastname:
+                  type: string
+                  description: Apellido del usuario
+                email:
+                  type: string
+                dni:
+                  type: string
+                  minLength: 8
+                address:
+                  type: string
+                role:
+                  type: string
+                  description: Rol del usuario
+                  enum:
+                    - CLIENT
+                    - TECHNICIAN
+                    - ADMIN
+                  discriminator:
+                    propertyName: role
+                phone:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Perfil actualizado
+        "500":
+          description: Error del back-end
+        "401":
+          description: No estas logeado
+        "400":
+          description: Error en un campo
+  /user/{id}:
+    delete:
+      tags:
+        - usuarios
+      operationId: deleteUser
+      summary: Elimina a un usuario por su id (Se debe de ser admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del usuario
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Usuario eliminado (Cambiado de estado a inactivo)
+        "500":
+          description: Error del back-end
+        "404":
+          description: Usuario no encontrado
+        "401":
+          description: No tienes permisos
+  /work-order:
+    post:
+      tags:
+        - orders
+      operationId: saveOrder
+      summary: Crea una orden de trabajo (Se debe de ser tecnico)
+      requestBody:
+        required: true
+        content:
+          raw:
+            schema:
+              type: object
+              description: Orden de trabajo a crear
+              properties:
+                dni:
+                  type: string
+                  description: Dni del cliente
+                observations:
+                  type: string
+                  description: Observaciones de la orden
+                  nullable: true
+                devices:
+                  type: array
+                  description: Dispositivos de la orden
+                  minItems: 1
+                  items:
+                    type: object
+                    description: Dispositivo de la orden
+                    properties:
+                      model:
+                        type: string
+                        description: Modelo del dispositivo
+                      serialNumber:
+                        type: string
+                        description: Numero de serie del dispositivo
+                      accesories:
+                        type: string
+                        description: Accesorios del dispositivo
+                      initialPrice:
+                        type: number
+                        description: Precio inicial del dispositivo
+                        minimum: 1000
+                      finalPrice:
+                        type: number
+                        description: Precio final del dispositivo
+                        minimum: 1000
+                      clientDescription:
+                        type: string
+                        description: Descripcion del cliente
+                      technicalReport:
+                        type: string
+                        description: Reporte tecnico
+                      type:
+                        type: string
+                        description: Tipo del dispositivo
+                        enum:
+                          - COMPUTADORA_PORTATIL
+                          - COMPUTADORA_DE_ESCRITORIO
+                          - TABLET
+                          - SMARTHPHONE
+                          - IMPRESORA
+                          - MONITOR
+                          - TECLADO
+                          - MOUSE
+                          - ROUTER
+                          - SWITCH_RED
+                          - DISCO_DURO_EXTERNO
+                          - MEMORIA_USB
+                          - CONSOLA_DE_VIDEOJUEGOS
+                          - TARJETA_GRAFICA
+                          - FUENTE_DE_PODER
+                          - PLACA_BASE
+                          - SERVIDOR
+                          - ESCANER
+                          - PROYECTOR
+                          - LECTOR_dE_CODIGOS_DE_BARRA
+                          - NOTEBOOK
+                      observations:
+                        type: string
+                        description: Observaciones del dispositivo
+                      state:
+                        type: string
+                        description: Estado del dispositivo
+                        enum:
+                          - RECIBIDO
+                          - EN_DIAGNOSTICO
+                          - ESPERANDO_APROBACION
+                          - EN_REPARACION
+                          - ESPERANDO_REPUESTOS
+                          - REPARADO
+                          - EN_PRUEBAS
+                          - LISTO_PARA_RETIRO
+                          - ENTREGADO
+                          - NO_REPARABLE
+                          - CANCELADO
+      responses:
+        "201":
+          description: Creacion de orden de trabajo exitosa
+        "500":
+          description: Error del back-end
+        "400":
+          description: Error en un campo
+        "404":
+          description: El email de tu cuenta no esta registrado como tecnico / cliente no encontrado
+  /work-order:
+    get:
+      tags:
+        - ordenes
+      operationId: getAllOrders
+      summary: Obtiene todas las ordenes de trabajo (Se debe de ser tecnico)
+      responses:
+        "200":
+          description: Ordenes de trabajo obtenidas
+        "500":
+          description: Error del back-end
+        "401":
+          description: No tienes permisos
+  /work-order/{id}:
+    get:
+      tags:
+        - ordenes
+      operationId: getOrder
+      summary: Obtiene una orden de trabajo por su id (Se debe de ser tecnico)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id de la orden de trabajo
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Orden de trabajo obtenida
+        "500":
+          description: Error del back-end
+        "404":
+          description: Orden de trabajo no encontrada
+        "401":
+          description: No tienes permisos
+  /work-order/number/{number}:
+    get:
+      tags:
+        - ordenes
+      operationId: getOrderByNumber
+      summary: Obtiene una orden de trabajo por su numero (Se debe de ser tecnico)
+      parameters:
+        - name: number
+          in: path
+          required: true
+          description: Numero de la orden de trabajo
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Orden de trabajo obtenida
+        "500":
+          description: Error del back-end
+        "404":
+          description: Orden de trabajo no encontrada
+        "401":
+          description: No tienes permisos
+  /work-order/{id}:
+    put:
+      tags:
+        - ordenes
+      operationId: updateOrder
+      summary: Actualiza una orden de trabajo por su id (Se debe de ser tecnico)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id de la orden de trabajo
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          raw:
+            schema:
+              type: object
+              description: Orden de trabajo a actualizar
+              properties:
+                dni:
+                  type: string
+                  description: Dni del cliente
+                observations:
+                  type: string
+                  description: Observaciones de la orden
+                  nullable: true
+                devices:
+                  type: array
+                  description: Dispositivos de la orden
+                  minItems: 1
+                  items:
+                    type: object
+                    properties:
+                      model:
+                        type: string
+                        description: Modelo del dispositivo
+                      serialNumber:
+                        type: string
+                        description: Numero de serie del dispositivo
+                      accesories:
+                        type: string
+                        description: Accesorios del dispositivo
+                      initialPrice:
+                        type: number
+                        description: Precio inicial del dispositivo
+                        minimum: 1000
+                      finalPrice:
+                        type: number
+                        description: Precio final del dispositivo
+                        minimum: 1000
+                      clientDescription:
+                        type: string
+                        description: Descripcion del cliente
+                      technicalReport:
+                        type: string
+                        description: Reporte tecnico
+                      type:
+                        type: string
+                        description: Tipo del dispositivo
+                        enum:
+                          - COMPUTADORA_PORTATIL
+                          - COMPUTADORA_DE_ESCRITORIO
+                          - TABLET
+                          - SMARTHPHONE
+                          - IMPRESORA
+                          - MONITOR
+                          - TECLADO
+                          - MOUSE
+                          - ROUTER
+                          - SWITCH_RED
+                          - DISCO_DURO_EXTERNO
+                          - MEMORIA_USB
+                          - CONSOLA_DE_VIDEOJUEGOS
+                          - TARJETA_GRAFICA
+                          - FUENTE_DE_PODER
+                          - PLACA_BASE
+                          - SERVIDOR
+                          - ESCANER
+                          - PROYECTOR
+                          - LECTOR_dE_CODIGOS_DE_BARRA
+                          - NOTEBOOK
+                      observations:
+                        type: string
+                        description: Observaciones del dispositivo
+                      state:
+                        type: string
+                        description: Estado del dispositivo
+                        enum:
+                          - RECIBIDO
+                          - EN_DIAGNOSTICO
+                          - ESPERANDO_APROBACION
+                          - EN_REPARACION
+                          - ESPERANDO_REPUESTOS
+                          - REPARADO
+                          - EN_PRUEBAS
+                          - LISTO_PARA_RETIRO
+                          - ENTREGADO
+                          - NO_REPARABLE
+                          - CANCELADO
+      responses:
+        "200":
+          description: Orden de trabajo actualizada
+        "500":
+          description: Error del back-end / Cantidad de dispositivos diferente a la que tiene la orden
+        "404":
+          description: Orden de trabajo no encontrada
+        "401":
+          description: No tienes permisos
+  /work-order/{id}/set-active:
+    patch:
+      tags:
+        - ordenes
+      operationId: setActiveOrder
+      summary: Cambia el estado de una orden de trabajo a la seleccionada (Se debe de ser tecnico)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id de la orden de trabajo
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          raw:
+            schema:
+              type: object
+              description: Estado de la orden de trabajo
+              properties:
+                active:
+                  type: boolean
+                  description: Estado de la orden de trabajo
+      responses:
+        "200":
+          description: Orden de trabajo activada
+        "500":
+          description: Error del back-end
+        "404":
+          description: Orden de trabajo no encontrada
+        "401":
+          description: No tienes permisos
+  /logs/userchanges:
+    get:
+      tags:
+        - logs
+      operationId: getUserChanges
+      summary: Obtiene todos los cambios de usuario (Se debe de ser admin)
+      responses:
+        "200":
+          description: Cambios de usuario obtenidos
+        "500":
+          description: Error del back-end
+        "401":
+          description: No tienes permisos
+        "404":
+          description: El gmail no esta registrado como admin
+  /movement:
+    get:
+      tags:
+        - movimientos
+      operationId: allMovements
+      summary: obtiene todos los movimientos de trabajo (Se debe de ser admin)
+      responses:
+        "201":
+          description: Creacion de movimiento exitosa
+        "500":
+          description: Error del back-end
+        "400":
+          description: Error en un campo
+        "404":
+          description: El email de tu cuenta no esta registrado como tecnico
+  /movement/{id}:
+    get:
+      tags:
+        - movimientos
+      operationId: getMovement
+      summary: Obtiene un movimiento por su id (Se debe de ser admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del movimiento
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Movimiento obtenido
+        "500":
+          description: Error del back-end
+        "404":
+          description: Movimiento no encontrado
+        "401":
+          description: No tienes permisos
+  /movement/{action}:
+    get:
+      tags:
+        - movimientos
+      operationId: getMovementByAction
+      summary: Obtiene un movimiento por su accion (Se debe de ser admin)
+      parameters:
+        - name: action
+          in: path
+          required: true
+          description: Accion del movimiento
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Movimiento obtenido
+        "500":
+          description: Error del back-end
+        "404":
+          description: Movimiento no encontrado
+        "401":
+          description: No tienes permisos
+  /movement/actions:
+    get:
+      tags:
+        - movimientos
+      operationId: getActions
+      summary: Obtiene todas las acciones de los movimientos (Se debe de ser admin)
+      responses:
+        "200":
+          description: Acciones obtenidas
+        "500":
+          description: Error del back-end
+        "401":
+          description: No tienes permisos
+  /device:
+    get:
+      tags:
+        - dispositivos
+      operationId: allDevices
+      summary: Obtiene todos los dispositivos (Se debe de ser tecnico)
+      responses:
+        "200":
+          description: Dispositivos obtenidos
+        "500":
+          description: Error del back-end
+        "401":
+          description: No tienes permisos
+  /device/{id}:
+    get:
+      tags:
+        - dispositivos
+      operationId: getDevice
+      summary: Obtiene un dispositivo por su id (Se debe de ser tecnico)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del dispositivo
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Dispositivo obtenido
+        "500":
+          description: Error del back-end
+        "404":
+          description: Dispositivo no encontrado
+        "401":
+          description: No tienes permisos
+  /device/serial-number/{serialNumber}:
+    get:
+      tags:
+        - dispositivos
+      operationId: getDeviceBySerialNumber
+      summary: Obtiene un dispositivo por su numero de serie (Se debe de ser tecnico)
+      parameters:
+        - name: serialNumber
+          in: path
+          required: true
+          description: Numero de serie del dispositivo
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dispositivo obtenido
+        "500":
+          description: Error del back-end
+        "404":
+          description: Dispositivo no encontrado
+        "401":
+          description: No tienes permisos
+  /device/states:
+    get:
+      tags:
+        - dispositivos
+      operationId: getStates
+      summary: Obtiene todos los estados de los dispositivos (Se debe de ser tecnico)
+      responses:
+        "200":
+          description: Estados obtenidos
+        "500":
+          description: Error del back-end
+        "401":
+          description: No tienes permisos
+  /device/types:
+    get:
+      tags:
+        - dispositivos
+      operationId: getTypes
+      summary: Obtiene todos los tipos de los dispositivos (Se debe de ser tecnico)
+      responses:
+        "200":
+          description: Tipos obtenidos
+        "500":
+          description: Error del back-end
+        "401":
+          description: No tienes permisos
+  /device/state/{state}:
+    get:
+      tags:
+        - dispositivos
+      operationId: getDevicesByState
+      summary: Obtiene todos los dispositivos por su estado (Se debe de ser tecnico)
+      parameters:
+        - name: state
+          in: path
+          required: true
+          description: Estado del dispositivo
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dispositivos obtenidos
+        "500":
+          description: Error del back-end
+        "401":
+          description: No tienes permisos
+        "404":
+          description: Dispositivos no encontrados
+  /device/type/{type}:
+    get:
+      tags:
+        - dispositivos
+      operationId: getDevicesByType
+      summary: Obtiene todos los dispositivos por su tipo (Se debe de ser tecnico)
+      parameters:
+        - name: type
+          in: path
+          required: true
+          description: Tipo del dispositivo
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dispositivos obtenidos
+        "500":
+          description: Error del back-end
+        "401":
+          description: No tienes permisos
+        "404":
+          description: Dispositivos no encontrados
