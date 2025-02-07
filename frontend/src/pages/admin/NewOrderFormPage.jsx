@@ -1,5 +1,4 @@
-import { OrderForm } from "../../modules/core/components/OrderForm/OrderForm"
-
+import { OrderForm } from "../../modules/core/components/orderForm/OrderForm"
 
 const NewOrderFormPage = () => {
   return (

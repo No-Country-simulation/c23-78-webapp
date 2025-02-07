@@ -26,8 +26,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-      <button onClick={login}>Login</button>
-      <button onClick={logout}>Logout</button>
+
       {children}
     </AuthContext.Provider>
   );

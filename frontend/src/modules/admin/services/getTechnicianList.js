@@ -1,19 +1,21 @@
 import { getAccessToken } from "../../auth/libs/tokenStorage";
-const { VITE_BACKEND_URL } = import.meta.env
+const { VITE_BACKEND_URL } = import.meta.env;
 
-async function getWorksOrders() {
-    const accessToken = getAccessToken();
-    console.log("accessToken getWorksOrders: ", accessToken)
+async function getTechnicianList() {
+    const accessToken = getAccessToken();  // Corregido aquí
+    console.log("accessToken getTechnicianList: ", accessToken);
+
     const myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${getAccessToken()}`);
+    myHeaders.append("Authorization", `Bearer ${accessToken}`);
 
     const requestOptions = {
         method: "GET",
         headers: myHeaders,
         redirect: "follow"
     };
+
     try {
-        const response = await fetch(`${VITE_BACKEND_URL}/work-order`, requestOptions);
+        const response = await fetch(`${VITE_BACKEND_URL}/user/all?role=TECHNICIAN`, requestOptions);
 
         if (!response.ok) {
             const errorText = await response.text();
@@ -34,4 +36,4 @@ async function getWorksOrders() {
     }
 }
 
-export default getWorksOrders;
+export default getTechnicianList;
