@@ -1,86 +1,119 @@
-import { useForm } from "react-hook-form";
-
-const clienteNumero = 123;
+import { useForm, Controller } from "react-hook-form";
+import { TextField, Button, Paper, Typography, Alert, Box } from "@mui/material";
+import createUserOrder from "../../services/createUserOrder";
 
 const NewClient = () => {
+    const { control, handleSubmit, formState: { errors } } = useForm();
+    const onSubmit = async (data) => {
+        const payload = {
+
+            dni: data.dni ?? "DNI no proporcionado",
+            //observations: data.orderObservation ?? "Sin observaciones",
+            name: data.nombre ?? "Nombre no proporcionado",
+            lastName: data.apellido ?? "Apellido no proporcionado",
+            phone: data.telefono ?? "Teléfono no proporcionado",
+            address: data.direccion ?? "Dirección no proporcionada",
+            email: data.correo ?? "Correo no proporcionado",
+            password: data.password ?? "Contraseña no proporcionada",
+            role: "CLIENT",
+        };
+        const clientData = payload;
+        const response = await createUserOrder(clientData);
+
+        if (response) {
+            console.log("Cliente creado exitosamente:", response);
+        } else {
+            console.error("Error al crear el cliente");
+        }
+    };
+
+
+
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-6">
-            <form className="bg-white p-10 rounded-lg shadow-md w-full max-w-2xl border border-black ">
-                <h2 className="text-2xl font-bold  mb-6">Nuevo Cliente</h2>
+        <Paper elevation={2} sx={{ width: "100%", maxWidth: 700, margin: "auto", mt: 4, p: 3 }}>
+            <Typography variant="h5" gutterBottom>Nuevo Cliente</Typography>
+            <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
+                {/* Nombre */}
+                <Controller
+                    name="nombre"
+                    control={control}
+                    rules={{ required: "El nombre es obligatorio" }}
+                    render={({ field }) => (
+                        <TextField {...field} fullWidth label="Nombre" margin="normal" error={!!errors.nombre} helperText={errors.nombre?.message} />
+                    )}
+                />
 
+                {/* Apellido */}
+                <Controller
+                    name="apellido"
+                    control={control}
+                    rules={{ required: "El apellido es obligatorio" }}
+                    render={({ field }) => (
+                        <TextField {...field} fullWidth label="Apellido" margin="normal" error={!!errors.apellido} helperText={errors.apellido?.message} />
+                    )}
+                />
 
-                <div className="bg-gray-200 p-4 rounded-lg mb-6 w-full cursor-not-allowed "><span className="text-lg font-extralight ">Cliente #{clienteNumero}</span>
-                </div>
+                {/* DNI */}
+                <Controller
+                    name="dni"
+                    control={control}
+                    rules={{ required: "DNI es obligatorio" }}
+                    render={({ field }) => (
+                        <TextField {...field} fullWidth label="DNI" margin="normal" error={!!errors.dni} helperText={errors.dni?.message} />
+                    )}
+                />
 
-                <div className="flex flex-col mb-6">
-                    <label htmlFor="nombre" className="text-sm font-bold"></label>
-                    <input
-                        type="text"
-                        id="nombre"
-                        className="border border-black rounded-lg p-3 mt-1"
-                        placeholder="Nombre"
-                    />
-                </div>
+                {/* Teléfono */}
+                <Controller
+                    name="telefono"
+                    control={control}
+                    render={({ field }) => (
+                        <TextField {...field} fullWidth label="Teléfono" margin="normal" />
+                    )}
+                />
 
-                <div className="flex flex-col mb-6">
-                    <label htmlFor="apellido" className="text-sm font-bold "></label>
-                    <input
-                        type="text"
-                        id="apellido"
-                        className="border border-black rounded-lg p-3 mt-1"
-                        placeholder="Apellido"
-                    />
-                </div>
+                {/* Dirección */}
+                <Controller
+                    name="direccion"
+                    control={control}
+                    render={({ field }) => (
+                        <TextField {...field} fullWidth label="Dirección" margin="normal" />
+                    )}
+                />
 
-                <div className="flex flex-col md:flex-row gap-4 mb-6">
-                    <div className="flex flex-col w-full">
-                        <label htmlFor="dni" className="text-sm font-bold "></label>
-                        <input
-                            type="text"
-                            id="dni"
-                            className="border border-black rounded-lg p-3 mt-1"
-                            placeholder="DNI"
-                        />
-                    </div>
-                    <div className="flex flex-col w-full">
-                        <label htmlFor="telefono" className="text-sm font-bold "></label>
-                        <input
-                            type="tel"
-                            id="telefono"
-                            className="border border-black rounded-lg p-3 mt-1"
-                            placeholder="Telefono"
-                        />
-                    </div>
-                </div>
+                {/* Correo */}
+                <Controller
+                    name="correo"
+                    control={control}
+                    rules={{ required: "Correo electrónico es obligatorio", pattern: { value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, message: "Correo inválido" } }}
+                    render={({ field }) => (
+                        <TextField {...field} fullWidth label="Correo Electrónico" margin="normal" error={!!errors.correo} helperText={errors.correo?.message} />
+                    )}
+                />
 
-                <div className="flex flex-col mb-6">
-                    <label htmlFor="direccion" className="text-sm font-bold "> </label>
-                    <input
-                        type="text"
-                        id="direccion"
-                        className="border border-black rounded-lg p-3 mt-1"
-                        placeholder="Dirrecion"
-                    />
-                </div>
+                {/* Contraseña */}
+                <Controller
+                    name="password"
+                    control={control}
+                    rules={{ required: "Contraseña obligatoria" }}
+                    render={({ field }) => (
+                        <TextField {...field} fullWidth label="Contraseña" type="password" margin="normal" error={!!errors.password} helperText={errors.password?.message} />
+                    )}
+                />
 
-                <div className="flex flex-col mb-6">
-                    <label htmlFor="correo" className="text-sm font-bold"> </label>
-                    <input
-                        type="email"
-                        id="correo"
-                        className="border border-black rounded-lg p-3 mt-1"
-                        placeholder="Email"
-                    />
-                </div>
+                {/* Botones */}
+                <Button type="submit" variant="contained" fullWidth sx={{ mt: 3, bgcolor: "#F55F1D", "&:hover": { bgcolor: "#d14e19" } }}>
+                    Añadir nuevo cliente
+                </Button>
+                <Button
+                    fullWidth sx={{ color: "text.secondary", mt: 1 }}
+                    onClick={() => window.history.back()}
+                >
+                    No añadir cliente
+                </Button>
+            </Box>
+        </Paper>
+    );
+};
 
-
-                <button
-                    type="submit"
-                    className="bg-[#F55F1D] text-white py-3 px-4 rounded-lg w-full hover:bg-[#d14e19] transition duration-300"> Añadir nuevo trabajador</button>
-                <p className="text-center text-sm mt-4 hover:underline">No añadir cliente</p>
-            </form>
-        </div>
-    )
-}
-
-export default NewClient
+export default NewClient;

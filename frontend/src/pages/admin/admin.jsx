@@ -1,52 +1,89 @@
-import { NavBar } from "../../modules/core/components"
+import { NavBar } from "../../modules/core/components";
 import BasicTabs from "../../modules/admin/components/AdminTab/AdminTab";
 import AdminTable from "../../modules/admin/components/AdminTable/AdminTable";
+import PageHeader from "../../modules/admin/components/PageHeader/PageHeader";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useUpdatePath from "../../modules/admin/hooks/useUpdatePath";
+import { useAuth } from "../../modules/auth/components/AuthProvider";
+import { getName, getRole } from "../../modules/auth/libs/tokenStorage";
+import refreshToken from "../../modules/auth/services/refreshToken";
+import { ClientTable } from "../../modules/admin/components/ClientTable/ClientTable";
+import { WorkerTable } from "../../modules/admin/components/WorkerTable/WorkerTable";
+import AdminMenu from "../../modules/admin/components/AdminMenu/AdminMenu";
 
-var email = "roger@trackmyfix.com";
+
 
 const Admin = () => {
+    const [name, setName] = useState("roger@trackmyfix.com");
+    const [role, setRole] = useState("trabajador");
+    const [searchText, setSearchText] = useState("");
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+    useUpdatePath(searchText, "search");
+    useEffect(() => {
+        const name = getName();
+        setName(name);
+        const role = getRole();
+        setRole(role);
+    }, []);
+
+    const handleLogout = () => {
+        logout();
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("Buscando:", searchText);
+    };
+
+    const handleCreateOrder = () => {
+        navigate("/admin/newOrder");
+        refreshToken
+    };
     return (
         <>
             <NavBar />
-            <div className="flex flex-row items-center justify-between pt-10 pb-10">
-                <div className="ml-20">
-                    <h2 className="text-3xl font-bold text-[#F55F1D]">Bienvenido, {email}</h2>
-                    <p className="text-sm text-zinc-500">Bienvenido a la sección de administración</p>
-                </div>
-                <div className="mr-20">
-                    <button
-                        type="submit"
-                        className="bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto">
-                        Cerrar sesión
-                    </button>
-                </div>
-            </div>
-            <div className="w-full h-[1px] bg-black"></div>
-            <form className="flex flex-row items-center justify-center p-6 w-full ">
+            <PageHeader
+                title={`Bienvenido, ${name}`}
+                description={`Bienvenido a la sección de ${role}`}
+                buttonText="Cerrar sesión"
+                onButtonClick={handleLogout}
+            />
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-row items-center justify-center p-6 w-full"
+            >
                 <input
                     type="search"
                     id="search"
-                    className="border border-black rounded-lg p-3 mt-1  w-full md:w-[1400px] bg-inherit"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    className="border border-black rounded-lg p-3 mt-1 w-full md:w-[1400px] bg-inherit"
                     placeholder="Buscar..."
                 />
-                <button type="submit" className="mr-4 ml-4 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto">Buscar</button>
+                <button
+                    disabled
+                    type="submit"
+                    className="mr-4 ml-4 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
+                >
+                    Buscar
+                </button>
             </form>
-            <div className="flex flex-col items-start justify-between w-full ml-20">
-                <a>
-                    <button type="submit" className="bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto">Crear factura</button>
-                </a>
+
+            <div className="flex flex-col items-start justify-between w-full">
+                <div className="ml-20">
+                    <AdminMenu />
+                </div>
             </div>
+
             <BasicTabs
-                firts=
-                {<>
-                    <AdminTable />
-                </>}
-                second={<>
-                    <AdminTable />
-                </>} 
+                firts={<AdminTable />}
+                second={<ClientTable />}
+                third={<WorkerTable />}
             />
         </>
-    )
-}
+    );
+};
 
 export default Admin;

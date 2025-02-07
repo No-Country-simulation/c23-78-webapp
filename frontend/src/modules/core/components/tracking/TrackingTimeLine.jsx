@@ -1,96 +1,132 @@
-import React from "react"
-import { Box, Typography, Paper } from "@mui/material"
-import { styled } from "@mui/material/styles"
+import React from "react";
+import { Box, Typography, Paper } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { useState, useEffect } from "react";
+
 
 // Styled components
 const TimelineContainer = styled(Box)({
   position: "relative",
   padding: "20px",
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    left: "115px",
-    top: "30px",
-    bottom: "30px",
-    width: "2px",
-    background: "#e0e0e0",
-  },
-})
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
+});
 
 const TimelineItem = styled(Box)({
   display: "flex",
   alignItems: "flex-start",
   marginBottom: "20px",
   position: "relative",
-})
+});
 
 const TimelineDot = styled(Box)({
-  width: "16px",
-  height: "16px",
+  width: "20px",
+  height: "20px",
   borderRadius: "50%",
   backgroundColor: "#f4511e",
-  margin: "0 10px",
-  flexShrink: 0,
+  margin: "15px",
   position: "relative",
-  zIndex: 1,
-})
+});
 
 const TimelineContent = styled(Box)({
   flex: 1,
-  marginLeft: "20px",
-})
+});
 
-const DateTimeBox = styled(Box)({
-  width: "85px",
-  textAlign: "right",
-  flexShrink: 0,
-})
+const trackingData = [
+  {
+    status: "RECIBIDO",
+    description: "Tu producto ha sido recibido. Estamos preparando el diagnóstico inicial.",
+  },
+  {
+    status: "EN_DIAGNOSTICO",
+    description: "Nuestro equipo está evaluando el problema para encontrar la mejor solución.",
+  },
+  {
+    status: "ESPERANDO_APROBACION",
+    description: "Estamos esperando recibir la aprobación para continuar con la reparación.",
+  },
+  {
+    status: "EN_REPARACION",
+    description: "Estamos trabajando en la reparación de tu producto.",
+  },
+  {
+    status: "ESPERANDO_REPUESTOS",
+    description: "Estamos esperando recibir las piezas necesarias para completar la reparación.",
+  },
+  {
+    status: "REPARADO",
+    description: "La reparación ha sido completada, y el producto está listo para su verificación.",
+  },
+  {
+    status: "EN_PRUEBAS",
+    description: "Estamos verificando que tu producto funcione correctamente después de la reparación.",
+  },
+  {
+    status: "LISTO_PARA_RETIRO",
+    description: "Tu producto está reparado y listo para que lo retires.",
+  },
+  {
+    status: "ENTREGADO",
+    description: "Ya retiraste tu producto. ¡Gracias por confiar en nosotros!",
+  },
+  {
+    status: "NO_REPARABLE",
+    description: "Tu producto no es reparable debido a la gravedad del daño o la falta de piezas.",
+  },
+  {
+    status: "CANCELADO",
+    description: "La reparación ha sido cancelada. No se continuará con el proceso. Acerquese a la central de reparación.",
+  },
+];
 
-export function TrackingTimeLine() {
-  const trackingData = [
-    {
-      date: "27-0-2024",
-      time: "06:55 hs.",
-      status: "Recibido en el taller",
-      description: "Tu producto ha sido recibido. Estamos preparando el diagnóstico inicial.",
-    },
-    {
-      date: "26-09-2024",
-      time: "11:25 hs.",
-      status: "En diagnóstico",
-      description: "Nuestro equipo está evaluando el problema para encontrar la mejor solución.",
-    },
-    {
-      date: "26-09-2024",
-      time: "10:51 hs.",
-      status: "Esperando piezas",
-      description: "Estamos esperando recibir las piezas necesarias para completar la reparación.",
-    },
-    {
-      date: "21-09-2024",
-      time: "12:42 hs.",
-      status: "En reparación",
-      description: "Estamos trabajando en la reparación de tu producto.",
-    },
-    {
-      date: "21-09-2024",
-      time: "12:01 hs.",
-      status: "En control de calidad",
-      description: "Estamos verificando que tu producto funcione correctamente después de la reparación.",
-    },
-    {
-      date: "21-09-2024",
-      time: "12:45 hs.",
-      status: "Listo para retirar",
-      description: "Tu producto está reparado y listo para que lo retires.",
-    },
-    {
-      date: "22-09-2024",
-      time: "10:45 hs.",
-      status: "Entregado al cliente",
-      description: "Ya retiraste tu producto. ¡Gracias por confiar en nosotros!",
-    },
-  ]
+const options = [
+  "RECIBIDO",
+  "EN_DIAGNOSTICO",
+  "ESPERANDO_APROBACION",
+  "EN_REPARACION",
+  "ESPERANDO_REPUESTOS",
+  "REPARADO",
+  "EN_PRUEBAS",
+  "LISTO_PARA_RETIRO",
+  "ENTREGADO",
+  "NO_REPARABLE",
+  "CANCELADO",
+];
+
+export function TrackingTimeLine({ orderData }) {
+  const [orderState, setOrderState] = useState({
+    state: "CANCELADO",
+  });
+  useEffect(() => {
+    if (orderData && orderData.devices && orderData.devices.length > 0) {
+      setOrderState({ state: orderData.devices[0].state });
+    }
+  }, [orderData]);
+
+  const generateTimeline = (currentState) => {
+    const timeline = [];
+    const stateIndex = options.indexOf(currentState);
+
+    for (let i = 0; i <= stateIndex; i++) {
+      const state = options[i];
+      const matchingData = trackingData.find(item => item.status === state);
+      if (matchingData) {
+        timeline.push(matchingData);
+      }
+    }
+
+    if (currentState === "NO_REPARABLE" || currentState === "CANCELADO") {
+      const specialMessage = trackingData.find(item => item.status === currentState);
+      if (specialMessage) {
+        timeline.push(specialMessage);
+      }
+    }
+
+    return timeline;
+  };
+
+  const timelineItems = generateTimeline(orderState.state);
 
   return (
     <Paper
@@ -99,8 +135,8 @@ export function TrackingTimeLine() {
         width: "100%",
         maxWidth: { xs: "100%", sm: 700 },
         margin: "auto",
-        mt: { xs: 2, sm: 4},
-        p: { xs: 2, sm:3},
+        mt: { xs: 2, sm: 4 },
+        p: { xs: 2, sm: 3 },
         backgroundColor: "#fff",
         borderRadius: "8px",
       }}
@@ -110,19 +146,9 @@ export function TrackingTimeLine() {
       </Typography>
 
       <TimelineContainer>
-        {trackingData.map((item, index) => (
+        {timelineItems.map((item, index) => (
           <TimelineItem key={index}>
-            <DateTimeBox>
-              <Typography variant="body2" color="textSecondary" sx={{ fontSize: "0.875rem" }}>
-                {item.date}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" sx={{ fontSize: "0.875rem" }}>
-                {item.time}
-              </Typography>
-            </DateTimeBox>
-
             <TimelineDot />
-
             <TimelineContent>
               <Typography
                 variant="subtitle1"
@@ -148,6 +174,7 @@ export function TrackingTimeLine() {
         ))}
       </TimelineContainer>
     </Paper>
-  )
+  );
 }
 
+export default TrackingTimeLine;

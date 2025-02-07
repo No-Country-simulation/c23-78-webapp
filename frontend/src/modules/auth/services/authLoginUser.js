@@ -1,4 +1,15 @@
+import { saveTokens } from "../libs/tokenStorage";
+
+/**
+ * Función para autenticar a un usuario mediante una solicitud al backend.
+ * @param {string} username - El nombre de usuario o correo electrónico del usuario.
+ * @param {string} password - La contraseña del usuario.
+ * @returns {Object|string} - Retorna la respuesta del servidor en formato JSON o texto si no es JSON.
+ */
+
 export default async function authLoginUser(username, password) {
+    console.log("LOGIN USER", username, password)
+    // Header de la solicitud
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -14,9 +25,12 @@ export default async function authLoginUser(username, password) {
         redirect: "follow",
     };
 
+    const {VITE_BACKEND_URL} = import.meta.env
+    console.log("URL:", `${VITE_BACKEND_URL}/user/login`)
+    
     try {
         const response = await fetch(
-            "http://trackmyfix-backend.eqgrhtbfgsa4ggdk.brazilsouth.azurecontainer.io:9091/user/login",
+            `${VITE_BACKEND_URL}/user/login`,
             requestOptions
         );
 
@@ -34,9 +48,11 @@ export default async function authLoginUser(username, password) {
         } else {
             console.warn("La respuesta no es JSON válida. Analizando como texto...");
             const result = await response.text();
-            console.log("Respuesta exitosa (texto):", result);
-            return result; 
+            console.log("Petición fallo:", result);
+            saveTokens(result)
+            return result;
         }
+
     } catch (error) {
         console.error("Error durante el login:", error);
         throw error;

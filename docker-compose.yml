@@ -46,7 +46,7 @@ services:
       - ./frontend/vite.config.js:/usr/code/vite.config.js
     ports:
       - 5173:5173
-    command: npm run host
+    command: npm run preview
     environment:
       VITE_BACKEND_URL: http://trackmyfix:9091
     networks:
