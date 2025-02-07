@@ -101,11 +101,11 @@ public class UserChangeAspect {
                         default -> log.error("Action UserChange "+actionUser+" doesn't exist");
                     }
                 } else {
-                    log.warn("line 99: "+WARN_MESSAGE);
+                    log.warn(WARN_MESSAGE);
                 }
             }
         } else {
-            log.info("new client registered, with anonymous role");
+            log.info("anonymous user");
         }
     }
 

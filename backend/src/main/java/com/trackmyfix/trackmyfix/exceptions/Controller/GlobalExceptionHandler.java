@@ -1,7 +1,6 @@
 package com.trackmyfix.trackmyfix.exceptions.Controller;
 
 import com.trackmyfix.trackmyfix.exceptions.*;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.management.relation.RoleNotFoundException;
 import javax.security.auth.login.AccountNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
     }
 
     // ⚠️ Excepción genérica para recursos no encontrados
-    @ExceptionHandler({ResourceNotFoundException.class, MovementNotFoundException.class})
+    @ExceptionHandler({ResourceNotFoundException.class, MovementNotFoundException.class, RoleNotFoundException.class})
     public ResponseEntity<Map<String,String>> handleNotFoundExceptions(Exception ex, WebRequest request) {
         return generateErrorResponse(ex, request, HttpStatus.NOT_FOUND);
     }

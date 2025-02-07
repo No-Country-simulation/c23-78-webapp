@@ -3,6 +3,8 @@ services:
     image: mysql:8.0
     container_name: db-trackmyfix
     restart: always
+    env_file:
+      - ./backend/.env
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
@@ -17,11 +19,13 @@ services:
       timeout: 10s
   trackmyfix:
     build:
-      dockerfile: Dockerfile
+      dockerfile: ./backend/Dockerfile
       context: ./
     image: openjdk17
     container_name: trackmyfix
     mem_limit: 512m
+    env_file:
+      - ./backend/.env
     environment:
       DB_HOST: "jdbc:mysql://db-trackmyfix:3306/track_my_fix_db?createDatabaseIfNotExist=true&serverTimezone=UTC"
       DB_USER: ${DB_USER}
@@ -40,18 +44,18 @@ services:
   front-trackmyfix:
     container_name: front
     build:
-      dockerfile: Dockerfile
+      dockerfile: ./frontend/Dockerfile
       context: ./
-    image: frontend-front-trackmyfix
+    image: front-trackmyfix
     volumes:
-      - ./src:/usr/code/src
-      - ./index.html:/usr/code/index.html
-      - ./eslint.config.js:/usr/code/eslint.config.js
-      - ./tailwind.config.js:/usr/code/tailwind.config.js
-      - ./postcss.config.js:/usr/code/postcss.config.js
-      - ./vite.config.js:/usr/code/vite.config.js
+      - ./frontend/src:/usr/code/src
+      - ./frontend/index.html:/usr/code/index.html
+      - ./frontend/eslint.config.js:/usr/code/eslint.config.js
+      - ./frontend/tailwind.config.js:/usr/code/tailwind.config.js
+      - ./frontend/postcss.config.js:/usr/code/postcss.config.js
+      - ./frontend/vite.config.js:/usr/code/vite.config.js
     ports:
       - 5173:5173
     command: npm run host
-    networks:
-      - trackmyfix_net
+    environment:
+      VITE_BACKEND_URL: http://trackmyfix:9091

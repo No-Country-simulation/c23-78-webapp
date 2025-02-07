@@ -1,6 +1,5 @@
 package com.trackmyfix.trackmyfix.services.Impl;
 
-import com.trackmyfix.trackmyfix.Dto.Request.LoginRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Request.TokenType;
 import com.trackmyfix.trackmyfix.Dto.Request.UserRequestDTO;
 import com.trackmyfix.trackmyfix.Dto.Response.UserResponseDTO;
@@ -17,14 +16,22 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.RoleInfoNotFoundException;
+import javax.naming.InsufficientResourcesException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static com.trackmyfix.trackmyfix.entity.Role.*;
 
 @Slf4j
 @Service
@@ -49,34 +56,105 @@ public class UserService {
         };
     }
 
+    @SneakyThrows
     @UserChangeNotify(actionUser = ActionUser.AGREGO_CLIENTE)
     public UserResponseDTO save(UserRequestDTO user) {
-        return switch (user.getRole()) {
-            case ADMIN -> adminService.save(user);
-            case TECHNICIAN -> technicianService.save(user);
-            case CLIENT -> clientService.save(user);
-        };
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() != "anonymousUser") {
+            String authority = auth.getAuthorities().toArray()[0].toString();
+            switch (user.getRole()) {
+                case ADMIN -> {
+                    if (Objects.equals(authority, ADMIN.name())) {
+                        return adminService.save(user);
+                    } else {
+                        throw new InsufficientAuthenticationException("Only Admins can create "+ ADMIN.name());
+                    }
+                }
+                case TECHNICIAN -> {
+                    if (Objects.equals(authority, ADMIN.name())) {
+                        return technicianService.save(user);
+                    } else {
+                        throw new InsufficientAuthenticationException("Only Admins can create "+TECHNICIAN.name());
+                    }
+                }
+                case CLIENT -> {
+                    return clientService.save(user);
+                }
+                default -> throw new RoleInfoNotFoundException("Role not found");
+            }
+        } else {
+            throw new InsufficientAuthenticationException("you must be authenticated before create user");
+        }
     }
 
+    @SneakyThrows
     @UserChangeNotify(actionUser = ActionUser.MODIFICO_DATOS_CLIENTE)
     public UserResponseDTO update(UserRequestDTO user) {
-        return switch (user.getRole()) {
-            case ADMIN -> adminService.update(user);
-            case TECHNICIAN -> technicianService.update(user);
-            case CLIENT -> clientService.update(user);
-        };
+        UserResponseDTO verify = this.findById(user.getId());
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() != "anonymousUser") {
+            String authority = auth.getAuthorities().toArray()[0].toString();
+            switch (user.getRole()) {
+                case ADMIN -> {
+                    if (Objects.equals(authority, ADMIN.name())) {
+                        return adminService.save(user);
+                    } else {
+                        throw new InsufficientAuthenticationException("Only Admins can update "+ ADMIN.name());
+                    }
+                }
+                case TECHNICIAN -> {
+                    if (Objects.equals(authority, ADMIN.name())) {
+                        return technicianService.save(user);
+                    } else {
+                        throw new InsufficientAuthenticationException("Only Admins can update "+TECHNICIAN.name());
+                    }
+                }
+                case CLIENT -> {
+                    if (verify.getRole() == CLIENT) {
+                        return clientService.update(user);
+                    } else if (Objects.equals(authority, ADMIN.name())) {
+                            return clientService.update(user);
+                    } else {
+                        throw new InsufficientAuthenticationException("Only Admin can change user Role");
+                    }
+                }
+                default -> throw new RoleInfoNotFoundException("role Not found");
+            }
+        } else {
+            throw new InsufficientAuthenticationException("Only Admins can create "+TECHNICIAN.name());
+        }
     }
 
+    @SneakyThrows
     @UserChangeNotify(actionUser = ActionUser.DESACTIVO_CUENTA_CLIENTE)
     public Map<String,String> delete(Long id) {
         UserResponseDTO user = this.findById(id);
-        Map<String, String> resp = new HashMap<>();
-        switch (user.getRole()) {
-            case ADMIN -> resp = adminService.delete(id);
-            case TECHNICIAN -> resp = technicianService.delete(id);
-            case CLIENT -> resp = clientService.delete(id);
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() != "anonymousUser") {
+            String authority = auth.getAuthorities().toArray()[0].toString();
+            switch (user.getRole()) {
+                case ADMIN -> {
+                    if (Objects.equals(authority, ADMIN.name())) {
+                        return adminService.delete(id);
+                    } else {
+                        throw new InsufficientAuthenticationException("Only Admins can Delete "+ ADMIN.name());
+                    }
+                }
+                case TECHNICIAN -> {
+                    if (Objects.equals(authority, ADMIN.name())) {
+                        return technicianService.delete(id);
+                    } else {
+                        throw new InsufficientAuthenticationException("Only Admins can Delete "+ TECHNICIAN.name());
+                    }
+                }
+                case CLIENT -> {
+                    return clientService.delete(id);
+                }
+                default -> throw new RoleInfoNotFoundException("Role not found");
+            }
+        } else {
+            throw new InsufficientAuthenticationException("authentication error");
         }
-        return resp;
     }
     @SneakyThrows
     public Map<String, String> verify(String username, String password) {
