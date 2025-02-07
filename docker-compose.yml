@@ -48,7 +48,7 @@ services:
       - 5173:5173
     command: npm run preview
     environment:
-      VITE_BACKEND_URL: http://trackmyfix:9091
+      VITE_BACKEND_URL: http://localhost:9091
     networks:
       - trackmyfix_net
     depends_on:
