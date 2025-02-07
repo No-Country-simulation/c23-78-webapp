@@ -80,10 +80,16 @@ export default function AdminTable() {
     setPage(0);
   };
 
-  const handleNavigate = (orderNumber) => {
+  const handleEdit = (orderNumber) => {
     navigate(`/admin/modifyOrder/${orderNumber}`);
-    refreshToken(); 
+    refreshToken();
   };
+
+  const handleDelete = (orderId) => {
+    navigate(`/admin/deleteOrder/${orderId}`);
+    refreshToken();
+  };
+
 
   return (
     <Paper
@@ -122,30 +128,26 @@ export default function AdminTable() {
                           {column.id === "acciones" ? (
                             <div>
                               <button
-                                onClick={() => handleNavigate(row.orden)}
+                                onClick={() => handleEdit(row.orden)}
                                 type="submit"
                                 className="mr-3 bg-[#F55F1D] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
                               >
                                 Editar
                               </button>
                               <button
-                                onClick={() =>
-                                  console.log("eliminando: " + row.orden)
-                                }
+                                onClick={() => handleDelete(row.orden)}
                                 type="submit"
                                 className="bg-[red] text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
                               >
                                 Eliminar
                               </button>
-                              <button
-                                onClick={() =>
-                                  console.log("viendo: " + row.orden)
-                                }
+                              {/* <button
+                                
                                 type="submit"
                                 className="ml-3 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-[#d14e19] transition duration-300 w-full md:w-auto"
                               >
                                 Ver
-                              </button>
+                              </button> */}
                             </div>
                           ) : column.format && typeof value === "number" ? (
                             column.format(value)

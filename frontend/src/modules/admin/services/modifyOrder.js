@@ -5,7 +5,7 @@
 import { getAccessToken } from "../../auth/libs/tokenStorage";
 const { VITE_BACKEND_URL } = import.meta.env;
 
-export const modifyClientOrder = async (orderData, orderId) => {
+export const modifyOrder = async (orderData, orderId) => {
   try {
     const itsLogged = !!getAccessToken();
     if (!itsLogged) throw new Error("User not authenticated");

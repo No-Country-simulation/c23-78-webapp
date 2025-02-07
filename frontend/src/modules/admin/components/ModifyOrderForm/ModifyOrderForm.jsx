@@ -4,7 +4,7 @@ import { TextField, Button, Box, Typography, MenuItem, Paper, FormControl, Input
 import { getAccessToken } from "../../../auth/libs/tokenStorage";
 import postWorkOrder from "../../../core/services/postWorkOrder";
 import getSearchOrder from "../../../core/services/getSearchOrder";
-import { modifyClientOrder } from "../../services/modifyClientOrders";
+import { modifyOrder } from "../../services/modifyOrder";
 
 export function ModifyOrderForm({ orderNumber }) {
     const { control, handleSubmit, formState: { errors }, reset } = useForm({
@@ -106,7 +106,7 @@ export function ModifyOrderForm({ orderNumber }) {
         };
         
         try {
-            const result = await modifyClientOrder(payload, orderID);
+            const result = await modifyOrder(payload, orderID);
             console.log("result", result);
             setMessage({ type: "success", text: "Orden enviada con éxito." });
 
