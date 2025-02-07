@@ -5,10 +5,6 @@ services:
     restart: always
     env_file:
       - ./backend/.env
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
     networks:
       - trackmyfix_net
     ports:
@@ -19,7 +15,7 @@ services:
       timeout: 10s
   trackmyfix:
     build:
-      dockerfile: ./backend/Dockerfile
+      dockerfile: ./backend.dockerfile
       context: ./
     image: openjdk17
     container_name: trackmyfix
@@ -28,12 +24,6 @@ services:
       - ./backend/.env
     environment:
       DB_HOST: "jdbc:mysql://db-trackmyfix:3306/track_my_fix_db?createDatabaseIfNotExist=true&serverTimezone=UTC"
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      ACCESS_SECRET: ${ACCESS_SECRET}
-      REFRESH_SECRET: ${REFRESH_SECRET}
-      REFRESH_EXPIRATION: ${REFRESH_EXPIRATION}
-      ACCESS_EXPIRATION: ${ACCESS_EXPIRATION}
     networks:
       - trackmyfix_net
     ports:
@@ -44,7 +34,7 @@ services:
   front-trackmyfix:
     container_name: front
     build:
-      dockerfile: ./frontend/Dockerfile
+      dockerfile: ./front.dockerfile
       context: ./
     image: front-trackmyfix
     volumes:
@@ -59,3 +49,18 @@ services:
     command: npm run host
     environment:
       VITE_BACKEND_URL: http://trackmyfix:9091
+    networks:
+      - trackmyfix_net
+    depends_on:
+      db-trackmyfix:
+        condition: service_healthy
+      trackmyfix:
+        condition: service_started
+networks:
+  trackmyfix_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        -
+          subnet: 192.168.3.0/24
