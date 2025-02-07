@@ -43,7 +43,7 @@ export function ClientTable() {
 
   const handleEdit = (id) => {
     console.log(`Editar cliente ${id}`);
-    navigate(`/admin/ModifyClient/${id}`);
+    navigate(`/admin/modifyClient/${id}`);
       refreshToken(); 
   };
 
