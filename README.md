@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href=""><img src="https://media.discordapp.net/attachments/1326647355289632898/1336874791843532905/image.png?ex=67c2662c&is=67c114ac&hm=1d92b4f51b8cb314c0af50888843dc480c8c524a87918032b7d0395d2002e86f&=&format=webp&quality=lossless&width=1151&height=618" width="400" alt="Logo"></a>
+  <a href=""><img src="https://media.discordapp.net/attachments/1326628838939295815/1336888044044812328/image.png?ex=67c27283&is=67c12103&hm=8d94b05ff81a4aabf60829e23a63c69182f587c14ce548d175333fd53ea58090&=&format=webp&quality=lossless&width=1889&height=465" width="400" alt="Logo"></a>
 </h1>
 
 <h3 align="center">📌 Gestión de Equipos en Servicio Técnico</h3>
@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-  <img src="https://media.discordapp.net/attachments/1326647355289632898/1336874791843532905/image.png?ex=67a5652c&is=67a413ac&hm=0537439c0173ba45896b740489ffa712aaba2711cdce17c06ce682ced0bfa796&=&format=webp&quality=lossless&width=1158&height=623" alt="Vista de la aplicación" width="800">
+  <img src="https://media.discordapp.net/attachments/1326647355289632898/1336874791843532905/image.png?ex=67c2662c&is=67c114ac&hm=1d92b4f51b8cb314c0af50888843dc480c8c524a87918032b7d0395d2002e86f&=&format=webp&quality=lossless&width=1151&height=618" alt="Vista de la aplicación" width="800">
 </p>
 
 ## 📋 **Índice**
