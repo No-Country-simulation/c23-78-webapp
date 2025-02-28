@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href=""><img src="https://media.discordapp.net/attachments/1326628838939295815/1336888044044812328/image.png?ex=67a57183&is=67a42003&hm=fd28b2754b725a1f97bb72b2578c7b6ad3432a65f3262199405e134ca96a843c&=&format=webp&quality=lossless&width=1191&height=294" width="400" alt="Logo"></a>
+  <a href=""><img src="https://media.discordapp.net/attachments/1326647355289632898/1336874791843532905/image.png?ex=67c2662c&is=67c114ac&hm=1d92b4f51b8cb314c0af50888843dc480c8c524a87918032b7d0395d2002e86f&=&format=webp&quality=lossless&width=1151&height=618" width="400" alt="Logo"></a>
 </h1>
 
 <h3 align="center">📌 Gestión de Equipos en Servicio Técnico</h3>
